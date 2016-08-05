@@ -1,0 +1,11 @@
+/.metadata/
+/.recommenders/
+/.xd/
+/output/
+/Servers*/
+/python/
+/RemoteSystemsTempFiles/
+*.log
+/drumbeat-rdf.modelfactory*/
+/RemoteSystemsTempFiles/
+/drumbeat-xsd/
