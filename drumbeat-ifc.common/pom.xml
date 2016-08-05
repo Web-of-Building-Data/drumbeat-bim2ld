@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>fi.aalto.cs.drumbeat</groupId>
 			<artifactId>drumbeat-common</artifactId>
-			<version>0.11.0</version>
+			<version>${drumbeat-common.version}</version>
 		</dependency>
 
 		<!-- Apache Commons Codec -->

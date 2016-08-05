@@ -40,7 +40,7 @@ public class Guid implements Serializable {
 	
 	/**
 	 * Checks if one {@link Guid} equals to another
-	 * @param other
+	 * @param other another guid to compare with 
 	 * @return true if they are equal
 	 */
 	public boolean equals(Guid other) {

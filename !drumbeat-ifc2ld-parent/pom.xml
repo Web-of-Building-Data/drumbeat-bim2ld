@@ -38,6 +38,7 @@
 
 		<drumbeat.groupId>${project.groupId}</drumbeat.groupId>
 		<drumbeat.jena.version>0.8.0</drumbeat.jena.version>
+		<drumbeat-common.version>0.11.0</drumbeat-common.version>
 
 		<!-- All versions updated on 04.05.2015 -->
 		<commons-cli.version>1.2</commons-cli.version>
@@ -102,6 +103,9 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
+						<configuration>
+							<additionalparam>-Xdoclint:none</additionalparam>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -109,7 +113,6 @@
 	</build>
 
 	<modules>
-		<module>../drumbeat-common</module>
 		<module>../drumbeat-rdf</module>
 		<module>../drumbeat-ifc.common</module>
 		<module>../drumbeat-ifc.data</module>
