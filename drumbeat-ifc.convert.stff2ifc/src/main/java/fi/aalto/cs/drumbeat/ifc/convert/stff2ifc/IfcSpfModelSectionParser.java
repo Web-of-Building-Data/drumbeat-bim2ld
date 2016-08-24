@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import fi.aalto.cs.drumbeat.common.string.RegexUtils;
 import fi.aalto.cs.drumbeat.common.string.StrBuilderWrapper;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
-import fi.aalto.cs.drumbeat.ifc.common.IfcNotFoundException;
+import fi.aalto.cs.drumbeat.common.DrbNotFoundException;
 import fi.aalto.cs.drumbeat.ifc.data.IfcVocabulary;
 import fi.aalto.cs.drumbeat.ifc.data.LogicalEnum;
 import fi.aalto.cs.drumbeat.ifc.data.model.*;
@@ -78,10 +78,10 @@ class IfcSpfModelSectionParser {
 	/**
 	 * Reads line by line and creates new entities
 	 * @throws IOException
-	 * @throws IfcNotFoundException
+	 * @throws DrbNotFoundException
 	 * @throws IfcParserException
 	 */
-	public List<IfcEntity> parseEntities(IfcLineReader reader, IfcSchema schema, boolean isHeaderSection, boolean ignoreUnknownTypes) throws IOException, IfcNotFoundException, IfcParserException {		
+	public List<IfcEntity> parseEntities(IfcLineReader reader, IfcSchema schema, boolean isHeaderSection, boolean ignoreUnknownTypes) throws IOException, DrbNotFoundException, IfcParserException {		
 		
 		this.schema = schema;
 		this.reader = reader;
@@ -135,7 +135,7 @@ class IfcSpfModelSectionParser {
 			
 			try {			
 				entityTypeInfo = schema.getEntityTypeInfo(entityTypeInfoName);
-			} catch (IfcNotFoundException e) {
+			} catch (DrbNotFoundException e) {
 				if (ignoreUnknownTypes) {
 					continue;
 				} else {
@@ -194,11 +194,11 @@ class IfcSpfModelSectionParser {
 	 * @param attributeValueType
 	 * @return a single attribute value or list of attribute values
 	 * @throws IfcFormatException
-	 * @throws IfcNotFoundException
+	 * @throws DrbNotFoundException
 	 * @throws IfcValueTypeConflictException 
 	 */
 	private List<IfcValue> parseAttributeValues(StrBuilderWrapper attributeStrBuilderWrapper, IfcEntity entity,
-			List<IfcAttributeInfo> entityAttributeInfos, IfcTypeInfo commonAttributeTypeInfo, EnumSet<IfcTypeEnum> commonValueTypes) throws IfcFormatException, IfcNotFoundException {
+			List<IfcAttributeInfo> entityAttributeInfos, DrbTypeInfo commonAttributeTypeInfo, EnumSet<DrbTypeEnum> commonValueTypes) throws IfcFormatException, DrbNotFoundException {
 
 		logger.debug(String.format("Parsing entity '%s'", entity));			
 
@@ -206,9 +206,9 @@ class IfcSpfModelSectionParser {
 		
 		for (int attributeIndex = 0; !attributeStrBuilderWrapper.trimLeft().isEmpty(); ++attributeIndex) {
 
-			EnumSet<IfcTypeEnum> attributeValueTypes;
+			EnumSet<DrbTypeEnum> attributeValueTypes;
 			IfcAttributeInfo attributeInfo;
-			IfcTypeInfo attributeTypeInfo;
+			DrbTypeInfo attributeTypeInfo;
 			if (commonValueTypes == null) {
 				assert(attributeIndex < entityAttributeInfos.size()) :
 					String.format("attributeIndex=%d, entityAttributeInfos.size=%s, attributeStrBuilderWrapper='%s'",
@@ -237,7 +237,7 @@ class IfcSpfModelSectionParser {
 				String remoteLineNumber = Long.toString(attributeStrBuilderWrapper.getLong());
 				IfcEntity remoteEntity = getEntity(remoteLineNumber);
 				if (remoteEntity == null) {
-					throw new IfcNotFoundException("Entity not found: #" + remoteLineNumber);
+					throw new DrbNotFoundException("Entity not found: #" + remoteLineNumber);
 				}
 				attributeValues.add(remoteEntity);
 				break;
@@ -246,7 +246,7 @@ class IfcSpfModelSectionParser {
 				String s = attributeStrBuilderWrapper.getStringBetweenSingleQuotes();
 				assert attributeValueTypes.size() == 1 : "Expect attributeValueTypes.size() == 1"; 
 //				if (!attributeValueTypes.contains(IfcTypeEnum.GUID)) {
-					attributeValues.add(new IfcLiteralValue(s, attributeTypeInfo, IfcTypeEnum.STRING));
+					attributeValues.add(new IfcLiteralValue(s, attributeTypeInfo, DrbTypeEnum.STRING));
 //					break;
 //				} else {
 //					attributeValues.add(new IfcGuidValue(s));
@@ -259,20 +259,20 @@ class IfcSpfModelSectionParser {
 				s = attributeStrBuilderWrapper.getStringBetweenSimilarCharacters(IfcVocabulary.SpfFormat.ENUMERATION_VALUE_SYMBOL);
 
 				assert attributeValueTypes.size() == 1 : "Expect attributeValueTypes.size() == 1"; 
-				if (!attributeValueTypes.contains(IfcTypeEnum.LOGICAL)) {
-					attributeValues.add(new IfcLiteralValue(s, attributeTypeInfo, IfcTypeEnum.ENUM));
+				if (!attributeValueTypes.contains(DrbTypeEnum.LOGICAL)) {
+					attributeValues.add(new IfcLiteralValue(s, attributeTypeInfo, DrbTypeEnum.ENUM));
 				} else {
 					switch (s) {
 					case "T":
 					case "TRUE":
-						attributeValues.add(new IfcLiteralValue(LogicalEnum.TRUE, attributeTypeInfo, IfcTypeEnum.LOGICAL));
+						attributeValues.add(new IfcLiteralValue(LogicalEnum.TRUE, attributeTypeInfo, DrbTypeEnum.LOGICAL));
 						break;
 					case "F":
 					case "FALSE":
-						attributeValues.add(new IfcLiteralValue(LogicalEnum.FALSE, attributeTypeInfo, IfcTypeEnum.LOGICAL));
+						attributeValues.add(new IfcLiteralValue(LogicalEnum.FALSE, attributeTypeInfo, DrbTypeEnum.LOGICAL));
 						break;
 					default:
-						attributeValues.add(new IfcLiteralValue(LogicalEnum.UNKNOWN, attributeTypeInfo, IfcTypeEnum.LOGICAL));
+						attributeValues.add(new IfcLiteralValue(LogicalEnum.UNKNOWN, attributeTypeInfo, DrbTypeEnum.LOGICAL));
 						break;
 
 					}
@@ -310,7 +310,7 @@ class IfcSpfModelSectionParser {
 					// parsing sub entity
 					//
 					String subEntityTypeInfoName = attributeStrBuilderWrapper.getIdentifierName();
-					IfcNonEntityTypeInfo subNonEntityTypeInfo = schema.getNonEntityTypeInfo(subEntityTypeInfoName);
+					DrbNonEntityTypeInfo subNonEntityTypeInfo = schema.getNonEntityTypeInfo(subEntityTypeInfoName);
 					attributeValueTypes = subNonEntityTypeInfo.getValueTypes();
 					s = attributeStrBuilderWrapper.getStringBetweenRoundBrackets();
 					
@@ -329,13 +329,13 @@ class IfcSpfModelSectionParser {
 					// parsing number or datetime
 					//
 					assert attributeValueTypes.size() == 1 : "Expect attributeValueTypes.size() == 1";
-					IfcTypeEnum attributeValueType = (IfcTypeEnum)attributeValueTypes.iterator().next();
+					DrbTypeEnum attributeValueType = (DrbTypeEnum)attributeValueTypes.iterator().next();
 					Object value;
-					if (attributeValueType == IfcTypeEnum.INTEGER) {
+					if (attributeValueType == DrbTypeEnum.INTEGER) {
 						value = attributeStrBuilderWrapper.getLong();
-					} else if (attributeValueType == IfcTypeEnum.REAL || attributeValueType == IfcTypeEnum.NUMBER) {
+					} else if (attributeValueType == DrbTypeEnum.REAL || attributeValueType == DrbTypeEnum.NUMBER) {
 						value = attributeStrBuilderWrapper.getDouble();
-					} else if (attributeValueType == IfcTypeEnum.DATETIME) {
+					} else if (attributeValueType == DrbTypeEnum.DATETIME) {
 						long timeStamp = attributeStrBuilderWrapper.getLong();
 						value = Calendar.getInstance();
 						((Calendar)value).setTimeInMillis(timeStamp * 1000);
@@ -343,7 +343,7 @@ class IfcSpfModelSectionParser {
 						throw new IfcFormatException(reader.getCurrentLineNumber(), "Invalid attributeValueType: " + attributeValueType);
 					}
 					
-					attributeValues.add(new IfcLiteralValue(value, (IfcNonEntityTypeInfo)attributeTypeInfo, attributeValueType));						
+					attributeValues.add(new IfcLiteralValue(value, (DrbNonEntityTypeInfo)attributeTypeInfo, attributeValueType));						
 				}
 
 				break;

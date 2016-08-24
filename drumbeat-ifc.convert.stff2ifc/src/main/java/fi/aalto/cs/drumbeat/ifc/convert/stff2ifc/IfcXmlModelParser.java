@@ -16,7 +16,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
-import fi.aalto.cs.drumbeat.ifc.common.IfcNotFoundException;
+import fi.aalto.cs.drumbeat.common.DrbNotFoundException;
 import fi.aalto.cs.drumbeat.ifc.data.IfcVocabulary.Formatter;
 import fi.aalto.cs.drumbeat.ifc.data.LogicalEnum;
 import fi.aalto.cs.drumbeat.ifc.data.model.*;
@@ -80,7 +80,7 @@ public class IfcXmlModelParser {
 			}
 			
 			if (schema == null) {
-				throw new IfcNotFoundException("None of the following schema found: " + Arrays.toString(schemaNames));
+				throw new DrbNotFoundException("None of the following schema found: " + Arrays.toString(schemaNames));
 			}
 			
 			logger.info("Parsing ifcXml file using schema '" + schema.getVersion() + "'");
@@ -109,7 +109,7 @@ public class IfcXmlModelParser {
 		return schemaName;
 	}
 
-	private List<IfcEntityBase> parseEntities(Element parentElement, String parentEntityId) throws IfcParserException, IfcNotFoundException {
+	private List<IfcEntityBase> parseEntities(Element parentElement, String parentEntityId) throws IfcParserException, DrbNotFoundException {
 		List<IfcEntityBase> entities = new ArrayList<>();
 		int childCount = 0;
 		for (Node childNode = parentElement.getFirstChild(); childNode != null; childNode = childNode
@@ -124,7 +124,7 @@ public class IfcXmlModelParser {
 					// short entity
 					String literalTypeName = typeName.substring(0,
 							typeName.length() - XML_ELEMENT_TAG_WRAPPER_SUFFIX.length());
-					IfcNonEntityTypeInfo literalTypeInfo = schema.getNonEntityTypeInfo(literalTypeName);
+					DrbNonEntityTypeInfo literalTypeInfo = schema.getNonEntityTypeInfo(literalTypeName);
 					IfcLiteralValue literalValue = parseSingleLiteralValue(literalTypeInfo,
 							((Element) childNode).getTextContent());
 					IfcShortEntity entity = new IfcShortEntity(literalTypeInfo, literalValue);
@@ -152,7 +152,7 @@ public class IfcXmlModelParser {
 	}
 
 	private IfcEntityBase parseEntity(Element entityElement, String entityTypeName, String parentEntityId, int childCount)
-			throws IfcParserException, IfcNotFoundException {
+			throws IfcParserException, DrbNotFoundException {
 
 		String id = entityElement.getAttribute(XML_ATTRIBUTE_ID);
 
@@ -245,7 +245,7 @@ public class IfcXmlModelParser {
 					if (attributeInfo instanceof IfcLinkInfo) {
 
 						IfcLinkInfo linkInfo = (IfcLinkInfo) attributeInfo;
-						IfcTypeInfo linkTypeInfo = linkInfo.getAttributeTypeInfo();
+						DrbTypeInfo linkTypeInfo = linkInfo.getAttributeTypeInfo();
 						if (linkTypeInfo instanceof IfcCollectionTypeInfo) {
 							List<IfcEntityBase> linkedEntities = parseEntities((Element) childNode, entity.getLocalId());
 							IfcEntityCollection linkedEntityCollection = new IfcEntityCollection(linkedEntities);
@@ -261,7 +261,7 @@ public class IfcXmlModelParser {
 
 					} else if (attributeInfo instanceof IfcInverseLinkInfo) {
 						
-						IfcTypeInfo inverseLinkTypeInfo = ((IfcInverseLinkInfo) attributeInfo).getAttributeTypeInfo();
+						DrbTypeInfo inverseLinkTypeInfo = ((IfcInverseLinkInfo) attributeInfo).getAttributeTypeInfo();
 
 						List<IfcEntityBase> linkedEntities;
 						if (inverseLinkTypeInfo instanceof IfcCollectionTypeInfo) {
@@ -273,7 +273,7 @@ public class IfcXmlModelParser {
 						}
 						
 						IfcLinkInfo linkInfo = ((IfcInverseLinkInfo) attributeInfo).getOutgoingLinkInfo();
-						IfcTypeInfo linkTypeInfo = linkInfo.getAttributeTypeInfo();
+						DrbTypeInfo linkTypeInfo = linkInfo.getAttributeTypeInfo();
 						for (IfcEntityBase linkedEntity : linkedEntities) {
 							
 							if (linkTypeInfo instanceof IfcCollectionTypeInfo) {
@@ -313,9 +313,9 @@ public class IfcXmlModelParser {
 	}
 
 	private IfcValue parseLiteralValues(IfcAttributeInfo attributeInfo, String nodeValue)
-			throws IfcParserException, IfcNotFoundException {
+			throws IfcParserException, DrbNotFoundException {
 
-		IfcTypeInfo attributeTypeInfo = attributeInfo.getAttributeTypeInfo();
+		DrbTypeInfo attributeTypeInfo = attributeInfo.getAttributeTypeInfo();
 		assert (!(attributeTypeInfo instanceof IfcEntityTypeInfo));
 
 		if (attributeTypeInfo instanceof IfcCollectionTypeInfo) {
@@ -323,7 +323,7 @@ public class IfcXmlModelParser {
 			String[] valueStrings = nodeValue.split(" ");
 			IfcLiteralValueCollection valueCollection = new IfcLiteralValueCollection();
 			
-			IfcTypeInfo valueTypeInfo = ((IfcCollectionTypeInfo) attributeTypeInfo).getItemTypeInfo();
+			DrbTypeInfo valueTypeInfo = ((IfcCollectionTypeInfo) attributeTypeInfo).getItemTypeInfo();
 
 			for (int i = 0; i < valueStrings.length; ++i) {
 				valueCollection.add(parseSingleLiteralValue(valueTypeInfo, valueStrings[i]));
@@ -337,22 +337,22 @@ public class IfcXmlModelParser {
 
 	}
 
-	private IfcLiteralValue parseSingleLiteralValue(IfcTypeInfo valueTypeInfo, String valueString)
+	private IfcLiteralValue parseSingleLiteralValue(DrbTypeInfo valueTypeInfo, String valueString)
 			throws IfcParserException {
 
 		assert (valueTypeInfo.getValueTypes().size() == 1);
 		assert (valueString != null);
 
-		IfcTypeEnum attributeValueType = valueTypeInfo.getValueTypes().iterator().next();
+		DrbTypeEnum attributeValueType = valueTypeInfo.getValueTypes().iterator().next();
 
 		Object value;
-		if (attributeValueType.equals(IfcTypeEnum.STRING) || attributeValueType.equals(IfcTypeEnum.ENUM)) {
+		if (attributeValueType.equals(DrbTypeEnum.STRING) || attributeValueType.equals(DrbTypeEnum.ENUM)) {
 			value = valueString;
-		} else if (attributeValueType.equals(IfcTypeEnum.REAL) || attributeValueType.equals(IfcTypeEnum.NUMBER)) {
+		} else if (attributeValueType.equals(DrbTypeEnum.REAL) || attributeValueType.equals(DrbTypeEnum.NUMBER)) {
 			value = Double.parseDouble(valueString);
-		} else if (attributeValueType.equals(IfcTypeEnum.INTEGER)) {
+		} else if (attributeValueType.equals(DrbTypeEnum.INTEGER)) {
 			value = Long.parseLong(valueString);
-		} else if (attributeValueType.equals(IfcTypeEnum.LOGICAL)) {
+		} else if (attributeValueType.equals(DrbTypeEnum.LOGICAL)) {
 			switch (valueString) {
 			case "true":
 				value = LogicalEnum.TRUE;
@@ -367,7 +367,7 @@ public class IfcXmlModelParser {
 			default:
 				throw new IfcParserException("Unknown logical value: " + valueString);
 			}
-		} else if (attributeValueType.equals(IfcTypeEnum.DATETIME)) {
+		} else if (attributeValueType.equals(DrbTypeEnum.DATETIME)) {
 			long timeStamp = Long.parseLong(valueString);
 			value = Calendar.getInstance();
 			((Calendar) value).setTimeInMillis(timeStamp * 1000);

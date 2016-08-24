@@ -25,12 +25,12 @@ import fi.aalto.cs.drumbeat.ifc.data.schema.IfcCollectionTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcDefinedTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcEntityTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcEnumerationTypeInfo;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcLiteralTypeInfo;
+import fi.aalto.cs.drumbeat.ifc.data.schema.DrbLiteralTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcLogicalTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcSchema;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcSelectTypeInfo;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcTypeEnum;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcTypeInfo;
+import fi.aalto.cs.drumbeat.ifc.data.schema.DrbTypeEnum;
+import fi.aalto.cs.drumbeat.ifc.data.schema.DrbTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcUniqueKeyInfo;
 import fi.aalto.cs.drumbeat.rdf.OwlProfileList;
 import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
@@ -53,7 +53,7 @@ public class Ifc2RdfConverter {
 	private Resource baseTypeForBooleans;
 	private Resource baseTypeForEnums;
 	private OwlProfileList owlProfileList;	
-	private Map<IfcTypeEnum, Property> map_Type_hasXXXProperty;
+	private Map<DrbTypeEnum, Property> map_Type_hasXXXProperty;
 	private boolean nameAllBlankNodes;
 	
 	public Ifc2RdfConverter(Ifc2RdfConversionContext context, IfcSchema schema) {
@@ -121,8 +121,8 @@ public class Ifc2RdfConverter {
 	 * @param typeInfo
 	 * @return
 	 */
-	public String formatTypeName(IfcTypeInfo typeInfo) {
-		if (typeInfo instanceof IfcLiteralTypeInfo || typeInfo instanceof IfcLogicalTypeInfo) {
+	public String formatTypeName(DrbTypeInfo typeInfo) {
+		if (typeInfo instanceof DrbLiteralTypeInfo || typeInfo instanceof IfcLogicalTypeInfo) {
 			return formatExpressOntologyName(typeInfo.getName());			
 		} else {
 			return formatIfcOntologyName(typeInfo.getName());
@@ -246,7 +246,7 @@ public class Ifc2RdfConverter {
 	// Region LITERAL TYPES AND VALUES
 	//*****************************************
 	
-	public Resource convertLiteralTypeInfo(IfcLiteralTypeInfo typeInfo, Model jenaModel) {
+	public Resource convertLiteralTypeInfo(DrbLiteralTypeInfo typeInfo, Model jenaModel) {
 		
 		Resource typeResource = jenaModel.createResource(formatTypeName(typeInfo)); 
 		
@@ -283,7 +283,7 @@ public class Ifc2RdfConverter {
 	 * @param typeInfo
 	 * @return
 	 */
-	public Resource getBaseTypeForLiterals(IfcLiteralTypeInfo typeInfo) {
+	public Resource getBaseTypeForLiterals(DrbLiteralTypeInfo typeInfo) {
 		
 		switch (typeInfo.getName()) {
 		
@@ -371,7 +371,7 @@ public class Ifc2RdfConverter {
 	}
 	
 	
-	Resource convertBooleanValue(IfcTypeInfo typeInfo, LogicalEnum value, Model jenaModel) {
+	Resource convertBooleanValue(DrbTypeInfo typeInfo, LogicalEnum value, Model jenaModel) {
 		
 		Resource baseType = getBaseTypeForBooleans();
 		if (baseType.equals(OWL2.NamedIndividual)) {
@@ -383,7 +383,7 @@ public class Ifc2RdfConverter {
 			Resource resource = jenaModel.createResource();				
 			resource.addProperty(RDF.type, jenaModel.createResource(formatTypeName(typeInfo)));				
 			
-			Property property = getHasXXXProperty(IfcTypeEnum.LOGICAL, jenaModel);
+			Property property = getHasXXXProperty(DrbTypeEnum.LOGICAL, jenaModel);
 			
 			RDFNode valueNode;
 			if (value == LogicalEnum.TRUE) {
@@ -617,7 +617,7 @@ public class Ifc2RdfConverter {
 		Resource typeResource = jenaModel.createResource(formatTypeName(typeInfo));
 		jenaModel.add(typeResource, RDF.type, OWL.Class);
 		
-		IfcTypeInfo baseTypeInfo = typeInfo.getSuperTypeInfo();
+		DrbTypeInfo baseTypeInfo = typeInfo.getSuperTypeInfo();
 		assert(baseTypeInfo != null);
 		
 		if (baseTypeInfo instanceof IfcDefinedTypeInfo) {
@@ -626,7 +626,7 @@ public class Ifc2RdfConverter {
 			Resource superTypeResource = jenaModel.createResource(formatExpressOntologyName(baseTypeInfo.getName()));
 			jenaModel.add(typeResource, RDFS.subClassOf, superTypeResource);
 
-		} else if (baseTypeInfo instanceof IfcLiteralTypeInfo) {
+		} else if (baseTypeInfo instanceof DrbLiteralTypeInfo) {
 
 			Resource superTypeResource = jenaModel.createResource(formatExpressOntologyName(baseTypeInfo.getName()));
 			jenaModel.add(typeResource, RDFS.subClassOf, superTypeResource);
@@ -807,7 +807,7 @@ public class Ifc2RdfConverter {
 					
 					jenaModel.add(property, RDF.type, Ifc2RdfVocabulary.EXPRESS.EntityProperty);
 					
-					IfcTypeInfo attributeTypeInfo = attributeInfo.getAttributeTypeInfo();
+					DrbTypeInfo attributeTypeInfo = attributeInfo.getAttributeTypeInfo();
 					
 					if (attributeTypeInfo.isCollectionType()) {
 						IfcCollectionTypeInfo collectionAttributeTypeInfo = (IfcCollectionTypeInfo)attributeTypeInfo;
@@ -856,7 +856,7 @@ public class Ifc2RdfConverter {
 			 jenaModel.add(blankNode, RDF.type, OWL2.AllDisjointClasses);
 			
 			 List<Resource> disjointClassResources = new ArrayList<>();
-			 for (IfcTypeInfo disjointClassTypeInfo : disjointClasses) {
+			 for (DrbTypeInfo disjointClassTypeInfo : disjointClasses) {
 				 disjointClassResources.add(jenaModel.createResource(formatTypeName(disjointClassTypeInfo)));
 			 }
 			
@@ -954,7 +954,7 @@ public class Ifc2RdfConverter {
 	 * @param baseTypeInfo
 	 * @return
 	 */
-	Property getHasXXXProperty(IfcTypeEnum valueType, Model jenaModel) {
+	Property getHasXXXProperty(DrbTypeEnum valueType, Model jenaModel) {
 		Property hasXXXProperty = map_Type_hasXXXProperty.get(valueType);
 		if (hasXXXProperty == null) {
 			String valueTypeName = valueType.toString();			

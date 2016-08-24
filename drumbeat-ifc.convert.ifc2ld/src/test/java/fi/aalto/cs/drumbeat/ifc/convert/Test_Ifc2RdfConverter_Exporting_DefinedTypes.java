@@ -13,15 +13,15 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 
-import fi.aalto.cs.drumbeat.ifc.common.IfcNotFoundException;
+import fi.aalto.cs.drumbeat.common.DrbNotFoundException;
 import fi.aalto.cs.drumbeat.ifc.convert.RdfAsserter.FullResourceAsserter;
 import fi.aalto.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
 import fi.aalto.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConverter;
 import fi.aalto.cs.drumbeat.ifc.data.IfcVocabulary;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcDefinedTypeInfo;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcLiteralTypeInfo;
+import fi.aalto.cs.drumbeat.ifc.data.schema.DrbLiteralTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcSchema;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcTypeInfo;
+import fi.aalto.cs.drumbeat.ifc.data.schema.DrbTypeInfo;
 
 public class Test_Ifc2RdfConverter_Exporting_DefinedTypes {
 	
@@ -64,13 +64,13 @@ public class Test_Ifc2RdfConverter_Exporting_DefinedTypes {
 		}
 	}
 	
-	private void test_convert_IfcDefinedTypeInfo(String typeName, Class<?> expectedSuperTypeClass) throws IfcNotFoundException, IOException {		
+	private void test_convert_IfcDefinedTypeInfo(String typeName, Class<?> expectedSuperTypeClass) throws DrbNotFoundException, IOException {		
 		
-		IfcTypeInfo typeInfo = ifcSchema.getNonEntityTypeInfo(typeName);
+		DrbTypeInfo typeInfo = ifcSchema.getNonEntityTypeInfo(typeName);
 		
 		assertEquals(IfcDefinedTypeInfo.class, typeInfo.getClass());
 		
-		IfcTypeInfo superTypeInfo = ((IfcDefinedTypeInfo)typeInfo).getSuperTypeInfo();		
+		DrbTypeInfo superTypeInfo = ((IfcDefinedTypeInfo)typeInfo).getSuperTypeInfo();		
 		assertEquals(expectedSuperTypeClass, superTypeInfo.getClass());
 		
 		Resource typeResource = converter.convertDefinedTypeInfo((IfcDefinedTypeInfo)typeInfo, jenaModel);
@@ -80,17 +80,17 @@ public class Test_Ifc2RdfConverter_Exporting_DefinedTypes {
 	
 
 	@Test
-	public void test_convert_IfcDefinedTypeInfo_IFC_INTEGER() throws IfcNotFoundException, IOException {		
-		test_convert_IfcDefinedTypeInfo(IfcVocabulary.TypeNames.IFC_INTEGER, IfcLiteralTypeInfo.class);
+	public void test_convert_IfcDefinedTypeInfo_IFC_INTEGER() throws DrbNotFoundException, IOException {		
+		test_convert_IfcDefinedTypeInfo(IfcVocabulary.TypeNames.IFC_INTEGER, DrbLiteralTypeInfo.class);
 	}	
 
 	@Test
-	public void test_convert_IfcDefinedTypeInfo_IfcPlaneAngleMeasure() throws IfcNotFoundException, IOException {		
-		test_convert_IfcDefinedTypeInfo("IfcPlaneAngleMeasure", IfcLiteralTypeInfo.class);
+	public void test_convert_IfcDefinedTypeInfo_IfcPlaneAngleMeasure() throws DrbNotFoundException, IOException {		
+		test_convert_IfcDefinedTypeInfo("IfcPlaneAngleMeasure", DrbLiteralTypeInfo.class);
 	}	
 
 	@Test
-	public void test_convert_IfcDefinedTypeInfo_IfcPositivePlaneAngleMeasure() throws IfcNotFoundException, IOException {		
+	public void test_convert_IfcDefinedTypeInfo_IfcPositivePlaneAngleMeasure() throws DrbNotFoundException, IOException {		
 		test_convert_IfcDefinedTypeInfo("IfcPositivePlaneAngleMeasure", IfcDefinedTypeInfo.class);
 	}
 	

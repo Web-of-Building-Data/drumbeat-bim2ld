@@ -13,15 +13,15 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 
-import fi.aalto.cs.drumbeat.ifc.common.IfcNotFoundException;
+import fi.aalto.cs.drumbeat.common.DrbNotFoundException;
 import fi.aalto.cs.drumbeat.ifc.convert.RdfAsserter.FullResourceAsserter;
 import fi.aalto.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
 import fi.aalto.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConverter;
 import fi.aalto.cs.drumbeat.ifc.data.IfcVocabulary;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcLiteralTypeInfo;
+import fi.aalto.cs.drumbeat.ifc.data.schema.DrbLiteralTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcLogicalTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcSchema;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcTypeInfo;
+import fi.aalto.cs.drumbeat.ifc.data.schema.DrbTypeInfo;
 
 public class Test_Ifc2RdfConverter_Exporting_LiteralTypes {
 	
@@ -65,13 +65,13 @@ public class Test_Ifc2RdfConverter_Exporting_LiteralTypes {
 	}
 	
 	
-	private void test_convert_IfcLiteralTypeInfo(String typeName) throws IfcNotFoundException, IOException {
+	private void test_convert_IfcLiteralTypeInfo(String typeName) throws DrbNotFoundException, IOException {
 		
-		IfcTypeInfo typeInfo = ifcSchema.getNonEntityTypeInfo(typeName);
+		DrbTypeInfo typeInfo = ifcSchema.getNonEntityTypeInfo(typeName);
 		
-		assertEquals(IfcLiteralTypeInfo.class, typeInfo.getClass());
+		assertEquals(DrbLiteralTypeInfo.class, typeInfo.getClass());
 		
-		Resource typeResource = converter.convertLiteralTypeInfo((IfcLiteralTypeInfo)typeInfo, jenaModel);
+		Resource typeResource = converter.convertLiteralTypeInfo((DrbLiteralTypeInfo)typeInfo, jenaModel);
 		
 		assertNotNull(typeResource);
 		assertTrue(typeResource.isURIResource());
@@ -82,9 +82,9 @@ public class Test_Ifc2RdfConverter_Exporting_LiteralTypes {
 	}
 	
 	
-	private void test_convert_IfcLogicalTypeInfo(String typeName) throws IfcNotFoundException, IOException {		
+	private void test_convert_IfcLogicalTypeInfo(String typeName) throws DrbNotFoundException, IOException {		
 		
-		IfcTypeInfo typeInfo = ifcSchema.getNonEntityTypeInfo(typeName);
+		DrbTypeInfo typeInfo = ifcSchema.getNonEntityTypeInfo(typeName);
 		
 		assertEquals(IfcLogicalTypeInfo.class, typeInfo.getClass());
 		
@@ -99,38 +99,38 @@ public class Test_Ifc2RdfConverter_Exporting_LiteralTypes {
 
 
 	@Test
-	public void test_convert_IfcLiteralTypeInfo_INTEGER() throws IfcNotFoundException, IOException {		
+	public void test_convert_IfcLiteralTypeInfo_INTEGER() throws DrbNotFoundException, IOException {		
 		test_convert_IfcLiteralTypeInfo(IfcVocabulary.TypeNames.INTEGER);		
 	}	
 
 
 	@Test
-	public void test_convert_IfcLiteralTypeInfo_REAL() throws IfcNotFoundException, IOException {		
+	public void test_convert_IfcLiteralTypeInfo_REAL() throws DrbNotFoundException, IOException {		
 		test_convert_IfcLiteralTypeInfo(IfcVocabulary.TypeNames.REAL);		
 	}	
 
 	@Test
-	public void test_convert_IfcLiteralTypeInfo_STRING() throws IfcNotFoundException, IOException {		
+	public void test_convert_IfcLiteralTypeInfo_STRING() throws DrbNotFoundException, IOException {		
 		test_convert_IfcLiteralTypeInfo(IfcVocabulary.TypeNames.STRING);		
 	}	
 	
 	@Test
-	public void test_convert_IfcLiteralTypeInfo_BINARY() throws IfcNotFoundException, IOException {		
+	public void test_convert_IfcLiteralTypeInfo_BINARY() throws DrbNotFoundException, IOException {		
 		test_convert_IfcLiteralTypeInfo(IfcVocabulary.TypeNames.BINARY);		
 	}	
 
 	@Test
-	public void test_convert_IfcLiteralTypeInfo_DATETIME() throws IfcNotFoundException, IOException {		
+	public void test_convert_IfcLiteralTypeInfo_DATETIME() throws DrbNotFoundException, IOException {		
 		test_convert_IfcLiteralTypeInfo(IfcVocabulary.TypeNames.DATETIME);		
 	}	
 
 	@Test
-	public void test_convert_IfcLogicalTypeInfo_BOOLEAN() throws IfcNotFoundException, IOException {
+	public void test_convert_IfcLogicalTypeInfo_BOOLEAN() throws DrbNotFoundException, IOException {
 		test_convert_IfcLogicalTypeInfo(IfcVocabulary.TypeNames.BOOLEAN);
 	}	
 
 	@Test
-	public void test_convert_IfcLogicalTypeInfo_LOGICAL() throws IfcNotFoundException, IOException {
+	public void test_convert_IfcLogicalTypeInfo_LOGICAL() throws DrbNotFoundException, IOException {
 		test_convert_IfcLogicalTypeInfo(IfcVocabulary.TypeNames.LOGICAL);
 	}	
 

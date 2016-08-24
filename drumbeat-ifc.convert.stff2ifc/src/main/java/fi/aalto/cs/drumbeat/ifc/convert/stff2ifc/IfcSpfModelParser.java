@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
-import fi.aalto.cs.drumbeat.ifc.common.IfcNotFoundException;
+import fi.aalto.cs.drumbeat.common.DrbNotFoundException;
 import fi.aalto.cs.drumbeat.ifc.data.IfcVocabulary;
 import fi.aalto.cs.drumbeat.ifc.data.metamodel.IfcMetaModel;
 import fi.aalto.cs.drumbeat.ifc.data.model.*;
@@ -57,7 +57,7 @@ public class IfcSpfModelParser  {
 			}
 			
 			if (schema == null) {
-				throw new IfcNotFoundException("None of schemas " + schemaVersions + " is found");
+				throw new DrbNotFoundException("None of schemas " + schemaVersions + " is found");
 			}
 
 			//

@@ -1,8 +1,8 @@
 package fi.aalto.cs.drumbeat.ifc.common;
 
-import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.common.DrbException;
 
-public class IfcException extends DrumbeatException {
+public class IfcException extends DrbException {
 
 	private static final long serialVersionUID = 1L;
 

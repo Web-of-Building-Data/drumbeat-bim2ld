@@ -26,11 +26,11 @@ import fi.aalto.cs.drumbeat.ifc.data.schema.IfcCollectionTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcDefinedTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcEntityTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcEnumerationTypeInfo;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcLiteralTypeInfo;
+import fi.aalto.cs.drumbeat.ifc.data.schema.DrbLiteralTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcLogicalTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcSelectTypeInfo;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcTypeEnum;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcTypeInfo;
+import fi.aalto.cs.drumbeat.ifc.data.schema.DrbTypeEnum;
+import fi.aalto.cs.drumbeat.ifc.data.schema.DrbTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcUniqueKeyInfo;
 import fi.aalto.cs.drumbeat.rdf.OwlProfileList;
 import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
@@ -52,7 +52,7 @@ public abstract class Ifc2RdfExporterBase {
 	private Resource baseTypeForDoubles;
 	private Resource baseTypeForBooleans;
 	private Resource baseTypeForEnums;
-	private Map<IfcTypeEnum, Property> mapOf_Type_hasXXXProperty;
+	private Map<DrbTypeEnum, Property> mapOf_Type_hasXXXProperty;
 	private OwlProfileList owlProfileList;	
 	
 	protected Ifc2RdfExporterBase(Ifc2RdfConversionContext context, Model jenaModel) {
@@ -71,10 +71,10 @@ public abstract class Ifc2RdfExporterBase {
 	 */
 	public RDFNode convertLiteralToNode(IfcLiteralValue literalValue) {
 		
-		IfcTypeInfo typeInfo = literalValue.getType();
+		DrbTypeInfo typeInfo = literalValue.getType();
 		assert(typeInfo != null) : literalValue;
 
-		if (typeInfo instanceof IfcDefinedTypeInfo || typeInfo instanceof IfcLiteralTypeInfo) {
+		if (typeInfo instanceof IfcDefinedTypeInfo || typeInfo instanceof DrbLiteralTypeInfo) {
 			
 			return convertValueOfLiteralOrDefinedType(typeInfo, literalValue.getValue());
 			
@@ -235,7 +235,7 @@ public abstract class Ifc2RdfExporterBase {
 	 * @param baseTypeInfo
 	 * @return
 	 */
-	protected Property getHasXXXProperty(IfcTypeEnum valueType) {
+	protected Property getHasXXXProperty(DrbTypeEnum valueType) {
 		Property hasXXXProperty = mapOf_Type_hasXXXProperty.get(valueType);
 		if (hasXXXProperty == null) {
 			String valueTypeName = valueType.toString();			
@@ -272,8 +272,8 @@ public abstract class Ifc2RdfExporterBase {
 	 * @param typeInfo
 	 * @return
 	 */
-	protected String formatTypeName(IfcTypeInfo typeInfo) {
-		if (typeInfo instanceof IfcLiteralTypeInfo || typeInfo instanceof IfcLogicalTypeInfo) {
+	protected String formatTypeName(DrbTypeInfo typeInfo) {
+		if (typeInfo instanceof DrbLiteralTypeInfo || typeInfo instanceof IfcLogicalTypeInfo) {
 			return formatExpressOntologyName(typeInfo.getName());			
 		} else {
 			return formatOntologyName(typeInfo.getName());
@@ -348,7 +348,7 @@ public abstract class Ifc2RdfExporterBase {
 	}
 	
 	
-	private Resource convertBooleanValue(IfcTypeInfo typeInfo, LogicalEnum value) {
+	private Resource convertBooleanValue(DrbTypeInfo typeInfo, LogicalEnum value) {
 		
 		Resource baseType = getBaseTypeForBooleans();
 		if (baseType.equals(OWL2.NamedIndividual)) {
@@ -360,7 +360,7 @@ public abstract class Ifc2RdfExporterBase {
 			Resource resource = createAnonResource();				
 			resource.addProperty(RDF.type, createUriResource(formatTypeName(typeInfo)));				
 			
-			Property property = getHasXXXProperty(IfcTypeEnum.LOGICAL);
+			Property property = getHasXXXProperty(DrbTypeEnum.LOGICAL);
 			
 			RDFNode valueNode;
 			if (value == LogicalEnum.TRUE) {
@@ -478,7 +478,7 @@ public abstract class Ifc2RdfExporterBase {
 	 * @param typeInfo
 	 * @return
 	 */
-	public Resource getBaseTypeForLiterals(IfcLiteralTypeInfo typeInfo) {
+	public Resource getBaseTypeForLiterals(DrbLiteralTypeInfo typeInfo) {
 		
 		switch (typeInfo.getName()) {
 		
@@ -546,7 +546,7 @@ public abstract class Ifc2RdfExporterBase {
 	}
 	
 	
-	protected void exportLiteralTypeInfo(IfcLiteralTypeInfo typeInfo) {
+	protected void exportLiteralTypeInfo(DrbLiteralTypeInfo typeInfo) {
 		
 		Resource typeResource = createUriResource(formatTypeName(typeInfo)); 
 		
@@ -605,27 +605,27 @@ public abstract class Ifc2RdfExporterBase {
 	
 	
 	
-	private Resource convertValueOfLiteralOrDefinedType(IfcTypeInfo typeInfo, Object value) {
+	private Resource convertValueOfLiteralOrDefinedType(DrbTypeInfo typeInfo, Object value) {
 		
-		assert(typeInfo instanceof IfcLiteralTypeInfo || typeInfo instanceof IfcDefinedTypeInfo);
+		assert(typeInfo instanceof DrbLiteralTypeInfo || typeInfo instanceof IfcDefinedTypeInfo);
 		
 		RDFNode valueNode;
-		IfcTypeEnum valueType = typeInfo.getValueTypes().iterator().next();
+		DrbTypeEnum valueType = typeInfo.getValueTypes().iterator().next();
 		
-		if (valueType == IfcTypeEnum.STRING) {
+		if (valueType == DrbTypeEnum.STRING) {
 			valueNode = jenaModel.createTypedLiteral((String)value);				
-		} else if (valueType == IfcTypeEnum.GUID) {				
+		} else if (valueType == DrbTypeEnum.GUID) {				
 			valueNode = jenaModel.createTypedLiteral(value.toString());
-		} else if (valueType == IfcTypeEnum.REAL || valueType == IfcTypeEnum.NUMBER) {				
+		} else if (valueType == DrbTypeEnum.REAL || valueType == DrbTypeEnum.NUMBER) {				
 			valueNode = jenaModel.createTypedLiteral((double)value, getBaseTypeForDoubles().getURI());				
-		} else if (valueType == IfcTypeEnum.INTEGER) {				
+		} else if (valueType == DrbTypeEnum.INTEGER) {				
 			valueNode = jenaModel.createTypedLiteral((long)value);				
-		} else if (valueType == IfcTypeEnum.LOGICAL) {
+		} else if (valueType == DrbTypeEnum.LOGICAL) {
 //			assert(typeInfo instanceof IfcLogicalTypeInfo) : typeInfo;
 			assert(value instanceof LogicalEnum) : value;
 			valueNode = convertBooleanValue(typeInfo, (LogicalEnum)value);
 		} else {
-			assert (valueType == IfcTypeEnum.DATETIME) : "Expected: valueType == IfcTypeEnum.DATETIME. Actual: valueType = " + valueType + ", " + typeInfo;
+			assert (valueType == DrbTypeEnum.DATETIME) : "Expected: valueType == IfcTypeEnum.DATETIME. Actual: valueType = " + valueType + ", " + typeInfo;
 			valueNode = jenaModel.createTypedLiteral((Calendar)value);				
 		}
 
@@ -645,10 +645,10 @@ public abstract class Ifc2RdfExporterBase {
 		Resource typeResource = createUriResource(formatTypeName(typeInfo));
 		jenaModel.add(typeResource, RDF.type, OWL.Class);
 		
-		IfcTypeInfo baseTypeInfo = typeInfo.getSuperTypeInfo();
+		DrbTypeInfo baseTypeInfo = typeInfo.getSuperTypeInfo();
 		assert(baseTypeInfo != null);
 		
-		if (baseTypeInfo instanceof IfcLiteralTypeInfo) {
+		if (baseTypeInfo instanceof DrbLiteralTypeInfo) {
 			
 			Resource superTypeResource = createUriResource(formatExpressOntologyName(baseTypeInfo.getName()));
 			jenaModel.add(typeResource, RDFS.subClassOf, superTypeResource);			
@@ -837,7 +837,7 @@ public abstract class Ifc2RdfExporterBase {
 			 jenaModel.add(blankNode, RDF.type, OWL2.AllDisjointClasses);
 			
 			 List<Resource> disjointClassResources = new ArrayList<>();
-			 for (IfcTypeInfo disjointClassTypeInfo : disjointClasses) {
+			 for (DrbTypeInfo disjointClassTypeInfo : disjointClasses) {
 				 disjointClassResources.add(createUriResource(formatTypeName(disjointClassTypeInfo)));
 			 }
 			

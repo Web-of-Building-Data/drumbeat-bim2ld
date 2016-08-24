@@ -24,7 +24,7 @@ import fi.aalto.cs.drumbeat.common.string.RegexUtils;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.ifc.common.IfcException;
 import fi.aalto.cs.drumbeat.ifc.common.IfcHelper;
-import fi.aalto.cs.drumbeat.ifc.common.IfcNotFoundException;
+import fi.aalto.cs.drumbeat.common.DrbNotFoundException;
 import fi.aalto.cs.drumbeat.ifc.data.Cardinality;
 import fi.aalto.cs.drumbeat.ifc.data.IfcVocabulary;
 import fi.aalto.cs.drumbeat.ifc.data.schema.*;
@@ -115,7 +115,7 @@ public class IfcSchemaParser {
 				if (tokens[0].equals(IfcVocabulary.ExpressFormat.TYPE)) {
 					
 					// parse an non-entity type info
-					IfcNonEntityTypeInfo nonEntityTypeInfo = parseNonEntityTypeInfo(tokens);
+					DrbNonEntityTypeInfo nonEntityTypeInfo = parseNonEntityTypeInfo(tokens);
 					schema.addNonEntityTypeInfo(nonEntityTypeInfo);
 					
 				} else if (tokens[0].equals(IfcVocabulary.ExpressFormat.ENTITY)) {
@@ -175,7 +175,7 @@ public class IfcSchemaParser {
 		}
 	}
 	
-	private IfcNonEntityTypeInfo parseNonEntityTypeInfo(String[] tokens) throws IOException, IfcFormatException, IfcNotFoundException {
+	private DrbNonEntityTypeInfo parseNonEntityTypeInfo(String[] tokens) throws IOException, IfcFormatException, DrbNotFoundException {
 		
 		tokens = RegexUtils.split2(tokens[1].trim(), RegexUtils.WHITE_SPACE);			
 		
@@ -184,7 +184,7 @@ public class IfcSchemaParser {
 		tokens = RegexUtils.split2(tokens[1], IfcVocabulary.ExpressFormat.EQUAL);			
 		String typeInfoString = tokens[1].trim();
 		
-		IfcNonEntityTypeInfo typeInfo = parseNonEntityTypeInfoBody(typeInfoString, typeName);
+		DrbNonEntityTypeInfo typeInfo = parseNonEntityTypeInfoBody(typeInfoString, typeName);
 		
 		for (;;) {
 
@@ -211,7 +211,7 @@ public class IfcSchemaParser {
 	 * @throws IOException
 	 * @throws IfcFormatException
 	 */
-	private IfcNonEntityTypeInfo parseNonEntityTypeInfoBody(String typeInfoString, String typeName) throws IOException, IfcFormatException {		
+	private DrbNonEntityTypeInfo parseNonEntityTypeInfoBody(String typeInfoString, String typeName) throws IOException, IfcFormatException {		
 		String[] tokens = RegexUtils.split2(typeInfoString, RegexUtils.WHITE_SPACE);
 		
 		IfcCollectionKindEnum collectionKind = IfcCollectionKindEnum.parse(tokens[0]);
@@ -237,7 +237,7 @@ public class IfcSchemaParser {
 			
 			IfcCollectionTypeInfo typeInfo;
 			if (isCollectionTypeHeader(tokens[0])) {
-				IfcTypeInfo itemTypeInfo = parseNonEntityTypeInfoBody(typeInfoString, itemTypeInfoName); 
+				DrbTypeInfo itemTypeInfo = parseNonEntityTypeInfoBody(typeInfoString, itemTypeInfoName); 
 				typeInfo = new IfcCollectionTypeInfo(schema, typeName, collectionKind, itemTypeInfo);
 			} else {
 				typeInfo = new IfcCollectionTypeInfo(schema, typeName, collectionKind, itemTypeInfoName);				
@@ -287,7 +287,7 @@ public class IfcSchemaParser {
 			
 			try {
 				return schema.getNonEntityTypeInfo(typeName);
-			} catch (IfcNotFoundException e) {			
+			} catch (DrbNotFoundException e) {			
 				return new IfcDefinedTypeInfo(schema, typeName, internalTypeInfoName);
 			}			
 				
@@ -334,7 +334,7 @@ public class IfcSchemaParser {
 	 * @return
 	 * @throws IfcFormatException
 	 * @throws IOException
-	 * @throws IfcNotFoundException 
+	 * @throws DrbNotFoundException 
 	 */
 	private IfcEntityTypeInfoText parseEntityTypeInfoText(String[] tokens) throws IfcFormatException, IOException {
 		
@@ -349,7 +349,7 @@ public class IfcSchemaParser {
 		IfcEntityTypeInfo entityTypeInfo;
 		try {
 			entityTypeInfo = schema.getEntityTypeInfo(entityTypeName);
-		} catch (IfcNotFoundException e) {
+		} catch (DrbNotFoundException e) {
 			entityTypeInfo = new IfcEntityTypeInfo(schema, entityTypeName);
 		}
 		IfcEntityTypeInfoText entityTypeInfoText = new IfcEntityTypeInfoText(entityTypeInfo);			
@@ -440,7 +440,7 @@ public class IfcSchemaParser {
 			String collectionTypeInfoName = IfcCollectionTypeInfo.formatCollectionTypeName(collectionKind, collectionItemTypeInfoName, collectionCardinality);
 			try {
 				return (IfcCollectionTypeInfo)schema.getTypeInfo(collectionTypeInfoName);
-			} catch (IfcNotFoundException e) {					
+			} catch (DrbNotFoundException e) {					
 			
 				// create collection type (with cardinality)
 				IfcCollectionTypeInfo collectionTypeInfo = new IfcCollectionTypeInfo(schema, collectionTypeInfoName, collectionKind, collectionItemTypeInfoName);
@@ -476,7 +476,7 @@ public class IfcSchemaParser {
 			
 	}
 	
-	private void bindEntitySuperTypeAndAttributes(IfcEntityTypeInfoText entityTypeInfoText) throws IfcFormatException, IfcNotFoundException, IOException {		
+	private void bindEntitySuperTypeAndAttributes(IfcEntityTypeInfoText entityTypeInfoText) throws IfcFormatException, DrbNotFoundException, IOException {		
 				
 		IfcEntityTypeInfo entityTypeInfo = entityTypeInfoText.getEntityTypeInfo();
 		
@@ -501,7 +501,7 @@ public class IfcSchemaParser {
 				tokens = RegexUtils.split2(tokens[1].trim(), RegexUtils.WHITE_SPACE);
 			}
 			
-			IfcTypeInfo attributeTypeInfo;
+			DrbTypeInfo attributeTypeInfo;
 			
 			IfcCollectionKindEnum collectionKind = IfcCollectionKindEnum.parse(tokens[0]); 
 			

@@ -172,7 +172,7 @@ public class Ifc2RdfExporter {
 			for (IfcSchema schema : schemas) {
 				System.out.printf("SCHEMA %s", schema.getVersion());
 				schema.getAllTypeInfos().stream().filter(t -> t instanceof IfcSelectTypeInfo).forEach(t -> {
-					EnumSet<IfcTypeEnum> valueTypes = t.getValueTypes();
+					EnumSet<DrbTypeEnum> valueTypes = t.getValueTypes();
 					if (valueTypes.size() > 1) {
 						System.out.printf("SELECT type %s %s%n", t, valueTypes);
 					}

@@ -32,7 +32,7 @@
 //import fi.aalto.cs.drumbeat.common.string.StringUtils;
 //import fi.aalto.cs.drumbeat.ifc.common.IfcException;
 //import fi.aalto.cs.drumbeat.ifc.common.IfcHelper;
-//import fi.aalto.cs.drumbeat.ifc.common.IfcNotFoundException;
+//import fi.aalto.cs.drumbeat.common.DrbNotFoundException;
 //import fi.aalto.cs.drumbeat.ifc.data.Cardinality;
 //import fi.aalto.cs.drumbeat.ifc.data.IfcVocabulary;
 //import fi.aalto.cs.drumbeat.ifc.data.schema.*;

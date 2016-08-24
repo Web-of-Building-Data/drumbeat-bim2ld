@@ -107,7 +107,7 @@ public class IfcModelAnalyser {
 		return result;
 	}
 
-//	public List<IfcEntity> getEntitiesByType(String entityTypeInfoName, boolean checkSubtypes) throws IfcNotFoundException {
+//	public List<IfcEntity> getEntitiesByType(String entityTypeInfoName, boolean checkSubtypes) throws DrbNotFoundException {
 //		IfcEntityTypeInfo entityTypeInfo = model.getSchema().getEntityTypeInfo(entityTypeInfoName);
 //		return getEntitiesByType(entityTypeInfo, checkSubtypes);
 //	}

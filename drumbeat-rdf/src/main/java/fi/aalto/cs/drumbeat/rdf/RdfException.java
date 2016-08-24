@@ -1,8 +1,8 @@
 package fi.aalto.cs.drumbeat.rdf;
 
-import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.common.DrbException;
 
-public class RdfException extends DrumbeatException {
+public class RdfException extends DrbException {
 
 	private static final long serialVersionUID = 1L;
 

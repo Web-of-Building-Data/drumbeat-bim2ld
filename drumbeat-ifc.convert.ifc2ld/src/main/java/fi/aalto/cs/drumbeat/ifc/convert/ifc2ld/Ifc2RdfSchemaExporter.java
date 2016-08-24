@@ -64,13 +64,13 @@ public class Ifc2RdfSchemaExporter {
 			//
 			// write non-entity types section
 			//
-			Collection<IfcNonEntityTypeInfo> nonEntityTypeInfos = ifcSchema
+			Collection<DrbNonEntityTypeInfo> nonEntityTypeInfos = ifcSchema
 					.getNonEntityTypeInfos();
 
 
 			// enumeration types
 			// adapter.startSection("ENUMERATION TYPES");
-			for (IfcNonEntityTypeInfo nonEntityTypeInfo : nonEntityTypeInfos) {
+			for (DrbNonEntityTypeInfo nonEntityTypeInfo : nonEntityTypeInfos) {
 				if (nonEntityTypeInfo instanceof IfcEnumerationTypeInfo) {
 					converter.convertEnumerationTypeInfo((IfcEnumerationTypeInfo) nonEntityTypeInfo, jenaModel);
 					
@@ -80,7 +80,7 @@ public class Ifc2RdfSchemaExporter {
 
 			// defined types
 			// adapter.startSection("DEFINED TYPES");
-			for (IfcNonEntityTypeInfo nonEntityTypeInfo : nonEntityTypeInfos) {
+			for (DrbNonEntityTypeInfo nonEntityTypeInfo : nonEntityTypeInfos) {
 				if (nonEntityTypeInfo instanceof IfcDefinedTypeInfo) {
 					converter.convertDefinedTypeInfo((IfcDefinedTypeInfo) nonEntityTypeInfo, jenaModel);					
 				}
@@ -89,7 +89,7 @@ public class Ifc2RdfSchemaExporter {
 
 			// select types
 			// adapter.startSection("SELECT TYPES");
-			for (IfcNonEntityTypeInfo nonEntityTypeInfo : nonEntityTypeInfos) {
+			for (DrbNonEntityTypeInfo nonEntityTypeInfo : nonEntityTypeInfos) {
 				if (nonEntityTypeInfo instanceof IfcSelectTypeInfo) {
 					converter.convertSelectTypeInfo((IfcSelectTypeInfo) nonEntityTypeInfo, jenaModel);					
 				}
@@ -98,7 +98,7 @@ public class Ifc2RdfSchemaExporter {
 
 			// collection types
 			//adapter.startSection("COLLECTION TYPES");
-			for (IfcNonEntityTypeInfo nonEntityTypeInfo : nonEntityTypeInfos) {
+			for (DrbNonEntityTypeInfo nonEntityTypeInfo : nonEntityTypeInfos) {
 				if (nonEntityTypeInfo instanceof IfcCollectionTypeInfo) {
 					// TODO: check if additional collection types must be exported
 					converter.convertCollectionTypeInfo((IfcCollectionTypeInfo)nonEntityTypeInfo, jenaModel);					
@@ -181,11 +181,11 @@ public class Ifc2RdfSchemaExporter {
 
 		// simple types
 		// adapter.startSection("SIMPLE TYPES");
-		Collection<IfcNonEntityTypeInfo> nonEntityTypeInfos = ifcSchema
+		Collection<DrbNonEntityTypeInfo> nonEntityTypeInfos = ifcSchema
 				.getNonEntityTypeInfos();
-		for (IfcNonEntityTypeInfo nonEntityTypeInfo : nonEntityTypeInfos) {
-			if (nonEntityTypeInfo instanceof IfcLiteralTypeInfo) {
-				converter.convertLiteralTypeInfo((IfcLiteralTypeInfo) nonEntityTypeInfo, jenaModel);				
+		for (DrbNonEntityTypeInfo nonEntityTypeInfo : nonEntityTypeInfos) {
+			if (nonEntityTypeInfo instanceof DrbLiteralTypeInfo) {
+				converter.convertLiteralTypeInfo((DrbLiteralTypeInfo) nonEntityTypeInfo, jenaModel);				
 			} else if (nonEntityTypeInfo instanceof IfcLogicalTypeInfo) {
 				converter.convertLogicalTypeInfo((IfcLogicalTypeInfo) nonEntityTypeInfo, jenaModel);
 			}

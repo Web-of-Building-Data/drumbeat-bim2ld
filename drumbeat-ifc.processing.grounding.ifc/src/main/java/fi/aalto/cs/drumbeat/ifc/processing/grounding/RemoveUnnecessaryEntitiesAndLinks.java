@@ -6,7 +6,7 @@ import fi.aalto.cs.drumbeat.ifc.processing.IfcAnalyserException;
 import fi.aalto.cs.drumbeat.ifc.processing.grounding.IfcGroundingMainProcessor;
 import fi.aalto.cs.drumbeat.ifc.processing.grounding.IfcGroundingProcessor;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
-import fi.aalto.cs.drumbeat.ifc.common.IfcNotFoundException;
+import fi.aalto.cs.drumbeat.common.DrbNotFoundException;
 import fi.aalto.cs.drumbeat.ifc.data.model.IfcEntity;
 import fi.aalto.cs.drumbeat.ifc.data.model.IfcEntityBase;
 import fi.aalto.cs.drumbeat.ifc.data.model.IfcLink;
@@ -59,7 +59,7 @@ public class RemoveUnnecessaryEntitiesAndLinks extends IfcGroundingProcessor {
 					logger.trace("Removing entity type: '" + entityTypeName + "'");
 					entityTypeInfos.add(schema.getEntityTypeInfo(entityTypeName));
 				}
-			} catch (IfcNotFoundException e) {
+			} catch (DrbNotFoundException e) {
 				throw new IfcAnalyserException(e.getMessage(), e);
 			}
 		} else {

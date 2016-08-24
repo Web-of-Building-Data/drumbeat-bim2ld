@@ -6,7 +6,7 @@ import java.util.Properties;
 import fi.aalto.cs.drumbeat.ifc.processing.IfcAnalyserException;
 import fi.aalto.cs.drumbeat.ifc.processing.grounding.IfcGroundingMainProcessor;
 import fi.aalto.cs.drumbeat.ifc.processing.grounding.IfcGroundingProcessor;
-import fi.aalto.cs.drumbeat.ifc.common.IfcNotFoundException;
+import fi.aalto.cs.drumbeat.common.DrbNotFoundException;
 import fi.aalto.cs.drumbeat.ifc.common.guid.GuidCompressor;
 import fi.aalto.cs.drumbeat.ifc.data.model.IfcEntity;
 import fi.aalto.cs.drumbeat.ifc.data.model.IfcLink;
@@ -17,7 +17,7 @@ import fi.aalto.cs.drumbeat.ifc.data.schema.IfcDefinedTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcEntityTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcLinkInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcSchema;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcTypeEnum;
+import fi.aalto.cs.drumbeat.ifc.data.schema.DrbTypeEnum;
 
 
 /**
@@ -79,14 +79,14 @@ public class ReplacePropertiesWithValueGlobalId extends IfcGroundingProcessor {
 			}
 			
 			if (nameAttributeInfo == null) {
-				throw new IfcNotFoundException(IFCPROPERTY_NAME_ATTRIBUTE);
+				throw new DrbNotFoundException(IFCPROPERTY_NAME_ATTRIBUTE);
 			}
 			
 			if (valueAttributeInfo == null) {
-				throw new IfcNotFoundException(IFCPROPERTY_NOMINALVALUE_ATTRIBUTE);
+				throw new DrbNotFoundException(IFCPROPERTY_NOMINALVALUE_ATTRIBUTE);
 			}
 
-		} catch (IfcNotFoundException e) {
+		} catch (DrbNotFoundException e) {
 			throw new IfcAnalyserException("Couldn't find property type or attribute: " + e.getMessage());
 		}
 	}

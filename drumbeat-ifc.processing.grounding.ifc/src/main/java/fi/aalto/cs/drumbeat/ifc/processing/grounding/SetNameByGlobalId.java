@@ -4,7 +4,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 
 import fi.aalto.cs.drumbeat.ifc.processing.IfcAnalyserException;
-import fi.aalto.cs.drumbeat.ifc.common.IfcNotFoundException;
+import fi.aalto.cs.drumbeat.common.DrbNotFoundException;
 import fi.aalto.cs.drumbeat.ifc.common.guid.GuidCompressor;
 import fi.aalto.cs.drumbeat.ifc.data.IfcVocabulary;
 import fi.aalto.cs.drumbeat.ifc.data.model.IfcEntity;
@@ -58,7 +58,7 @@ public class SetNameByGlobalId extends IfcGroundingProcessor {
 			ifcRootEntityTypeInfo = schema.getEntityTypeInfo(IfcVocabulary.TypeNames.IFC_ROOT);
 			
 			globalIdAttributeInfo = ifcRootEntityTypeInfo.getAttributeInfo(IfcVocabulary.AttributeNames.GLOBAL_ID);
-		} catch (IfcNotFoundException e) {
+		} catch (DrbNotFoundException e) {
 		}
 		assert(globalIdAttributeInfo != null);
 	}

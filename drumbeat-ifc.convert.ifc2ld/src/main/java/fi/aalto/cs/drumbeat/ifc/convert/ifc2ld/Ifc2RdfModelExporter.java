@@ -28,11 +28,11 @@ import fi.aalto.cs.drumbeat.ifc.data.schema.IfcDefinedTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcEntityTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcEnumerationTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcInverseLinkInfo;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcLiteralTypeInfo;
+import fi.aalto.cs.drumbeat.ifc.data.schema.DrbLiteralTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcLogicalTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcSchema;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcTypeEnum;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcTypeInfo;
+import fi.aalto.cs.drumbeat.ifc.data.schema.DrbTypeEnum;
+import fi.aalto.cs.drumbeat.ifc.data.schema.DrbTypeInfo;
 import fi.aalto.cs.drumbeat.rdf.OwlProfileList;
 import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
 
@@ -288,7 +288,7 @@ public class Ifc2RdfModelExporter {
 	 * @param typeInfo
 	 * @return
 	 */
-	public RDFNode convertSingleValueToNode(IfcSingleValue value, IfcTypeInfo typeInfo, Resource entityResource, long childNodeCount) {
+	public RDFNode convertSingleValueToNode(IfcSingleValue value, DrbTypeInfo typeInfo, Resource entityResource, long childNodeCount) {
 		if (typeInfo instanceof IfcCollectionTypeInfo) {
 			throw new IllegalArgumentException("Expected non-collection type info: " + typeInfo);
 		} else {
@@ -303,7 +303,7 @@ public class Ifc2RdfModelExporter {
 		}
 	}
 	
-	public List<RDFNode> convertValueToNode(IfcValue value, IfcTypeInfo typeInfo, Resource entityResource, long childNodeCount) {
+	public List<RDFNode> convertValueToNode(IfcValue value, DrbTypeInfo typeInfo, Resource entityResource, long childNodeCount) {
 		if (value instanceof IfcSingleValue) {
 			List<RDFNode> nodes = new ArrayList<>();
 			nodes.add(convertSingleValueToNode((IfcSingleValue)value, typeInfo, entityResource, childNodeCount));
@@ -333,11 +333,11 @@ public class Ifc2RdfModelExporter {
 	 */
 	public RDFNode convertLiteralValue(IfcLiteralValue literalValue, Resource parentResource, long childNodeCount, Model jenaModel) {
 		
-		IfcTypeInfo typeInfo = literalValue.getType();
+		DrbTypeInfo typeInfo = literalValue.getType();
 		
 		assert(typeInfo != null) : literalValue;
 
-		if (typeInfo instanceof IfcDefinedTypeInfo || typeInfo instanceof IfcLiteralTypeInfo) {
+		if (typeInfo instanceof IfcDefinedTypeInfo || typeInfo instanceof DrbLiteralTypeInfo) {
 			
 			return convertValueOfLiteralOrDefinedType(typeInfo, literalValue.getValue(), parentResource, childNodeCount, jenaModel);
 			
@@ -359,27 +359,27 @@ public class Ifc2RdfModelExporter {
 	}
 	
 	
-	private Resource convertValueOfLiteralOrDefinedType(IfcTypeInfo typeInfo, Object value, Resource parentResource, long childNodeCount, Model jenaModel) {
+	private Resource convertValueOfLiteralOrDefinedType(DrbTypeInfo typeInfo, Object value, Resource parentResource, long childNodeCount, Model jenaModel) {
 		
-		assert(typeInfo instanceof IfcLiteralTypeInfo || typeInfo instanceof IfcDefinedTypeInfo);
+		assert(typeInfo instanceof DrbLiteralTypeInfo || typeInfo instanceof IfcDefinedTypeInfo);
 		
 		RDFNode valueNode;
-		IfcTypeEnum valueType = typeInfo.getValueTypes().iterator().next();
+		DrbTypeEnum valueType = typeInfo.getValueTypes().iterator().next();
 		
-		if (valueType == IfcTypeEnum.STRING) {
+		if (valueType == DrbTypeEnum.STRING) {
 			valueNode = jenaModel.createTypedLiteral((String)value);				
-		} else if (valueType == IfcTypeEnum.GUID) {				
+		} else if (valueType == DrbTypeEnum.GUID) {				
 			valueNode = jenaModel.createTypedLiteral(value.toString());
-		} else if (valueType == IfcTypeEnum.REAL || valueType == IfcTypeEnum.NUMBER) {				
+		} else if (valueType == DrbTypeEnum.REAL || valueType == DrbTypeEnum.NUMBER) {				
 			valueNode = jenaModel.createTypedLiteral((double)value, converter.getBaseTypeForDoubles().getURI());				
-		} else if (valueType == IfcTypeEnum.INTEGER) {				
+		} else if (valueType == DrbTypeEnum.INTEGER) {				
 			valueNode = jenaModel.createTypedLiteral((long)value);				
-		} else if (valueType == IfcTypeEnum.LOGICAL) {
+		} else if (valueType == DrbTypeEnum.LOGICAL) {
 //			assert(typeInfo instanceof IfcLogicalTypeInfo) : typeInfo;
 			assert(value instanceof LogicalEnum) : value;
 			valueNode = converter.convertBooleanValue(typeInfo, (LogicalEnum)value, jenaModel);
 		} else {
-			assert (valueType == IfcTypeEnum.DATETIME) : "Expected: valueType == IfcTypeEnum.DATETIME. Actual: valueType = " + valueType + ", " + typeInfo;
+			assert (valueType == DrbTypeEnum.DATETIME) : "Expected: valueType == IfcTypeEnum.DATETIME. Actual: valueType = " + valueType + ", " + typeInfo;
 			valueNode = jenaModel.createTypedLiteral((Calendar)value);				
 		}
 		
@@ -432,7 +432,7 @@ public class Ifc2RdfModelExporter {
 			
 			Resource listTypeResource = jenaModel.createResource(converter.formatTypeName(collectionTypeInfo)); 
 			Resource emptyListTypeResource = jenaModel.createResource(converter.formatTypeName(collectionTypeInfo).replace("List", "EmptyList"));
-			IfcTypeInfo itemTypeInfo = collectionTypeInfo.getItemTypeInfo();			
+			DrbTypeInfo itemTypeInfo = collectionTypeInfo.getItemTypeInfo();			
 			
 			List<? extends IfcSingleValue> values = listValue.getSingleValues(); 
 
@@ -497,7 +497,7 @@ public class Ifc2RdfModelExporter {
 			listResource = jenaModel.createResource();
 		}
 		
-		IfcTypeInfo itemTypeInfo = collectionTypeInfo.getItemTypeInfo();
+		DrbTypeInfo itemTypeInfo = collectionTypeInfo.getItemTypeInfo();
 		
 		List<RDFNode> nodeList = new ArrayList<>();
 		long count = 1;

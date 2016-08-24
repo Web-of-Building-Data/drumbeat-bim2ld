@@ -20,7 +20,7 @@ import fi.aalto.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConverter;
 import fi.aalto.cs.drumbeat.ifc.data.IfcVocabulary;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcCollectionTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcSchema;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcTypeInfo;
+import fi.aalto.cs.drumbeat.ifc.data.schema.DrbTypeInfo;
 
 public class Test_Ifc2RdfConverter_Exporting_CollectionTypes {
 	
@@ -67,7 +67,7 @@ public class Test_Ifc2RdfConverter_Exporting_CollectionTypes {
 	private void test_convert_IfcCollectionTypeInfo(String typeName) throws IOException, IfcException {		
 		
 		
-		IfcTypeInfo typeInfo = ifcSchema.getNonEntityTypeInfo(typeName);
+		DrbTypeInfo typeInfo = ifcSchema.getNonEntityTypeInfo(typeName);
 		
 		assertEquals(IfcCollectionTypeInfo.class, typeInfo.getClass());
 		
