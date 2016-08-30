@@ -3,8 +3,9 @@ package fi.aalto.cs.drumbeat.data.ifc.schema;
 import java.util.*;
 
 import fi.aalto.cs.drumbeat.data.edm.schema.*;
-import fi.aalto.cs.drumbeat.data.ifc.IfcVocabulary;
-import fi.aalto.cs.drumbeat.data.ifc.IfcVocabulary.LogicalValues;
+import fi.aalto.cs.drumbeat.data.ifc.IfcVocabulary.IfcTypes;
+import fi.aalto.cs.drumbeat.data.step.StepVocabulary.StepTypes;
+import fi.aalto.cs.drumbeat.data.step.StepVocabulary.StepValues;
 
 
 /**
@@ -19,35 +20,35 @@ public class IfcSchema extends DrbSchema {
 	 * Predefined schema entity types
 	 *
 	 */
-	public final DrbEntityTypeInfo IFC_ELEMENT = new DrbEntityTypeInfo(this, IfcVocabulary.TypeNames.IFC_ELEMENT);
-	public final DrbEntityTypeInfo IFC_OBJECT = new DrbEntityTypeInfo(this, IfcVocabulary.TypeNames.IFC_OBJECT);
-	public final DrbEntityTypeInfo IFC_OBJECT_DEFINITION = new DrbEntityTypeInfo(this, IfcVocabulary.TypeNames.IFC_OBJECT_DEFINITION);
-	public final DrbEntityTypeInfo IFC_PRODUCT = new DrbEntityTypeInfo(this, IfcVocabulary.TypeNames.IFC_PRODUCT);
-	public final DrbEntityTypeInfo IFC_PROJECT = new DrbEntityTypeInfo(this, IfcVocabulary.TypeNames.IFC_PROJECT);
-	public final DrbEntityTypeInfo IFC_PROPERTY_DEFINITION = new DrbEntityTypeInfo(this, IfcVocabulary.TypeNames.IFC_PROPERTY_DEFINITION);
-	public final DrbEntityTypeInfo IFC_RELATIONSHIP = new DrbEntityTypeInfo(this, IfcVocabulary.TypeNames.IFC_RELATIONSHIP);
-	public final DrbEntityTypeInfo IFC_ROOT = new DrbEntityTypeInfo(this, IfcVocabulary.TypeNames.IFC_ROOT);	
-	public final DrbEntityTypeInfo IFC_SPACIAL_STRUCTURAL_ELEMENT = new DrbEntityTypeInfo(this, IfcVocabulary.TypeNames.IFC_SPACIAL_STRUCTURAL_ELEMENT);
+	public final DrbEntityTypeInfo IFC_ELEMENT = new DrbEntityTypeInfo(this, IfcTypes.IFC_ELEMENT);
+	public final DrbEntityTypeInfo IFC_OBJECT = new DrbEntityTypeInfo(this, IfcTypes.IFC_OBJECT);
+	public final DrbEntityTypeInfo IFC_OBJECT_DEFINITION = new DrbEntityTypeInfo(this, IfcTypes.IFC_OBJECT_DEFINITION);
+	public final DrbEntityTypeInfo IFC_PRODUCT = new DrbEntityTypeInfo(this, IfcTypes.IFC_PRODUCT);
+	public final DrbEntityTypeInfo IFC_PROJECT = new DrbEntityTypeInfo(this, IfcTypes.IFC_PROJECT);
+	public final DrbEntityTypeInfo IFC_PROPERTY_DEFINITION = new DrbEntityTypeInfo(this, IfcTypes.IFC_PROPERTY_DEFINITION);
+	public final DrbEntityTypeInfo IFC_RELATIONSHIP = new DrbEntityTypeInfo(this, IfcTypes.IFC_RELATIONSHIP);
+	public final DrbEntityTypeInfo IFC_ROOT = new DrbEntityTypeInfo(this, IfcTypes.IFC_ROOT);	
+	public final DrbEntityTypeInfo IFC_SPACIAL_STRUCTURAL_ELEMENT = new DrbEntityTypeInfo(this, IfcTypes.IFC_SPACIAL_STRUCTURAL_ELEMENT);
 	
 	/**
 	 * Predefined literal types
 	 */
-	public final DrbPrimitiveTypeInfo BINARY = new DrbPrimitiveTypeInfo(this, IfcVocabulary.TypeNames.BINARY, DrbTypeEnum.BINARY);
-	public final DrbPrimitiveTypeInfo DATETIME = new DrbPrimitiveTypeInfo(this, IfcVocabulary.TypeNames.DATETIME, DrbTypeEnum.DATETIME);
-	public final DrbPrimitiveTypeInfo INTEGER = new DrbPrimitiveTypeInfo(this, IfcVocabulary.TypeNames.INTEGER, DrbTypeEnum.INTEGER);
-	public final DrbPrimitiveTypeInfo NUMBER = new DrbPrimitiveTypeInfo(this, IfcVocabulary.TypeNames.NUMBER, DrbTypeEnum.NUMBER);
-	public final DrbPrimitiveTypeInfo REAL = new DrbPrimitiveTypeInfo(this, IfcVocabulary.TypeNames.REAL, DrbTypeEnum.REAL);
-	public final DrbPrimitiveTypeInfo STRING = new DrbPrimitiveTypeInfo(this, IfcVocabulary.TypeNames.STRING, DrbTypeEnum.STRING);
+	public final DrbPrimitiveTypeInfo BINARY = new DrbPrimitiveTypeInfo(this, StepTypes.BINARY, DrbTypeEnum.BINARY);
+	public final DrbPrimitiveTypeInfo DATETIME = new DrbPrimitiveTypeInfo(this, StepTypes.DATETIME, DrbTypeEnum.DATETIME);
+	public final DrbPrimitiveTypeInfo INTEGER = new DrbPrimitiveTypeInfo(this, StepTypes.INTEGER, DrbTypeEnum.INTEGER);
+	public final DrbPrimitiveTypeInfo NUMBER = new DrbPrimitiveTypeInfo(this, StepTypes.NUMBER, DrbTypeEnum.NUMBER);
+	public final DrbPrimitiveTypeInfo REAL = new DrbPrimitiveTypeInfo(this, StepTypes.REAL, DrbTypeEnum.REAL);
+	public final DrbPrimitiveTypeInfo STRING = new DrbPrimitiveTypeInfo(this, StepTypes.STRING, DrbTypeEnum.STRING);
 	
-	public final DrbReferenceTypeInfo IFC_BOOLEAN = new DrbReferenceTypeInfo(this, IfcVocabulary.TypeNames.IFC_BOOLEAN, IfcVocabulary.TypeNames.BOOLEAN);
-	public final DrbReferenceTypeInfo IFC_INTEGER = new DrbReferenceTypeInfo(this, IfcVocabulary.TypeNames.IFC_INTEGER, IfcVocabulary.TypeNames.INTEGER);
-	public final DrbReferenceTypeInfo IFC_LOGICAL = new DrbReferenceTypeInfo(this, IfcVocabulary.TypeNames.IFC_LOGICAL, IfcVocabulary.TypeNames.LOGICAL);
-	public final DrbReferenceTypeInfo IFC_REAL = new DrbReferenceTypeInfo(this, IfcVocabulary.TypeNames.IFC_REAL, IfcVocabulary.TypeNames.REAL);
-	public final DrbReferenceTypeInfo IFC_TIME_STAMP = new DrbReferenceTypeInfo(this, IfcVocabulary.TypeNames.IFC_TIME_STAMP, IfcVocabulary.TypeNames.DATETIME);
-	public final DrbReferenceTypeInfo IFC_TEXT = new DrbReferenceTypeInfo(this, IfcVocabulary.TypeNames.IFC_TEXT, IfcVocabulary.TypeNames.STRING);
+	public final DrbDefinedTypeInfo IFC_BOOLEAN = new DrbDefinedTypeInfo(this, IfcTypes.IFC_BOOLEAN, StepTypes.BOOLEAN);
+	public final DrbDefinedTypeInfo IFC_INTEGER = new DrbDefinedTypeInfo(this, IfcTypes.IFC_INTEGER, StepTypes.INTEGER);
+	public final DrbDefinedTypeInfo IFC_LOGICAL = new DrbDefinedTypeInfo(this, IfcTypes.IFC_LOGICAL, StepTypes.LOGICAL);
+	public final DrbDefinedTypeInfo IFC_REAL = new DrbDefinedTypeInfo(this, IfcTypes.IFC_REAL, StepTypes.REAL);
+	public final DrbDefinedTypeInfo IFC_TIME_STAMP = new DrbDefinedTypeInfo(this, IfcTypes.IFC_TIME_STAMP, StepTypes.DATETIME);
+	public final DrbDefinedTypeInfo IFC_TEXT = new DrbDefinedTypeInfo(this, IfcTypes.IFC_TEXT, StepTypes.STRING);
 	
-	public final DrbEnumerationTypeInfo BOOLEAN = new DrbEnumerationTypeInfo(this, IfcVocabulary.TypeNames.BOOLEAN, Arrays.asList(LogicalValues.TRUE, LogicalValues.FALSE));
-	public final DrbEnumerationTypeInfo LOGICAL = new DrbEnumerationTypeInfo(this, IfcVocabulary.TypeNames.LOGICAL, Arrays.asList(LogicalValues.TRUE, LogicalValues.FALSE, LogicalValues.UNKNOWN));
+	public final DrbEnumerationTypeInfo BOOLEAN = new DrbEnumerationTypeInfo(this, StepTypes.BOOLEAN, Arrays.asList(StepValues.TRUE, StepValues.FALSE));
+	public final DrbEnumerationTypeInfo LOGICAL = new DrbEnumerationTypeInfo(this, StepTypes.LOGICAL, Arrays.asList(StepValues.TRUE, StepValues.FALSE, StepValues.UNKNOWN));
 	
 	
 	

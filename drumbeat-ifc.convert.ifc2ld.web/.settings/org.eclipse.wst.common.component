@@ -19,9 +19,6 @@
         <dependent-module archiveName="drumbeat-ifc.common-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/drumbeat-ifc.common/drumbeat-ifc.common">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="drumbeat-common-0.11.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/drumbeat-common/drumbeat-common">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="drumbeat-data.edm-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/drumbeat-data.edm/drumbeat-data.edm">
             <dependency-type>uses</dependency-type>
         </dependent-module>

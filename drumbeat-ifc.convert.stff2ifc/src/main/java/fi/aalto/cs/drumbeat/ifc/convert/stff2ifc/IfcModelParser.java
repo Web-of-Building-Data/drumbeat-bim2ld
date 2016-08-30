@@ -20,12 +20,12 @@ public class IfcModelParser {
 		InputStream in = sis.getInputStream();
 		String filePath = sis.getSerializationInfo();
 		
-		if (FileManager.hasFileExtension(filePath, IfcVocabulary.SpfFormat.FILE_EXTENSION_IFC_ZIP)) {
+		if (FileManager.checkFileHasExtension(filePath, IfcVocabulary.SpfFormat.FILE_EXTENSION_IFC_ZIP)) {
 			
 			filePath = FileManager.replaceLastExtension(filePath, FileManager.FILE_EXTENSION_ZIP);
 			return parse(SerializedInputStream.getUncompressedInputStream(in, filePath));
 			
-		} else if (FileManager.hasAnyFileExtension(
+		} else if (FileManager.checkFileHasAnyOfExtensions(
 				filePath,
 				IfcVocabulary.IfcXmlFormat.FILE_EXTENSION_IFC_XML,
 				IfcVocabulary.IfcXmlFormat.FILE_EXTENSION_IFX,
@@ -35,7 +35,7 @@ public class IfcModelParser {
 			IfcXmlModelParser xmlParser = new IfcXmlModelParser(in);
 			return xmlParser.parseModel();
 			
-		} else if (FileManager.hasAnyFileExtension(
+		} else if (FileManager.checkFileHasAnyOfExtensions(
 				filePath,
 				IfcVocabulary.SpfFormat.FILE_EXTENSION_IFC,
 				IfcVocabulary.SpfFormat.FILE_EXTENSION_STP))

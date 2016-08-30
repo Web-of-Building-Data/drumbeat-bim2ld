@@ -9,10 +9,10 @@
 		<relativePath>../drumbeat-bim2ld-parent/pom.xml</relativePath>
 	</parent>
 
-	<artifactId>drumbeat-data.ifc</artifactId>
+	<artifactId>drumbeat-data.step</artifactId>
 	<packaging>jar</packaging>
 
-	<name>drumbeat-data.ifc</name>
+	<name>drumbeat-data.step</name>
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
@@ -20,7 +20,7 @@
 		<!-- Drumbeat -->		 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>drumbeat-data.step</artifactId>
+			<artifactId>drumbeat-data.edm</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

@@ -115,6 +115,7 @@
 
 	<modules>
 		<module>../drumbeat-data.edm</module>
+		<module>../drumbeat-data.step</module>
 		<module>../drumbeat-data.ifc</module>
 		<!-- 
 		<module>../drumbeat-rdf</module>
