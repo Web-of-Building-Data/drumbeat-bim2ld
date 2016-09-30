@@ -1,10 +1,40 @@
-package fi.aalto.cs.drumbeat.ifc.data;
+package fi.aalto.cs.drumbeat.data.step;
 
-import fi.aalto.cs.drumbeat.common.file.FileManager;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
+import fi.aalto.cs.drumbeat.data.bedm.schema.DrbCollectionKindEnum;
+import fi.aalto.cs.drumbeat.data.bedm.schema.DrbEntityTypeInfo;
 
-public class IfcVocabulary {
+public class StepVocabulary {
+
+	/**
+	 * Logical values
+	 *
+	 */
+	public static class StepValues {
+		
+		public static final String TRUE = "TRUE";
+		public static final String FALSE = "FALSE";
+		public static final String UNKNOWN = "UNKNOWN";
+		
+	}
 	
+	public static class StepTypes {
+		
+		public static final String BINARY = "BINARY";
+//		public static final String BINARY32 = "BINARY32";
+		public static final String BOOLEAN = "BOOLEAN";
+		public static final String DATETIME = "DATETIME";		
+		public static final String GUID = "STRING22";
+		public static final String INTEGER = "INTEGER";
+		public static final String LOGICAL = "LOGICAL";
+		public static final String NUMBER = "NUMBER";
+		public static final String REAL = "REAL";
+		public static final String STRING = "STRING";
+//		public static final String STRING255 = "STRING255";
+		
+	}
+	
+
 	/**
 	 * EXPRESS format
 	 *
@@ -45,16 +75,34 @@ public class IfcVocabulary {
 		public static final String[] COLLECTION_HEADERS = new String[]{LIST, SET, ARRAY, BAG};
 		
 		public static final String UNBOUNDED = StringUtils.QUESTION;
+		
+		
+		public static DrbCollectionKindEnum parseCollectionKind(String typeHeader) {
+			typeHeader = typeHeader.toUpperCase();
+			
+			switch (typeHeader) {
+			case StepVocabulary.ExpressFormat.LIST:
+				return DrbCollectionKindEnum.List;
+			case StepVocabulary.ExpressFormat.ARRAY:
+				return DrbCollectionKindEnum.Array;
+			case StepVocabulary.ExpressFormat.SET:
+				return DrbCollectionKindEnum.Set;
+			case StepVocabulary.ExpressFormat.BAG:
+				return DrbCollectionKindEnum.Bag;
+			default:
+				return null;
+			}
+			
+		}		
+		
 	}
 	
 	/**
-	 * STEP Physical File Format
+	 * STEP Physical File Format (SPFF)
 	 *
 	 */
 	public static class SpfFormat {
-		public static final String FILE_EXTENSION_IFC = "ifc";
 		public static final String FILE_EXTENSION_STP = "stp";
-		public static final String FILE_EXTENSION_IFC_ZIP = "ifczip";
 
 		public static final String HEADER = "HEADER";
 		public static final String DATA = "DATA";
@@ -119,64 +167,17 @@ public class IfcVocabulary {
 		
 	}
 	
-	public static class IfcXmlFormat {
-		public static final String FILE_EXTENSION_IFC_XML = "ifcxml";
-		public static final String FILE_EXTENSION_IFX = "ifx";
-		public static final String FILE_EXTENSION_XML = FileManager.FILE_EXTENSION_XML;
+	public static class Formatter {
 		
+		public static String formatEntityName(DrbEntityTypeInfo typeInfo, String localId) {
+			return String.format("%s_%s", typeInfo, localId);
+		}
 		
-	}
-	
-	public static class TypeNames {
-		
-		public static final String IFC_ELEMENT = "IfcElement";
-		public static final String IFC_OBJECT = "IfcObject";
-		public static final String IFC_OBJECT_DEFINITION = "IfcObjectDefinition";
-		public static final String IFC_OWNER_HISTORY = "IfcOwnerHistory";
-		public static final String IFC_PRODUCT = "IfcProduct";
-		public static final String IFC_PROJECT = "IfcProject";
-		public static final String IFC_ROOT = "IfcRoot";
-		public static final String IFC_SPACIAL_STRUCTURAL_ELEMENT = "IfcSpacialStructuralElement";
-		public static final String IFC_RELATIONSHIP = "IfcRelationship";
-		public static final String IFC_PROPERTY_DEFINITION = "IfcPropertyDefinition";
-		
-		public static final String IFC_BOOLEAN = "IfcBoolean";
-		public static final String IFC_INTEGER = "IfcInteger";
-		public static final String IFC_LOGICAL = "IfcLogical";
-		public static final String IFC_REAL = "IfcReal";
-		public static final String IFC_TEXT = "IfcText";
-		public static final String IFC_TIME_STAMP = "IfcTimeStamp";	
-		
-		public static final String BINARY = "BINARY";
-//		public static final String BINARY32 = "BINARY32";
-		public static final String BOOLEAN = "BOOLEAN";
-		public static final String DATETIME = "DATETIME";		
-		public static final String GUID = "STRING22";
-		public static final String INTEGER = "INTEGER";
-		public static final String LOGICAL = "LOGICAL";
-		public static final String NUMBER = "NUMBER";
-		public static final String REAL = "REAL";
-		public static final String STRING = "STRING";
-//		public static final String STRING255 = "STRING255";
+		public static String formatChildEntityId(String parentEntityId, int childCount) {
+			return String.format("%s-%s", parentEntityId, childCount);
+		}
 		
 	}
-	
-	public static class AttributeNames {
-		
-		public static final String GLOBAL_ID = "globalId";
-		
-	}
-	
-//	public static class Formatter {
-//		
-//		public static String formatEntityName(IfcEntityTypeInfo typeInfo, String localId) {
-//			return String.format("%s_%s", typeInfo, localId);
-//		}
-//		
-//		public static String formatChildEntityId(String parentEntityId, int childCount) {
-//			return String.format("%s-%s", parentEntityId, childCount);
-//		}
-//		
-//	}
+
 
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="drumbeat-ifc.convert.ifc2ld.web">
+    <wb-module deploy-name="drumbeat-ifc.convert.ifc2ld.web-0.0.1">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
@@ -19,7 +19,10 @@
         <dependent-module archiveName="drumbeat-ifc.common-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/drumbeat-ifc.common/drumbeat-ifc.common">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="drumbeat-data.edm-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/drumbeat-data.edm/drumbeat-data.edm">
+        <dependent-module archiveName="drumbeat2-common-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/drumbeat2-common/drumbeat2-common">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="drumbeat2-data.bedm-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/drumbeat2-data.bedm/drumbeat2-data.bedm">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="drumbeat-ifc.processing.grounding.ifc-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/drumbeat-ifc.processing.grounding.ifc/drumbeat-ifc.processing.grounding.ifc">

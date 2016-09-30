@@ -4,9 +4,9 @@
 
 	<parent>
 		<groupId>fi.aalto.cs.drumbeat</groupId>
-		<artifactId>drumbeat-bim2ld-parent</artifactId>
+		<artifactId>drumbeat2-bim2ld-parent</artifactId>
 		<version>0.0.1</version>
-		<relativePath>../drumbeat-bim2ld-parent/pom.xml</relativePath>
+		<relativePath>../drumbeat2-bim2ld-parent/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>drumbeat-ifc.processing.grounding.ifc</artifactId>

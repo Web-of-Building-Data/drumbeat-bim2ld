@@ -4,9 +4,9 @@
 
 	<parent>
 		<groupId>fi.aalto.cs.drumbeat</groupId>
-		<artifactId>drumbeat-bim2ld-parent</artifactId>
+		<artifactId>drumbeat2-bim2ld-parent</artifactId>
 		<version>0.0.1</version>
-		<relativePath>../drumbeat-bim2ld-parent/pom.xml</relativePath>
+		<relativePath>../drumbeat2-bim2ld-parent/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>drumbeat-ifc.data</artifactId>
@@ -26,7 +26,7 @@
 	
 		<dependency>
 			<groupId>${drumbeat.groupId}</groupId>
-			<artifactId>drumbeat-data.edm</artifactId>
+			<artifactId>drumbeat2-data.bedm</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

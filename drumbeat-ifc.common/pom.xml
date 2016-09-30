@@ -4,9 +4,9 @@
 
 	<parent>
 		<groupId>fi.aalto.cs.drumbeat</groupId>
-		<artifactId>drumbeat-bim2ld-parent</artifactId>
+		<artifactId>drumbeat2-bim2ld-parent</artifactId>
 		<version>0.0.1</version>
-		<relativePath>../drumbeat-bim2ld-parent/pom.xml</relativePath>
+		<relativePath>../drumbeat2-bim2ld-parent/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>drumbeat-ifc.common</artifactId>
@@ -20,8 +20,8 @@
 		<!-- Drumbeat -->		 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>drumbeat-common</artifactId>
-			<version>${drumbeat-common.version}</version>
+			<artifactId>drumbeat2-common</artifactId>
+			<version>${drumbeat2-common.version}</version>
 		</dependency>
 
 		<!-- Apache Commons Codec -->
