@@ -4,7 +4,7 @@ import java.util.*;
 
 import fi.aalto.cs.drumbeat.common.DrbNotFoundException;
 
-public class DrbEntityTypeInfo extends DrbComplexTypeInfo {
+public class DrbEntityTypeInfo extends DrbComplexNonCollectionTypeInfo {
 	
 	private DrbEntityTypeInfo superTypeInfo;
 	private List<DrbEntityTypeInfo> subTypeInfos;

@@ -1,11 +1,7 @@
 package fi.aalto.cs.drumbeat.data.bedm.model;
 
-import java.io.Serializable;
-
-public abstract class DrbValue implements Serializable {
+public abstract class DrbValue {
 	
-	private static final long serialVersionUID = 1L;
-
 	public DrbValue() {
 	}
 	

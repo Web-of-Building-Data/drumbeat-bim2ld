@@ -15,7 +15,7 @@ public class DrbLink extends DrbAttribute { // implements IRdfTriple {
 	protected DrbInverseLinkInfo inverseLinkInfo;
 	private boolean useInverseLink;
 	
-	public DrbLink(DrbOutgoingLinkInfo linkInfo, int attributeIndex, DrbEntity source, DrbEntityBase destination) {
+	public DrbLink(DrbOutgoingLinkInfo linkInfo, int attributeIndex, DrbEntity source, DrbEntity destination) {
 		super(linkInfo, attributeIndex, destination);
 		this.source = source;
 	}

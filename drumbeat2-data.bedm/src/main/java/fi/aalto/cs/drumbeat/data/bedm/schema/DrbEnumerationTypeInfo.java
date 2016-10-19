@@ -10,7 +10,7 @@ import java.util.List;
  * @author Nam Vu
  *
  */
-public class DrbEnumerationTypeInfo extends DrbSimpleTypeInfo {
+public class DrbEnumerationTypeInfo extends DrbSimpleNonCollectionTypeInfo {
 
 	private List<String> values;
 

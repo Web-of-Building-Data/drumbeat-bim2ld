@@ -1,6 +1,6 @@
 package fi.aalto.cs.drumbeat.data.bedm.schema;
 
-public class DrbPrimitiveTypeInfo extends DrbSimpleTypeInfo {
+public class DrbPrimitiveTypeInfo extends DrbSimpleNonCollectionTypeInfo {
 
 	private final DrbTypeEnum valueType;
 	

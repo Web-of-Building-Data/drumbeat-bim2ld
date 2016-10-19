@@ -53,8 +53,8 @@ public abstract class DrbAttribute implements Comparable<DrbAttribute>, Serializ
 //	}
 	
 	@SuppressWarnings("unchecked")
-	public <T extends DrbSingleValue> List<T> getSingleValues() {
-		if (value instanceof DrbSingleValue) {
+	public <T extends DrbNonCollectionValue> List<T> getSingleValues() {
+		if (value instanceof DrbNonCollectionValue) {
 			List<T> singleValues = new ArrayList<>(1);
 			singleValues.add((T)value);
 			return singleValues;
