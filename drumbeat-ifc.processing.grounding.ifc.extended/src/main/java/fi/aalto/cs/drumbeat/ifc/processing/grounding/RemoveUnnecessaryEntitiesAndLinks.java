@@ -13,7 +13,7 @@ import fi.hut.cs.drumbeat.ifc.data.model.IfcEntityBase;
 import fi.hut.cs.drumbeat.ifc.data.model.IfcLink;
 import fi.hut.cs.drumbeat.ifc.data.model.IfcModel;
 import fi.hut.cs.drumbeat.ifc.data.schema.IfcEntityTypeInfo;
-import fi.hut.cs.drumbeat.ifc.data.schema.IfcLinkInfo;
+import fi.hut.cs.drumbeat.ifc.data.schema.IfcAttributeInfo;
 import fi.hut.cs.drumbeat.ifc.data.schema.IfcSchema;
 
 
@@ -120,8 +120,8 @@ public class RemoveUnnecessaryEntitiesAndLinks extends IfcGroundingProcessor {
 			for (IfcLink incomingLink : entity.getIncomingLinks()) {
 				
 				IfcEntity source = incomingLink.getSource();
-				IfcLinkInfo linkInfo = incomingLink.getLinkInfo();				
-				source.getOutgoingLinks().remove(linkInfo, entity);
+				IfcAttributeInfo attributeInfo = incomingLink.getAttributeInfo();				
+				source.getOutgoingLinks().remove(attributeInfo, entity);
 				
 				++numberOfRemovedLinks;
 				
@@ -139,7 +139,7 @@ public class RemoveUnnecessaryEntitiesAndLinks extends IfcGroundingProcessor {
 					List<IfcLink> incomingLinks = destination.getIncomingLinks();
 					for (int i = 0; i < incomingLinks.size(); ++i) {
 						IfcLink incomingLink = incomingLinks.get(i);
-						if (incomingLink.getSource().equals(entity) && incomingLink.getLinkInfo().equals(outgoingLink.getLinkInfo())) {
+						if (incomingLink.getSource().equals(entity) && incomingLink.getAttributeInfo().equals(outgoingLink.getAttributeInfo())) {
 							incomingLinks.remove(i);
 							++numberOfRemovedLinks;
 							break;

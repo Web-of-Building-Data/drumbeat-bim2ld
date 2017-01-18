@@ -1,8 +1,8 @@
 package fi.aalto.cs.drumbeat.data.step;
 
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
-import fi.aalto.cs.drumbeat.data.bedm.schema.DrbCollectionKindEnum;
-import fi.aalto.cs.drumbeat.data.bedm.schema.DrbEntityTypeInfo;
+import fi.aalto.cs.drumbeat.data.bem.schema.BemCollectionKindEnum;
+import fi.aalto.cs.drumbeat.data.bem.schema.BemEntityTypeInfo;
 
 public class StepVocabulary {
 
@@ -77,18 +77,18 @@ public class StepVocabulary {
 		public static final String UNBOUNDED = StringUtils.QUESTION;
 		
 		
-		public static DrbCollectionKindEnum parseCollectionKind(String typeHeader) {
+		public static BemCollectionKindEnum parseCollectionKind(String typeHeader) {
 			typeHeader = typeHeader.toUpperCase();
 			
 			switch (typeHeader) {
 			case StepVocabulary.ExpressFormat.LIST:
-				return DrbCollectionKindEnum.List;
+				return BemCollectionKindEnum.List;
 			case StepVocabulary.ExpressFormat.ARRAY:
-				return DrbCollectionKindEnum.Array;
+				return BemCollectionKindEnum.Array;
 			case StepVocabulary.ExpressFormat.SET:
-				return DrbCollectionKindEnum.Set;
+				return BemCollectionKindEnum.Set;
 			case StepVocabulary.ExpressFormat.BAG:
-				return DrbCollectionKindEnum.Bag;
+				return BemCollectionKindEnum.Bag;
 			default:
 				return null;
 			}
@@ -169,7 +169,7 @@ public class StepVocabulary {
 	
 	public static class Formatter {
 		
-		public static String formatEntityName(DrbEntityTypeInfo typeInfo, String localId) {
+		public static String formatEntityName(BemEntityTypeInfo typeInfo, String localId) {
 			return String.format("%s_%s", typeInfo, localId);
 		}
 		

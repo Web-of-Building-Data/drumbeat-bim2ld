@@ -2,41 +2,41 @@ package fi.aalto.cs.drumbeat.data.step.schema;
 
 import java.util.Arrays;
 
-import fi.aalto.cs.drumbeat.data.bedm.schema.DrbEnumerationTypeInfo;
-import fi.aalto.cs.drumbeat.data.bedm.schema.DrbPrimitiveTypeInfo;
-import fi.aalto.cs.drumbeat.data.bedm.schema.DrbSchema;
-import fi.aalto.cs.drumbeat.data.bedm.schema.DrbTypeEnum;
+import fi.aalto.cs.drumbeat.data.bem.schema.BemEnumerationTypeInfo;
+import fi.aalto.cs.drumbeat.data.bem.schema.BemPrimitiveTypeInfo;
+import fi.aalto.cs.drumbeat.data.bem.schema.BemSchema;
+import fi.aalto.cs.drumbeat.data.bem.schema.BemPrimitiveKindEnum;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary.StepTypes;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary.StepValues;
 
-public class ExpressSchema extends DrbSchema {
+public class ExpressSchema extends BemSchema {
 
 	/**
 	 * Predefined literal types
 	 */
-	public final DrbPrimitiveTypeInfo BINARY = new DrbPrimitiveTypeInfo(this, StepTypes.BINARY, DrbTypeEnum.BINARY);
-	public final DrbPrimitiveTypeInfo DATETIME = new DrbPrimitiveTypeInfo(this, StepTypes.DATETIME, DrbTypeEnum.DATETIME);
-	public final DrbPrimitiveTypeInfo INTEGER = new DrbPrimitiveTypeInfo(this, StepTypes.INTEGER, DrbTypeEnum.INTEGER);
-	public final DrbPrimitiveTypeInfo NUMBER = new DrbPrimitiveTypeInfo(this, StepTypes.NUMBER, DrbTypeEnum.NUMBER);
-	public final DrbPrimitiveTypeInfo REAL = new DrbPrimitiveTypeInfo(this, StepTypes.REAL, DrbTypeEnum.REAL);
-	public final DrbPrimitiveTypeInfo STRING = new DrbPrimitiveTypeInfo(this, StepTypes.STRING, DrbTypeEnum.STRING);
+	public final BemPrimitiveTypeInfo BINARY = new BemPrimitiveTypeInfo(this, StepTypes.BINARY, BemPrimitiveKindEnum.BINARY);
+	public final BemPrimitiveTypeInfo DATETIME = new BemPrimitiveTypeInfo(this, StepTypes.DATETIME, BemPrimitiveKindEnum.DATETIME);
+	public final BemPrimitiveTypeInfo INTEGER = new BemPrimitiveTypeInfo(this, StepTypes.INTEGER, BemPrimitiveKindEnum.INTEGER);
+	public final BemPrimitiveTypeInfo NUMBER = new BemPrimitiveTypeInfo(this, StepTypes.NUMBER, BemPrimitiveKindEnum.NUMBER);
+	public final BemPrimitiveTypeInfo REAL = new BemPrimitiveTypeInfo(this, StepTypes.REAL, BemPrimitiveKindEnum.REAL);
+	public final BemPrimitiveTypeInfo STRING = new BemPrimitiveTypeInfo(this, StepTypes.STRING, BemPrimitiveKindEnum.STRING);
 	
-	public final DrbEnumerationTypeInfo BOOLEAN = new DrbEnumerationTypeInfo(this, StepTypes.BOOLEAN, Arrays.asList(StepValues.TRUE, StepValues.FALSE));
-	public final DrbEnumerationTypeInfo LOGICAL = new DrbEnumerationTypeInfo(this, StepTypes.LOGICAL, Arrays.asList(StepValues.TRUE, StepValues.FALSE, StepValues.UNKNOWN));
+	public final BemEnumerationTypeInfo BOOLEAN = new BemEnumerationTypeInfo(this, StepTypes.BOOLEAN, Arrays.asList(StepValues.TRUE, StepValues.FALSE));
+	public final BemEnumerationTypeInfo LOGICAL = new BemEnumerationTypeInfo(this, StepTypes.LOGICAL, Arrays.asList(StepValues.TRUE, StepValues.FALSE, StepValues.UNKNOWN));
 	
 	public ExpressSchema() {
-		addNonEntityTypeInfo(BINARY);
-//		addNonEntityTypeInfo(BINARY32);
-		addNonEntityTypeInfo(DATETIME);
-//		addNonEntityTypeInfo(GUID);
-		addNonEntityTypeInfo(INTEGER);
-		addNonEntityTypeInfo(NUMBER);
-		addNonEntityTypeInfo(REAL);
-		addNonEntityTypeInfo(STRING);
-//		addNonEntityTypeInfo(STRING255);
+		addTypeInfo(BINARY);
+//		addTypeInfo(BINARY32);
+		addTypeInfo(DATETIME);
+//		addTypeInfo(GUID);
+		addTypeInfo(INTEGER);
+		addTypeInfo(NUMBER);
+		addTypeInfo(REAL);
+		addTypeInfo(STRING);
+//		addTypeInfo(STRING255);
 		
-		addNonEntityTypeInfo(BOOLEAN); // true or false
-		addNonEntityTypeInfo(LOGICAL); // true, false or null	
+		addTypeInfo(BOOLEAN); // true or false
+		addTypeInfo(LOGICAL); // true, false or null	
 	}
 
 }

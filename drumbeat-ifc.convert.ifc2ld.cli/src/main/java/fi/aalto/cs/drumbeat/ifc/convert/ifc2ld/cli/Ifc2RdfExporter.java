@@ -450,13 +450,13 @@ public class Ifc2RdfExporter {
 	
 //	protected void testSchema(IfcSchema schema) {
 //		for (IfcEntityTypeInfo entityInfo : schema.getEntityTypeInfos()) {
-//			for (IfcInverseLinkInfo inverseLinkInfo : entityInfo.getInverseLinkInfos()) {
-//				if (inverseLinkInfo.getCardinality().isSingle() && !inverseLinkInfo.getCardinality().isOptional()) {
-//					IfcLinkInfo outgoingLinkInfo = inverseLinkInfo.getOutgoingLinkInfo();
-//					if (outgoingLinkInfo.getCardinality().isSingle()) {
-//						System.out.println(String.format("%s.%s<--%s.%s", inverseLinkInfo
-//								.getDestinationEntityTypeInfo().getName(), inverseLinkInfo.getName(), outgoingLinkInfo
-//								.getEntityTypeInfo().getName(), outgoingLinkInfo.getName()));
+//			for (IfcInverseAttributeInfo inverseAttributeInfo : entityInfo.getInverseAttributeInfos()) {
+//				if (inverseAttributeInfo.getCardinality().isSingle() && !inverseAttributeInfo.getCardinality().isOptional()) {
+//					IfcAttributeInfo outgoingAttributeInfo = inverseAttributeInfo.getOutgoingAttributeInfo();
+//					if (outgoingAttributeInfo.getCardinality().isSingle()) {
+//						System.out.println(String.format("%s.%s<--%s.%s", inverseAttributeInfo
+//								.getDestinationEntityTypeInfo().getName(), inverseAttributeInfo.getName(), outgoingAttributeInfo
+//								.getEntityTypeInfo().getName(), outgoingAttributeInfo.getName()));
 //					}
 //				}
 //			}

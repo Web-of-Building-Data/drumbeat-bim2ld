@@ -19,18 +19,19 @@ package fi.aalto.cs.drumbeat.data.step.parsers;
 
 import fi.aalto.cs.drumbeat.common.string.RegexUtils;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
-import fi.aalto.cs.drumbeat.data.bedm.parsers.DrbFormatException;
-import fi.aalto.cs.drumbeat.data.bedm.parsers.DrbParserException;
-import fi.aalto.cs.drumbeat.data.bedm.schema.DrbSchema;
+import fi.aalto.cs.drumbeat.data.bem.BemException;
+import fi.aalto.cs.drumbeat.data.bem.BemNotFoundException;
+import fi.aalto.cs.drumbeat.data.bem.parsers.BemFormatException;
+import fi.aalto.cs.drumbeat.data.bem.parsers.BemParserException;
+import fi.aalto.cs.drumbeat.data.bem.schema.*;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary;
+import fi.aalto.cs.drumbeat.data.step.StepVocabulary.ExpressFormat;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-
-import fi.aalto.cs.drumbeat.common.DrbNotFoundException;
-import fi.aalto.cs.drumbeat.data.bedm.schema.*;
 
 
 /**
@@ -46,7 +47,7 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 //	/**
 //	 * Cache for EXPRESS schema of STFF header section
 //	 */
-//	private static DrbSchema stffExpressSchema;
+//	private static BemSchema stffExpressSchema;
 	
 	/**
 	 * The in reader, reads line by line, wraps original in stream inside
@@ -56,16 +57,14 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 	/**
 	 * The output schema
 	 */
-	private DrbSchema schema;
-	
-	private List<ExpressEntityTypeInfoText> entityTypeInfoTexts = new ArrayList<ExpressEntityTypeInfoText>();
+	private BemSchema schema;	
 	
 	/**
 	 * Creates a new parser. For internal use.
 	 * 
 	 * @param in
 	 */	
-	ExpressSchemaInternalParser(DrbSchema schema, InputStream in, String fileType) {
+	ExpressSchemaInternalParser(BemSchema schema, InputStream in, String fileType) {
 		this.schema = schema;
 		lineReader = new StepLineReader(in);
 	}
@@ -74,16 +73,16 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 	 * Parses an IFC schema from an in stream. This is the main entry of the parser. 
 	 * 
 	 * @param in
-	 * @return {@link DrbSchema}
-	 * @throws DrbParserException
+	 * @return {@link BemSchema}
+	 * @throws BemException
 	 */
-	DrbSchema parse() throws DrbParserException {		
+	BemSchema parse() throws BemException {		
 		try {
 			String statement = lineReader.getNextStatement();
 			String tokens[] = RegexUtils.split2(statement, RegexUtils.WHITE_SPACE);
 			
 			if (tokens.length != 2 || !tokens[0].equals(StepVocabulary.ExpressFormat.SCHEMA)) {
-				throw new DrbFormatException(lineReader.getCurrentLineNumber(), "Invalid schema");			
+				throw new BemFormatException(lineReader.getCurrentLineNumber(), "Invalid schema");			
 			}
 			
 			//
@@ -92,14 +91,17 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 			String version = tokens[1].trim();
 			schema.setName(version);
 			
+			List<ExpressEntityTypeInfoTextWrapper> entityTypeInfoTextWrappers = new LinkedList<ExpressEntityTypeInfoTextWrapper>();
+			List<ExpressNonEntityTypeInfoTextWrapper> nonEntityTypeInfoTextWrappers = new LinkedList<ExpressNonEntityTypeInfoTextWrapper>();
+			
+			
 			//
-			// read all type definitions,
-			// parse, create and put new types into the schema
+			// read all type definition headers and put new types into the schema
 			//
 			for (;;) {
 				statement = lineReader.getNextStatement();				
 				if (statement == null) {
-					throw new DrbFormatException(lineReader.getCurrentLineNumber(), String.format("Expected '%s'", StepVocabulary.ExpressFormat.END_SCHEMA));
+					throw new BemFormatException(lineReader.getCurrentLineNumber(), String.format("Expected '%s'", StepVocabulary.ExpressFormat.END_SCHEMA));
 				}
 					
 				tokens = RegexUtils.split2(statement, RegexUtils.WHITE_SPACE);
@@ -107,15 +109,16 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 				if (tokens[0].equals(StepVocabulary.ExpressFormat.TYPE)) {
 					
 					// parse an non-entity type info
-					DrbTypeInfo nonEntityTypeInfo = parseNonEntityTypeInfo(tokens);
-					schema.addNonEntityTypeInfo(nonEntityTypeInfo);
+					ExpressNonEntityTypeInfoTextWrapper nonEntityTypeInfoTextWrapper = parseNonEntityTypeHeader(tokens);
+					nonEntityTypeInfoTextWrappers.add(nonEntityTypeInfoTextWrapper);
+					schema.addTypeInfo(nonEntityTypeInfoTextWrapper.getTypeInfo());
 					
 				} else if (tokens[0].equals(StepVocabulary.ExpressFormat.ENTITY)) {
 					
 					// get the entity type body and put into the cache for LATER BINDING
-					ExpressEntityTypeInfoText entityTypeInfoText =  parseEntityTypeInfoText(tokens);
-					entityTypeInfoTexts.add(entityTypeInfoText);						
-					schema.addEntityTypeInfo(entityTypeInfoText.getEntityTypeInfo());
+					ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper =  parseEntityTypeInfoText(tokens);
+					entityTypeInfoTextWrappers.add(entityTypeInfoTextWrapper);						
+					schema.addTypeInfo(entityTypeInfoTextWrapper.getEntityTypeInfo());
 					
 				} else if (tokens[0].equals(StepVocabulary.ExpressFormat.END_SCHEMA)) {
 					break;
@@ -123,12 +126,20 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 					
 			}
 			
+			//
+			// parse all non-entity types
+			//
+			for (ExpressNonEntityTypeInfoTextWrapper typeWrapper : nonEntityTypeInfoTextWrappers) {
+				parseNonEntityTypeBody(typeWrapper.getTypeInfo(), typeWrapper.getTypeBodyStatements());
+			}
+			
+			
 //				//
 //				// bind all types
 //				//
-//				for (DrbNonEntityTypeInfo typeInfo : schema.getNonEntityTypeInfos()) {
-//					if (typeInfo instanceof IDrbLateBindingTypeInfo) {
-//						((IDrbLateBindingTypeInfo)typeInfo).bindTypeInfo(schema);
+//				for (BemNonEntityTypeInfo typeInfo : schema.getNonEntityTypeInfos()) {
+//					if (typeInfo instanceof IBemLateBindingTypeInfo) {
+//						((IBemLateBindingTypeInfo)typeInfo).bindTypeInfo(schema);
 //					}				
 //				}
 			
@@ -136,19 +147,19 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 			// bind entity types with their supertypes
 			// bind entity types' attributes with the attribute types
 			//
-			for (ExpressEntityTypeInfoText entityTypeInfoText : entityTypeInfoTexts) {
-				bindEntitySuperTypeAndAttributes(entityTypeInfoText);
+			for (ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper : entityTypeInfoTextWrappers) {
+				bindEntitySuperTypeAndAttributes(entityTypeInfoTextWrapper);
 			}
 			
 			//
 			// bind entity types' inverse links and unique keys
 			// 
-			for (ExpressEntityTypeInfoText entityTypeInfoText : entityTypeInfoTexts) {
-				bindEntityInverseLinks(entityTypeInfoText);
-				bindEntityUniqueKeys(entityTypeInfoText);
+			for (ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper : entityTypeInfoTextWrappers) {
+				bindEntityInverseLinks(entityTypeInfoTextWrapper);
+				bindEntityUniqueKeys(entityTypeInfoTextWrapper);
 			}
 			
-			for (DrbEntityTypeInfo entityTypeInfo : schema.getEntityTypeInfos()) {
+			for (BemEntityTypeInfo entityTypeInfo : schema.getEntityTypeInfos()) {
 				setEntityAttributeIndexes(entityTypeInfo);				
 			}
 
@@ -158,17 +169,24 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 			//
 			return schema;
 				
-		} catch (DrbParserException e) {
+		} catch (BemException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new DrbParserException(e);
-		} finally {
-			entityTypeInfoTexts = null;			
+			throw new BemParserException(e);
 		}
 	}
 	
-	private DrbTypeInfo parseNonEntityTypeInfo(String[] tokens) throws IOException, DrbNotFoundException, DrbParserException {
+	/**
+	 * Parses non-entity type definition header
+	 * @param tokens
+	 * @return type wrapper which includes the type itself and the type body statements
+	 * @throws IOException
+	 * @throws BemNotFoundException
+	 * @throws BemParserException
+	 */
+	private ExpressNonEntityTypeInfoTextWrapper parseNonEntityTypeHeader(String[] tokens) throws IOException, BemNotFoundException, BemParserException {
 		
+		assert(tokens[0].equals(ExpressFormat.TYPE));
 		tokens = RegexUtils.split2(tokens[1].trim(), RegexUtils.WHITE_SPACE);			
 		
 		String typeName = parseAndFormatTypeName(tokens[0]);
@@ -176,7 +194,22 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 		tokens = RegexUtils.split2(tokens[1], StepVocabulary.ExpressFormat.EQUAL);			
 		String typeInfoString = tokens[1].trim();
 		
-		DrbTypeInfo typeInfo = parseNonEntityTypeInfoBody(typeInfoString, typeName);
+		tokens = RegexUtils.split2(typeInfoString, RegexUtils.WHITE_SPACE);
+		
+		BemCollectionKindEnum collectionKind = parseCollectionKind(tokens[0]);
+		BemTypeInfo typeInfo;
+		
+		if (collectionKind != null) {
+			typeInfo = new BemCollectionTypeInfo(schema, typeName);
+		} else if (tokens[0].equals(StepVocabulary.ExpressFormat.SELECT)) {
+			typeInfo = new BemSelectTypeInfo(schema, typeName);
+		} else if (tokens[0].equals(StepVocabulary.ExpressFormat.ENUMERATION)) {
+			typeInfo = new BemEnumerationTypeInfo(schema, typeName);
+		} else {			
+			typeInfo = new BemDefinedTypeInfo(schema, typeName);
+		}
+		
+		ExpressNonEntityTypeInfoTextWrapper typeWrapper = new ExpressNonEntityTypeInfoTextWrapper(typeInfo, typeInfoString);					
 		
 		for (;;) {
 
@@ -185,14 +218,15 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 			if (statement != null) {
 				
 				if (statement.equals(StepVocabulary.ExpressFormat.END_TYPE)) {
-
-					return typeInfo;
+					return typeWrapper;
+				} else {
+					typeWrapper.addTypeBodyStatement(statement);
 				}
 				
 			} else {
-				throw new DrbFormatException(lineReader.getCurrentLineNumber(), String.format("Expected '%s'", StepVocabulary.ExpressFormat.END_TYPE));
+				throw new BemFormatException(lineReader.getCurrentLineNumber(), String.format("Expected '%s'", StepVocabulary.ExpressFormat.END_TYPE));
 			}
-		}		
+		}
 	}
 	
 	/**
@@ -201,56 +235,54 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 	 * @param typeName The name of external type
 	 * @return
 	 * @throws IOException
-	 * @throws DrbParserException 
+	 * @throws BemParserException 
+	 * @throws BemNotFoundException 
 	 */
-	private DrbTypeInfo parseNonEntityTypeInfoBody(String typeInfoString, String typeName) throws IOException, DrbParserException {		
-		String[] tokens = RegexUtils.split2(typeInfoString, RegexUtils.WHITE_SPACE);
+	private BemTypeInfo parseNonEntityTypeBody(BemTypeInfo typeInfo, String... statements) throws IOException, BemParserException, BemNotFoundException {
 		
-		DrbCollectionKindEnum collectionKind = parseCollectionKind(tokens[0]);
+		String[] tokens = RegexUtils.split2(statements[0], RegexUtils.WHITE_SPACE);
 		
-		if (collectionKind != null) {
-			//
-			// create a collection type
-			//
+		if (typeInfo instanceof BemCollectionTypeInfo) {			
+
+			BemCollectionKindEnum collectionKind = parseCollectionKind(tokens[0]);
+			((BemCollectionTypeInfo)typeInfo).setCollectionKind(collectionKind);
+
 			boolean isArray = tokens[0].equals(StepVocabulary.ExpressFormat.ARRAY);
 			
 			tokens = RegexUtils.split2(tokens[1], StepVocabulary.ExpressFormat.OF);
 			
-			DrbCardinality cardinality = parseCardinality(tokens[0], isArray);
+			BemCardinality cardinality = parseCardinality(tokens[0], isArray);
+			((BemCollectionTypeInfo)typeInfo).setCardinality(cardinality);
 			
 			tokens = RegexUtils.split2(tokens[1], StepVocabulary.ExpressFormat.UNIQUE);			
 			boolean itemsAreUnique = tokens.length == 2;
 			
-			typeInfoString = itemsAreUnique ? tokens[1].trim() : tokens[0].trim();
+			String typeInfoString = itemsAreUnique ? tokens[1].trim() : tokens[0].trim();
 			
 			String itemTypeInfoName = parseAndFormatTypeName(typeInfoString);
 			
 			tokens = RegexUtils.split2(itemTypeInfoName, RegexUtils.WHITE_SPACE);
 			
-			DrbCollectionTypeInfo typeInfo;
-			if (isCollectionTypeHeader(tokens[0])) {
-				DrbTypeInfo itemTypeInfo = parseNonEntityTypeInfoBody(typeInfoString, itemTypeInfoName); 
-				typeInfo = new DrbCollectionTypeInfo(schema, typeName, collectionKind, itemTypeInfo);
+			if (isCollectionTypeHeader(tokens[0])) {				
+				BemTypeInfo itemTypeInfo = new BemCollectionTypeInfo(schema, itemTypeInfoName);				
+				parseNonEntityTypeBody(itemTypeInfo, typeInfoString);
+				((BemCollectionTypeInfo)typeInfo).setItemTypeInfo(itemTypeInfo);				
 			} else {
-				typeInfo = new DrbCollectionTypeInfo(schema, typeName, collectionKind, itemTypeInfoName);				
+				BemTypeInfo itemTypeInfo = schema.getTypeInfo(itemTypeInfoName);
+				((BemCollectionTypeInfo)typeInfo).setItemTypeInfo(itemTypeInfo);				
 			}
 			
-			typeInfo.setCardinality(cardinality);
-			return typeInfo;		
+			return typeInfo;	
 			
-		} else if (tokens[0].equals(StepVocabulary.ExpressFormat.SELECT)) {
+		} else if (typeInfo instanceof BemSelectTypeInfo) {
 			
-			//
-			// create a select type
-			//
 			tokens = StringUtils.getStringBetweenBrackets(tokens[1].trim());
 			tokens = RegexUtils.splitAll(tokens[0], StringUtils.COMMA);
-			List<String> selectTypeInfoNames = new ArrayList<String>();
 			for (int i = 0; i < tokens.length; ++i) {
-				selectTypeInfoNames.add(parseAndFormatTypeName(tokens[i].trim()));
+				String itemTypeInfoName = parseAndFormatTypeName(tokens[i].trim());
+				BemTypeInfo itemTypeInfo = schema.getTypeInfo(itemTypeInfoName);
+				((BemSelectTypeInfo)typeInfo).addItemTypeInfo(itemTypeInfo);
 			}
-			
-			DrbSelectTypeInfo typeInfo = new DrbSelectTypeInfo(schema, typeName, selectTypeInfoNames);			
 			
 			return typeInfo;
 			
@@ -268,26 +300,27 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 				values.add(value.trim());
 			}
 			
-			DrbEnumerationTypeInfo typeInfo = new DrbEnumerationTypeInfo(schema, typeName, values);
+			((BemEnumerationTypeInfo)typeInfo).setValues(values);
 			return typeInfo;
 			
 		} else {			
 			
 			String internalTypeInfoName = parseAndFormatTypeName(tokens[0]);
-			
-			assert(typeName != null);
-			
-			try {
-				return schema.getNonEntityTypeInfo(typeName);
-			} catch (DrbNotFoundException e) {			
-				return new DrbDefinedTypeInfo(schema, typeName, internalTypeInfoName);
-			}			
+			BemTypeInfo internalTypeInfo = schema.getTypeInfo(internalTypeInfoName);
+			((BemDefinedTypeInfo)typeInfo).setWrappedTypeInfo(internalTypeInfo);
+			return typeInfo;
 				
 		}			
 			
 	}
 	
-	private static DrbCardinality parseCardinality(String s, boolean isArrayIndex) {
+	/**
+	 * Parses collection cardinality in format [X:Y], where X and Y can be a number or sign '?'
+	 * @param s
+	 * @param isArrayIndex
+	 * @return
+	 */
+	private static BemCardinality parseCardinality(String s, boolean isArrayIndex) {
 		
 		s = s.trim();
 		
@@ -299,12 +332,12 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 				RegexUtils.split2(s.replaceAll("[\\[\\]\\s]", ""), StringUtils.COLON);
 		
 		int min = cardinalityTokens[0].equals(StepVocabulary.ExpressFormat.UNBOUNDED) ?
-				DrbCardinality.UNBOUNDED : Integer.parseInt(cardinalityTokens[0]); 
+				BemCardinality.UNBOUNDED : Integer.parseInt(cardinalityTokens[0]); 
 		
 		int max = cardinalityTokens[1].equals(StepVocabulary.ExpressFormat.UNBOUNDED) ?
-				DrbCardinality.UNBOUNDED : Integer.parseInt(cardinalityTokens[1]);
+				BemCardinality.UNBOUNDED : Integer.parseInt(cardinalityTokens[1]);
 		
-		return new DrbCardinality(min, max, isArrayIndex);
+		return new BemCardinality(min, max, isArrayIndex);
 			
 	}
 
@@ -324,27 +357,27 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 	 * Parses tokens to get an entity info
 	 * @param tokens
 	 * @return
-	 * @throws DrbFormatException
+	 * @throws BemFormatException
 	 * @throws IOException
-	 * @throws DrbNotFoundException 
+	 * @throws BemNotFoundException 
 	 */
-	private ExpressEntityTypeInfoText parseEntityTypeInfoText(String[] tokens) throws DrbFormatException, IOException {
+	private ExpressEntityTypeInfoTextWrapper parseEntityTypeInfoText(String[] tokens) throws BemFormatException, IOException {
 		
 		if (tokens.length != 2) {
-			throw new DrbFormatException(lineReader.getCurrentLineNumber(), "Invalid format");		
+			throw new BemFormatException(lineReader.getCurrentLineNumber(), "Invalid format");		
 		}
 			
 		// get entity type name
 		tokens = RegexUtils.split2(tokens[1].trim(), RegexUtils.WHITE_SPACE);		
 		
 		String entityTypeName = tokens[0];
-		DrbEntityTypeInfo entityTypeInfo;
+		BemEntityTypeInfo entityTypeInfo;
 		try {
 			entityTypeInfo = schema.getEntityTypeInfo(entityTypeName);
-		} catch (DrbNotFoundException e) {
-			entityTypeInfo = new DrbEntityTypeInfo(schema, entityTypeName);
+		} catch (BemNotFoundException e) {
+			entityTypeInfo = new BemEntityTypeInfo(schema, entityTypeName);
 		}
-		ExpressEntityTypeInfoText entityTypeInfoText = new ExpressEntityTypeInfoText(entityTypeInfo);			
+		ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper = new ExpressEntityTypeInfoTextWrapper(entityTypeInfo);			
 		
 		if (tokens.length == 2) {
 			
@@ -370,35 +403,35 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 				tokens = StringUtils.getStringBetweenBrackets(tokens[1].trim());
 				
 				String superTypeName = parseAndFormatTypeName(tokens[0].trim());
-				entityTypeInfoText.setSuperTypeName(superTypeName);
+				entityTypeInfoTextWrapper.setSuperTypeName(superTypeName);
 			}
 		}			
 		
 		EntityFormatSection currentSection = EntityFormatSection.ATTRIBUTES;
-		List<String> listOfStatements = entityTypeInfoText.getAttributeStatements();
+		List<String> listOfStatements = entityTypeInfoTextWrapper.getAttributeStatements();
 		
 		for (;;) {
 			
 			String statement = lineReader.getNextStatement();				
 			
 			if (statement == null) {
-				throw new DrbFormatException(lineReader.getCurrentLineNumber(), String.format("Expected '%s'", StepVocabulary.ExpressFormat.END_ENTITY));
+				throw new BemFormatException(lineReader.getCurrentLineNumber(), String.format("Expected '%s'", StepVocabulary.ExpressFormat.END_ENTITY));
 			}
 				
 			tokens = RegexUtils.split2(statement, RegexUtils.WHITE_SPACE);
 			
 			if (tokens[0].equals(StepVocabulary.ExpressFormat.END_ENTITY)) {						
-				return entityTypeInfoText;
+				return entityTypeInfoTextWrapper;
 			} else if (currentSection.compareTo(EntityFormatSection.WHERE) <= 0 && tokens[0].equals(StepVocabulary.ExpressFormat.WHERE)) {
 				currentSection = EntityFormatSection.WHERE;
 				listOfStatements = null;
 			} else if (currentSection.compareTo(EntityFormatSection.UNIQUE) <= 0 && tokens[0].equals(StepVocabulary.ExpressFormat.UNIQUE)) {
 				currentSection = EntityFormatSection.UNIQUE;						
-				listOfStatements = entityTypeInfoText.getUniqueKeysStatements();
+				listOfStatements = entityTypeInfoTextWrapper.getUniqueKeysStatements();
 			} else if (currentSection.compareTo(EntityFormatSection.INVERSE) <= 0 && tokens[0].equals(StepVocabulary.ExpressFormat.INVERSE)) {
 				currentSection = EntityFormatSection.INVERSE;						
 				statement = tokens[1].trim();
-				listOfStatements = entityTypeInfoText.getInverseLinkStatements();
+				listOfStatements = entityTypeInfoTextWrapper.getInverseLinkStatements();
 			} else if (currentSection.compareTo(EntityFormatSection.DERIVE) <= 0 && tokens[0].equals(StepVocabulary.ExpressFormat.DERIVE)) {
 				currentSection = EntityFormatSection.DERIVE;						
 				listOfStatements = null;
@@ -411,11 +444,11 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 		} // for
 	}
 	
-	private DrbCollectionTypeInfo parseCollectionType(DrbCollectionKindEnum collectionKind, String typeInfoString) throws DrbParserException {
+	private BemCollectionTypeInfo parseCollectionType(BemCollectionKindEnum collectionKind, String typeInfoString) throws BemParserException, BemNotFoundException {
 		
 		// read collection cardinality
 		String[] tokens = RegexUtils.split2(typeInfoString, StepVocabulary.ExpressFormat.OF);				
-		DrbCardinality collectionCardinality = parseCardinality(tokens[0], collectionKind == DrbCollectionKindEnum.Array);				
+		BemCardinality collectionCardinality = parseCardinality(tokens[0], collectionKind == BemCollectionKindEnum.Array);				
 		tokens = RegexUtils.split2(tokens[1], StepVocabulary.ExpressFormat.UNIQUE);				
 		
 		boolean collectionItemsAreUnique = tokens.length == 2;		
@@ -429,38 +462,44 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 			// create or get the collection type
 			//
 			String collectionItemTypeInfoName = parseAndFormatTypeName(typeInfoString);				
-			String collectionTypeInfoName = DrbCollectionTypeInfo.formatCollectionTypeName(collectionKind, collectionItemTypeInfoName, collectionCardinality);
+			String collectionTypeInfoName = BemCollectionTypeInfo.formatCollectionTypeName(collectionKind, collectionItemTypeInfoName, collectionCardinality);
 			try {
-				return (DrbCollectionTypeInfo)schema.getTypeInfo(collectionTypeInfoName);
-			} catch (DrbNotFoundException e) {					
+				return (BemCollectionTypeInfo)schema.getTypeInfo(collectionTypeInfoName);
+			} catch (BemNotFoundException e) {					
 			
 				// create collection type (with cardinality)
-				DrbCollectionTypeInfo collectionTypeInfo = new DrbCollectionTypeInfo(schema, collectionTypeInfoName, collectionKind, collectionItemTypeInfoName);
+				BemCollectionTypeInfo collectionTypeInfo = new BemCollectionTypeInfo(schema, collectionTypeInfoName);
+				collectionTypeInfo.setCollectionKind(collectionKind);
+				
+				BemTypeInfo collectionItemTypeInfo = schema.getTypeInfo(collectionItemTypeInfoName);
+				collectionTypeInfo.setItemTypeInfo(collectionItemTypeInfo);
 				collectionTypeInfo.setCardinality(collectionCardinality);
-				schema.addNonEntityTypeInfo(collectionTypeInfo);
+				schema.addTypeInfo(collectionTypeInfo);
 				
 				return collectionTypeInfo;
 			}
 			
 		} else {
 			
-			DrbCollectionKindEnum collectionKind2 = parseCollectionKind(tokens[0]);			
+			BemCollectionKindEnum collectionKind2 = parseCollectionKind(tokens[0]);			
 			if (collectionKind == null) {
-				throw new DrbFormatException(lineReader.getCurrentLineNumber(), String.format("Expected one of %s", DrbCollectionKindEnum.values().toString()));				
+				throw new BemFormatException(lineReader.getCurrentLineNumber(), String.format("Expected one of %s", BemCollectionKindEnum.values().toString()));				
 			}
 			
 			// case SET/LIST/ARRAY/BAG OF LIST OF ... 
 
-			DrbCollectionTypeInfo collectionItemTypeInfo = parseCollectionType(collectionKind2, tokens[1]);
+			BemCollectionTypeInfo collectionItemTypeInfo = parseCollectionType(collectionKind2, tokens[1]);
 			
 			// create or get the super collection type (without cardinality)
-			String collectionTypeInfoName = DrbCollectionTypeInfo.formatCollectionTypeName(collectionKind, collectionItemTypeInfo.getName(), collectionCardinality);
+			String collectionTypeInfoName = BemCollectionTypeInfo.formatCollectionTypeName(collectionKind, collectionItemTypeInfo.getName(), collectionCardinality);
 			
 			// create collection type (with cardinality)
-			DrbCollectionTypeInfo collectionTypeInfo = new DrbCollectionTypeInfo(schema, collectionTypeInfoName, collectionKind2, collectionItemTypeInfo);
+			BemCollectionTypeInfo collectionTypeInfo = new BemCollectionTypeInfo(schema, collectionTypeInfoName);
+			collectionTypeInfo.setCollectionKind(collectionKind2);
+			collectionTypeInfo.setItemTypeInfo(collectionItemTypeInfo);
 			collectionTypeInfo.setCardinality(collectionCardinality);
 			//collectionTypeInfo.bindTypeInfo(schema);
-			schema.addNonEntityTypeInfo(collectionTypeInfo);
+			schema.addTypeInfo(collectionTypeInfo);
 			
 			return collectionTypeInfo;
 			
@@ -468,17 +507,17 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 			
 	}
 	
-	private void bindEntitySuperTypeAndAttributes(ExpressEntityTypeInfoText entityTypeInfoText) throws DrbNotFoundException, IOException, DrbParserException {		
+	private void bindEntitySuperTypeAndAttributes(ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper) throws BemNotFoundException, IOException, BemParserException {		
 				
-		DrbEntityTypeInfo entityTypeInfo = entityTypeInfoText.getEntityTypeInfo();
+		BemEntityTypeInfo entityTypeInfo = entityTypeInfoTextWrapper.getEntityTypeInfo();
 		
-		String superTypeInfoName = entityTypeInfoText.getSuperTypeName();
+		String superTypeInfoName = entityTypeInfoTextWrapper.getSuperTypeName();
 		if (superTypeInfoName != null) {
-			DrbEntityTypeInfo superTypeInfo = schema.getEntityTypeInfo(superTypeInfoName); 
+			BemEntityTypeInfo superTypeInfo = schema.getEntityTypeInfo(superTypeInfoName); 
 			entityTypeInfo.setSuperTypeInfo(superTypeInfo);
 		}
 
-		for (String statement : entityTypeInfoText.getAttributeStatements()) {
+		for (String statement : entityTypeInfoTextWrapper.getAttributeStatements()) {
 			
 			String[] tokens = RegexUtils.split2(statement, StringUtils.COLON);						
 			String attributeName = parseAndFormatAttributeName(tokens[0].trim());
@@ -493,9 +532,9 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 				tokens = RegexUtils.split2(tokens[1].trim(), RegexUtils.WHITE_SPACE);
 			}
 			
-			DrbTypeInfo attributeTypeInfo;
+			BemTypeInfo attributeTypeInfo;
 			
-			DrbCollectionKindEnum collectionKind = parseCollectionKind(tokens[0]); 
+			BemCollectionKindEnum collectionKind = parseCollectionKind(tokens[0]); 
 			
 			if (collectionKind != null) {				
 				attributeTypeInfo = parseCollectionType(collectionKind, tokens[1]);				
@@ -504,26 +543,26 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 				attributeTypeInfo = schema.getTypeInfo(attributeTypeInfoName);
 			}
 			
-			DrbAttributeInfo attributeInfo;
-			if (attributeTypeInfo instanceof DrbEntityTypeInfo ||
-					attributeTypeInfo instanceof DrbSelectTypeInfo ||
-					attributeTypeInfo instanceof DrbCollectionTypeInfo) {
-				attributeInfo = new DrbOutgoingLinkInfo(entityTypeInfo, attributeName, attributeTypeInfo);
+			BemAttributeInfo attributeInfo;
+			if (attributeTypeInfo instanceof BemEntityTypeInfo ||
+					attributeTypeInfo instanceof BemSelectTypeInfo ||
+					attributeTypeInfo instanceof BemCollectionTypeInfo) {
+				attributeInfo = new BemAttributeInfo(entityTypeInfo, attributeName, attributeTypeInfo);
 			} else {
-				assert (attributeTypeInfo instanceof DrbDefinedTypeInfo ||
-						attributeTypeInfo instanceof DrbEnumerationTypeInfo ||
-						attributeTypeInfo instanceof DrbPrimitiveTypeInfo) :
+				assert (attributeTypeInfo instanceof BemDefinedTypeInfo ||
+						attributeTypeInfo instanceof BemEnumerationTypeInfo ||
+						attributeTypeInfo instanceof BemPrimitiveTypeInfo) :
 					attributeTypeInfo.getClass();
 				
-//				if (attributeTypeInfo instanceof DrbLiteralTypeInfo) {
-//				attributeTypeInfo = schema.getEquivalentDefinedType((DrbLiteralTypeInfo)attributeTypeInfo);
+//				if (attributeTypeInfo instanceof BemLiteralTypeInfo) {
+//				attributeTypeInfo = schema.getEquivalentDefinedType((BemLiteralTypeInfo)attributeTypeInfo);
 //			}
 
 // TODO: Convert IfcTimeStamp (=Long) to DateTime.
 //				if (attributeName.equals(StepVocabulary.TypeNames.IFC_TIME_STAMP)) {
 //					attributeTypeInfo = schema.IFC_TIME_STAMP;
 //				}
-				attributeInfo = new DrbAttributeInfo(entityTypeInfo, attributeName, attributeTypeInfo);				
+				attributeInfo = new BemAttributeInfo(entityTypeInfo, attributeName, attributeTypeInfo);				
 			}
 			attributeInfo.setOptional(isOptional);
 			attributeInfo.setFunctional(true);
@@ -540,34 +579,34 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 				typeHeader.equals(StepVocabulary.ExpressFormat.BAG);
 	}
 	
-	private void setEntityAttributeIndexes(DrbEntityTypeInfo entityTypeInfo) {
+	private void setEntityAttributeIndexes(BemEntityTypeInfo entityTypeInfo) {
 		int attributeCount = 0;
 		
 		if (entityTypeInfo.getSuperTypeInfo() != null) {
 			attributeCount = entityTypeInfo.getSuperTypeInfo().getInheritedAttributeInfos().size();
 		}
 		
-		for (DrbAttributeInfo attributeInfo : entityTypeInfo.getAttributeInfos()) {
+		for (BemAttributeInfo attributeInfo : entityTypeInfo.getAttributeInfos()) {
 			attributeInfo.setAttributeIndex(attributeCount++);
 		}			
 	}
 	
-	private void bindEntityInverseLinks(ExpressEntityTypeInfoText entityTypeInfoText) throws DrbParserException, DrbNotFoundException {
+	private void bindEntityInverseLinks(ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper) throws BemParserException, BemNotFoundException {
 
-		DrbEntityTypeInfo entityTypeInfo = entityTypeInfoText.getEntityTypeInfo();
+		BemEntityTypeInfo entityTypeInfo = entityTypeInfoTextWrapper.getEntityTypeInfo();
 		
-		for (String statement : entityTypeInfoText.getInverseLinkStatements()) {
+		for (String statement : entityTypeInfoTextWrapper.getInverseLinkStatements()) {
 			
 			String[] tokens = RegexUtils.split2(statement, StringUtils.COLON);						
 			String attributeName = parseAndFormatAttributeName(tokens[0].trim());
 
 			tokens = RegexUtils.split2(tokens[1].trim(), StepVocabulary.ExpressFormat.SET);
 			
-			DrbCardinality cardinality;  
+			BemCardinality cardinality;  
 			
 			if (tokens.length == 1) {
 								
-				cardinality = new DrbCardinality(DrbCardinality.ONE, DrbCardinality.ONE, false);
+				cardinality = new BemCardinality(BemCardinality.ONE, BemCardinality.ONE, false);
 				tokens = RegexUtils.split2(tokens[0].trim(), RegexUtils.WHITE_SPACE);
 				
 			} else {
@@ -583,38 +622,38 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 			tokens = RegexUtils.split2(tokens[1].trim(), StepVocabulary.ExpressFormat.FOR);
 			String outgoingLinkName = parseAndFormatAttributeName(tokens[1].trim());
 			
-			DrbEntityTypeInfo sourceEntityTypeInfo = schema.getEntityTypeInfo(sourceEntityTypeInfoName);
+			BemEntityTypeInfo sourceEntityTypeInfo = schema.getEntityTypeInfo(sourceEntityTypeInfoName);
 
-			assert sourceEntityTypeInfo.getAttributeInfo(outgoingLinkName) instanceof DrbOutgoingLinkInfo : outgoingLinkName;
-			DrbOutgoingLinkInfo outgoingLinkInfo = (DrbOutgoingLinkInfo)sourceEntityTypeInfo.getAttributeInfo(outgoingLinkName);
+			assert sourceEntityTypeInfo.getAttributeInfo(outgoingLinkName) instanceof BemAttributeInfo : outgoingLinkName;
+			BemAttributeInfo outgoingAttributeInfo = (BemAttributeInfo)sourceEntityTypeInfo.getAttributeInfo(outgoingLinkName);
 			
-			DrbInverseLinkInfo inverseLinkInfo =
-					new DrbInverseLinkInfo(entityTypeInfo, attributeName, sourceEntityTypeInfo, outgoingLinkInfo);
-			inverseLinkInfo.setCardinality(cardinality);
+			BemInverseAttributeInfo inverseAttributeInfo =
+					new BemInverseAttributeInfo(entityTypeInfo, attributeName, sourceEntityTypeInfo, outgoingAttributeInfo);
+			inverseAttributeInfo.setCardinality(cardinality);
 			if (cardinality.isSingle()) {
-				inverseLinkInfo.setFunctional(true);
-				outgoingLinkInfo.setInverseFunctional(true);
+				inverseAttributeInfo.setFunctional(true);
+				outgoingAttributeInfo.setInverseFunctional(true);
 			}
-			inverseLinkInfo.setInverseFunctional(outgoingLinkInfo.isFunctional());
-			entityTypeInfo.addInverseLinkInfo(inverseLinkInfo);
+			inverseAttributeInfo.setInverseFunctional(outgoingAttributeInfo.isFunctional());
+			entityTypeInfo.addInverseAttributeInfo(inverseAttributeInfo);
 		}
 	}
 	
-	private void bindEntityUniqueKeys(ExpressEntityTypeInfoText entityTypeInfoText) throws DrbParserException, DrbNotFoundException {
+	private void bindEntityUniqueKeys(ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper) throws BemParserException, BemNotFoundException {
 
-		DrbEntityTypeInfo entityTypeInfo = entityTypeInfoText.getEntityTypeInfo();
+		BemEntityTypeInfo entityTypeInfo = entityTypeInfoTextWrapper.getEntityTypeInfo();
 		
-		for (String statement : entityTypeInfoText.getUniqueKeysStatements()) {
+		for (String statement : entityTypeInfoTextWrapper.getUniqueKeysStatements()) {
 			
 			String[] tokens = RegexUtils.split2(statement, StringUtils.COLON);						
 //			String uniqueKeyName = tokens[0].trim();
 			
-			DrbUniqueKeyInfo uniqueKeyInfo = new DrbUniqueKeyInfo();
+			BemUniqueKeyInfo uniqueKeyInfo = new BemUniqueKeyInfo();
 
 			while (tokens.length > 1) {
 				tokens = RegexUtils.split2(tokens[1].trim(), RegexUtils.COMMA);
 				String attributeName = parseAndFormatAttributeName(tokens[0].trim());
-				DrbAttributeInfo attributeInfo = entityTypeInfo.getAttributeInfo(attributeName); 
+				BemAttributeInfo attributeInfo = entityTypeInfo.getAttributeInfo(attributeName); 
 				uniqueKeyInfo.addAttributeInfo(attributeInfo);
 			}
 			
@@ -626,7 +665,7 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 		}
 	}
 	
-//	public DrbSchema getStepSchema() throws DrbParserException {
+//	public BemSchema getStepSchema() throws BemParserException {
 //		if (stffExpressSchema == null) {
 //			stffExpressSchema = parse(new ByteArrayInputStream(StepVocabulary.SpfFormat.Header.SCHEMA_STRING.getBytes()));
 //		}

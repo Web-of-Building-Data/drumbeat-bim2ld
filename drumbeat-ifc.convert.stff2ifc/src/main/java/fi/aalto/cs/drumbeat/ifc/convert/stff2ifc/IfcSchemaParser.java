@@ -516,7 +516,7 @@ public class IfcSchemaParser {
 			if (attributeTypeInfo instanceof IfcEntityTypeInfo ||
 					attributeTypeInfo instanceof IfcSelectTypeInfo ||
 					attributeTypeInfo instanceof IfcCollectionTypeInfo) {
-				attributeInfo = new IfcLinkInfo(entityTypeInfo, attributeName, attributeTypeInfo);
+				attributeInfo = new IfcAttributeInfo(entityTypeInfo, attributeName, attributeTypeInfo);
 			} else {
 				assert (attributeTypeInfo instanceof IfcDefinedTypeInfo ||
 						attributeTypeInfo instanceof IfcEnumerationTypeInfo ||
@@ -593,18 +593,18 @@ public class IfcSchemaParser {
 			
 			IfcEntityTypeInfo sourceEntityTypeInfo = schema.getEntityTypeInfo(sourceEntityTypeInfoName);
 
-			assert sourceEntityTypeInfo.getAttributeInfo(outgoingLinkName) instanceof IfcLinkInfo : outgoingLinkName;
-			IfcLinkInfo outgoingLinkInfo = (IfcLinkInfo)sourceEntityTypeInfo.getAttributeInfo(outgoingLinkName);
+			assert sourceEntityTypeInfo.getAttributeInfo(outgoingLinkName) instanceof IfcAttributeInfo : outgoingLinkName;
+			IfcAttributeInfo outgoingAttributeInfo = (IfcAttributeInfo)sourceEntityTypeInfo.getAttributeInfo(outgoingLinkName);
 			
-			IfcInverseLinkInfo inverseLinkInfo =
-					new IfcInverseLinkInfo(entityTypeInfo, attributeName, sourceEntityTypeInfo, outgoingLinkInfo);
-			inverseLinkInfo.setCardinality(cardinality);
+			IfcInverseAttributeInfo inverseAttributeInfo =
+					new IfcInverseAttributeInfo(entityTypeInfo, attributeName, sourceEntityTypeInfo, outgoingAttributeInfo);
+			inverseAttributeInfo.setCardinality(cardinality);
 			if (cardinality.isSingle()) {
-				inverseLinkInfo.setFunctional(true);
-				outgoingLinkInfo.setInverseFunctional(true);
+				inverseAttributeInfo.setFunctional(true);
+				outgoingAttributeInfo.setInverseFunctional(true);
 			}
-			inverseLinkInfo.setInverseFunctional(outgoingLinkInfo.isFunctional());
-			entityTypeInfo.addInverseLinkInfo(inverseLinkInfo);
+			inverseAttributeInfo.setInverseFunctional(outgoingAttributeInfo.isFunctional());
+			entityTypeInfo.addInverseAttributeInfo(inverseAttributeInfo);
 		}
 	}
 	

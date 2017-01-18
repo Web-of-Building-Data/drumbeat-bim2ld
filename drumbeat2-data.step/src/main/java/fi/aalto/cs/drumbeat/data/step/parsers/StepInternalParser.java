@@ -1,6 +1,6 @@
 package fi.aalto.cs.drumbeat.data.step.parsers;
 
-import fi.aalto.cs.drumbeat.data.bedm.schema.DrbCollectionKindEnum;
+import fi.aalto.cs.drumbeat.data.bem.schema.BemCollectionKindEnum;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary;
 
 class StepInternalParser {
@@ -10,18 +10,18 @@ class StepInternalParser {
 	 * @param collectionKind
 	 * @return the corresponding collection kind, or null if collectionKind param is not one of "LIST", "ARRAY", "SET", "BAG" 
 	 */	
-	static DrbCollectionKindEnum parseCollectionKind(String collectionKind) {
+	static BemCollectionKindEnum parseCollectionKind(String collectionKind) {
 		switch(collectionKind.toUpperCase()) {
 		case StepVocabulary.ExpressFormat.LIST:
-			return DrbCollectionKindEnum.List;
+			return BemCollectionKindEnum.List;
 		case StepVocabulary.ExpressFormat.ARRAY:
-			return DrbCollectionKindEnum.Array;
+			return BemCollectionKindEnum.Array;
 		case StepVocabulary.ExpressFormat.SET:
-			return DrbCollectionKindEnum.Set;
+			return BemCollectionKindEnum.Set;
 		case StepVocabulary.ExpressFormat.BAG:
-			return DrbCollectionKindEnum.Bag;
+			return BemCollectionKindEnum.Bag;
 		}
-//		throw new DrbParserException("Unsupported collection kind: " + collectionKind);
+//		throw new BemParserException("Unsupported collection kind: " + collectionKind);
 		return null;
 	}
 

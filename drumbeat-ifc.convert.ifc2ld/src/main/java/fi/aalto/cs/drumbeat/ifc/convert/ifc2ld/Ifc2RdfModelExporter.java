@@ -27,7 +27,7 @@ import fi.aalto.cs.drumbeat.ifc.data.schema.IfcCollectionTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcDefinedTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcEntityTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcEnumerationTypeInfo;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcInverseLinkInfo;
+import fi.aalto.cs.drumbeat.ifc.data.schema.IfcInverseAttributeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.DrbLiteralTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcLogicalTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcSchema;
@@ -264,9 +264,9 @@ public class Ifc2RdfModelExporter {
 		Property attributeProperty = convertAttributeInfoToResource(attributeInfo);
 		Property inverseAttributeProperty = null;
 		if (attribute instanceof IfcLink) {
-			IfcInverseLinkInfo inverseLinkInfo = ((IfcLink)attribute).getInverseLinkInfo();
-			if (inverseLinkInfo != null) {				
-				inverseAttributeProperty = convertAttributeInfoToResource(inverseLinkInfo);
+			IfcInverseAttributeInfo inverseAttributeInfo = ((IfcLink)attribute).getInverseAttributeInfo();
+			if (inverseAttributeInfo != null) {				
+				inverseAttributeProperty = convertAttributeInfoToResource(inverseAttributeInfo);
 			}
 		}
 		

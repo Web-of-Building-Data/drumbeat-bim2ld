@@ -14,8 +14,8 @@ import fi.hut.cs.drumbeat.ifc.data.model.IfcAttributeList;
 import fi.hut.cs.drumbeat.ifc.data.model.IfcEntity;
 import fi.hut.cs.drumbeat.ifc.data.model.IfcLink;
 import fi.hut.cs.drumbeat.ifc.data.schema.IfcEntityTypeInfo;
-import fi.hut.cs.drumbeat.ifc.data.schema.IfcInverseLinkInfo;
-import fi.hut.cs.drumbeat.ifc.data.schema.IfcLinkInfo;
+import fi.hut.cs.drumbeat.ifc.data.schema.IfcInverseAttributeInfo;
+import fi.hut.cs.drumbeat.ifc.data.schema.IfcAttributeInfo;
 import fi.hut.cs.drumbeat.ifc.data.schema.IfcSchema;
 
 
@@ -38,7 +38,7 @@ public class ReplaceByInverseLinks extends IfcGroundingProcessor {
 
 	private static final String PARAM_INVERSE_LINK_NAMES = "inverseLinkNames";
 	
-	private Map<IfcEntityTypeInfo, IfcInverseLinkInfo> inverseLinkInfoMap;
+	private Map<IfcEntityTypeInfo, IfcInverseAttributeInfo> inverseAttributeInfoMap;
 	
 	public ReplaceByInverseLinks(IfcGroundingMainProcessor mainProcessor, Properties properties) {
 		super(mainProcessor, properties);
@@ -52,7 +52,7 @@ public class ReplaceByInverseLinks extends IfcGroundingProcessor {
 	@Override
 	void initialize() throws IfcAnalyserException {
 
-		inverseLinkInfoMap = new TreeMap<>();
+		inverseAttributeInfoMap = new TreeMap<>();
 		
 		String inverseLinkNameString = getProperties().getProperty(PARAM_INVERSE_LINK_NAMES);
 		
@@ -73,9 +73,9 @@ public class ReplaceByInverseLinks extends IfcGroundingProcessor {
 			
 			String inverseLinkName = tokens[1];
 			boolean found = false;
-			for (IfcInverseLinkInfo inverseLinkInfo : entityTypeInfo.getInheritedInverseLinkInfos()) {
-				if (inverseLinkInfo.getName().equalsIgnoreCase(inverseLinkName)) {
-					inverseLinkInfoMap.put(entityTypeInfo, inverseLinkInfo);
+			for (IfcInverseAttributeInfo inverseAttributeInfo : entityTypeInfo.getInheritedInverseAttributeInfos()) {
+				if (inverseAttributeInfo.getName().equalsIgnoreCase(inverseLinkName)) {
+					inverseAttributeInfoMap.put(entityTypeInfo, inverseAttributeInfo);
 					found = true;
 					continue;
 				}
@@ -91,28 +91,28 @@ public class ReplaceByInverseLinks extends IfcGroundingProcessor {
 	@Override
 	boolean process(IfcEntity entity) throws IfcAnalyserException {
 		
-		for (IfcEntityTypeInfo entityTypeInfo : inverseLinkInfoMap.keySet()) {
+		for (IfcEntityTypeInfo entityTypeInfo : inverseAttributeInfoMap.keySet()) {
 			if (entity.isInstanceOf(entityTypeInfo)) {
-				IfcInverseLinkInfo inverseLinkInfo = inverseLinkInfoMap.get(entityTypeInfo); 
-				IfcLinkInfo outgoingLinkInfo = inverseLinkInfo.getOutgoingLinkInfo();
+				IfcInverseAttributeInfo inverseAttributeInfo = inverseAttributeInfoMap.get(entityTypeInfo); 
+				IfcAttributeInfo outgoingAttributeInfo = inverseAttributeInfo.getOutgoingAttributeInfo();
 				List<IfcLink> incomingLinks = entity.getIncomingLinks(); 
 				for (int i = 0; i < incomingLinks.size(); ++i) {
 					IfcLink incomingLink = incomingLinks.get(i);
-					if (incomingLink.getLinkInfo().equals(outgoingLinkInfo)) {
+					if (incomingLink.getAttributeInfo().equals(outgoingAttributeInfo)) {
 						IfcAttributeList<IfcLink> outgoingLinksOfSource = incomingLink.getSource().getOutgoingLinks();
-						List<IfcLink> links = outgoingLinksOfSource.selectAll(outgoingLinkInfo);
+						List<IfcLink> links = outgoingLinksOfSource.selectAll(outgoingAttributeInfo);
 						if (links.size() == 1) {
 							links.get(0).setUseInverseLink(true);
 							return true;
 						} else {
-							throw new IfcAnalyserException(String.format("Incoming link %s is a multiple link", entityTypeInfo.getName(), outgoingLinkInfo.getName()));
+							throw new IfcAnalyserException(String.format("Incoming link %s is a multiple link", entityTypeInfo.getName(), outgoingAttributeInfo.getName()));
 						}						
 					}
 				}
 				
-//				if (!inverseLinkInfo.isOptional()) {
+//				if (!inverseAttributeInfo.isOptional()) {
 //					throw new IfcAnalyserException(String.format("Incoming link %s.%s-->%s is not found for entity %s",
-//							incomingLinkInfo.getEntityTypeInfo().getName(), incomingLinkInfo.getName(), entityTypeInfo.getName(), entity));
+//							incomingAttributeInfo.getEntityTypeInfo().getName(), incomingAttributeInfo.getName(), entityTypeInfo.getName(), entity));
 //				}
 			}
 		}

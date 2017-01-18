@@ -5,7 +5,7 @@ import java.io.*;
 //import java.util.regex.Pattern;
 
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
-import fi.aalto.cs.drumbeat.data.bedm.parsers.DrbFormatException;
+import fi.aalto.cs.drumbeat.data.bem.parsers.BemFormatException;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary;
 
 
@@ -39,7 +39,7 @@ public class StepLineReader {
 	}
 	
 
-	private String getNextLine() throws IOException, DrbFormatException {
+	private String getNextLine() throws IOException, BemFormatException {
 		++currentLineNumber;
 		String line = reader.readLine();
 
@@ -58,7 +58,7 @@ public class StepLineReader {
 					}
 				} else {
 					currentLineNumber = LINE_NUMBER_OF_END;
-					throw new DrbFormatException(currentLineNumber, "Expected closing comment");					
+					throw new BemFormatException(currentLineNumber, "Expected closing comment");					
 				}
 			}
 		}
@@ -75,9 +75,9 @@ public class StepLineReader {
 	 * Gets the next statement from the input stream   
 	 * @return Tokens of the next statement in the file (without semicolon)
 	 * @throws IOException
-	 * @throws DrbFormatException
+	 * @throws BemFormatException
 	 */
-//	public String getNextStatement() throws IOException, DrbFormatException {
+//	public String getNextStatement() throws IOException, BemFormatException {
 //		
 //		String line = "";
 //		
@@ -98,7 +98,7 @@ public class StepLineReader {
 //						line = getNextLine();
 //						//line = reader.readLine();
 //						if (line == null) {
-//							throw new DrbFormatException("Expected closing comment");
+//							throw new BemFormatException("Expected closing comment");
 //						}
 //					}
 //					return getNextStatement();
@@ -150,13 +150,13 @@ public class StepLineReader {
 //				if (stringBuilder.length() == 0) {
 //					return null;
 //				} else {
-//					throw new DrbFormatException(String.format("Expected '%s'", StringUtils.SEMICOLON));
+//					throw new BemFormatException(String.format("Expected '%s'", StringUtils.SEMICOLON));
 //				}
 //			}
 //		}		
 //	}
 	
-	public String getNextStatement() throws IOException, DrbFormatException {
+	public String getNextStatement() throws IOException, BemFormatException {
 		
 		int length;
 		
@@ -201,7 +201,7 @@ public class StepLineReader {
 				if (cache.length() == 0) {
 					return null;
 				} else {
-					throw new DrbFormatException(currentLineNumber, String.format("Expected '%s'", StringUtils.SEMICOLON));
+					throw new BemFormatException(currentLineNumber, String.format("Expected '%s'", StringUtils.SEMICOLON));
 				}
 			}
 			

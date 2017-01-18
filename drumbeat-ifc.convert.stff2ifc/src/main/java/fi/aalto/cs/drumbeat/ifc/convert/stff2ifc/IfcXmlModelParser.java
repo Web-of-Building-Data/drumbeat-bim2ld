@@ -242,26 +242,26 @@ public class IfcXmlModelParser {
 
 					IfcAttributeInfo attributeInfo = entityTypeInfo.getAttributeInfo(attributeName, true);
 
-					if (attributeInfo instanceof IfcLinkInfo) {
+					if (attributeInfo instanceof IfcAttributeInfo) {
 
-						IfcLinkInfo linkInfo = (IfcLinkInfo) attributeInfo;
-						DrbTypeInfo linkTypeInfo = linkInfo.getAttributeTypeInfo();
+						IfcAttributeInfo attributeInfo = (IfcAttributeInfo) attributeInfo;
+						DrbTypeInfo linkTypeInfo = attributeInfo.getAttributeTypeInfo();
 						if (linkTypeInfo instanceof IfcCollectionTypeInfo) {
 							List<IfcEntityBase> linkedEntities = parseEntities((Element) childNode, entity.getLocalId());
 							IfcEntityCollection linkedEntityCollection = new IfcEntityCollection(linkedEntities);
-							IfcLink link = new IfcLink(linkInfo, linkInfo.getAttributeIndex(), entity,
+							IfcLink link = new IfcLink(attributeInfo, attributeInfo.getAttributeIndex(), entity,
 									linkedEntityCollection);
 							entity.addOutgoingLink(link);
 						} else {
 							IfcEntityBase linkedEntity = parseEntity((Element) childNode, null, entity.getLocalId(), childCount++);
-							IfcLink link = new IfcLink(linkInfo, linkInfo.getAttributeIndex(),
+							IfcLink link = new IfcLink(attributeInfo, attributeInfo.getAttributeIndex(),
 									entity, linkedEntity);
 							entity.addOutgoingLink(link);
 						}
 
-					} else if (attributeInfo instanceof IfcInverseLinkInfo) {
+					} else if (attributeInfo instanceof IfcInverseAttributeInfo) {
 						
-						DrbTypeInfo inverseLinkTypeInfo = ((IfcInverseLinkInfo) attributeInfo).getAttributeTypeInfo();
+						DrbTypeInfo inverseLinkTypeInfo = ((IfcInverseAttributeInfo) attributeInfo).getAttributeTypeInfo();
 
 						List<IfcEntityBase> linkedEntities;
 						if (inverseLinkTypeInfo instanceof IfcCollectionTypeInfo) {
@@ -272,17 +272,17 @@ public class IfcXmlModelParser {
 							linkedEntities.add(linkedEntity);
 						}
 						
-						IfcLinkInfo linkInfo = ((IfcInverseLinkInfo) attributeInfo).getOutgoingLinkInfo();
-						DrbTypeInfo linkTypeInfo = linkInfo.getAttributeTypeInfo();
+						IfcAttributeInfo attributeInfo = ((IfcInverseAttributeInfo) attributeInfo).getOutgoingAttributeInfo();
+						DrbTypeInfo linkTypeInfo = attributeInfo.getAttributeTypeInfo();
 						for (IfcEntityBase linkedEntity : linkedEntities) {
 							
 							if (linkTypeInfo instanceof IfcCollectionTypeInfo) {
 								
-								IfcLink link = ((IfcEntity)linkedEntity).getOutgoingLink(linkInfo);
+								IfcLink link = ((IfcEntity)linkedEntity).getOutgoingLink(attributeInfo);
 								if (link == null) {
 									IfcEntityCollection linkedEntityCollection = new IfcEntityCollection();
 									linkedEntityCollection.add(entity);
-									link = new IfcLink(linkInfo, linkInfo.getAttributeIndex(), (IfcEntity)linkedEntity,
+									link = new IfcLink(attributeInfo, attributeInfo.getAttributeIndex(), (IfcEntity)linkedEntity,
 											linkedEntityCollection);
 									((IfcEntity)linkedEntity).addOutgoingLink(link);
 								} else {
@@ -290,7 +290,7 @@ public class IfcXmlModelParser {
 								}	
 								
 							} else {
-								IfcLink link = new IfcLink(linkInfo, linkInfo.getAttributeIndex(), (IfcEntity)linkedEntity, entity);
+								IfcLink link = new IfcLink(attributeInfo, attributeInfo.getAttributeIndex(), (IfcEntity)linkedEntity, entity);
 								entity.addOutgoingLink(link);
 							}
 							

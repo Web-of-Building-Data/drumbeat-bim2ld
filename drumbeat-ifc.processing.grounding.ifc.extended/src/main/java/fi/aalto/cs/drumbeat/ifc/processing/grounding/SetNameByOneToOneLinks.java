@@ -10,7 +10,7 @@ import fi.hut.cs.drumbeat.ifc.processing.grounding.InputTypeEnum;
 import fi.hut.cs.drumbeat.ifc.data.model.IfcEntity;
 import fi.hut.cs.drumbeat.ifc.data.model.IfcEntityBase;
 import fi.hut.cs.drumbeat.ifc.data.model.IfcLink;
-import fi.hut.cs.drumbeat.ifc.data.schema.IfcLinkInfo;
+import fi.hut.cs.drumbeat.ifc.data.schema.IfcAttributeInfo;
 
 
 /**
@@ -60,13 +60,13 @@ public class SetNameByOneToOneLinks extends IfcGroundingProcessor {
 		for (IfcLink link : source.getOutgoingLinks()) {			
 			
 			// check if direct link cardinality is single
-			IfcLinkInfo linkInfo = link.getLinkInfo();
-			if (linkInfo.isFunctional() && linkInfo.isInverseFunctional()) {
+			IfcAttributeInfo attributeInfo = link.getAttributeInfo();
+			if (attributeInfo.isFunctional() && attributeInfo.isInverseFunctional()) {
 				
-				if (!linkInfo.isSortedList()) {
+				if (!attributeInfo.isSortedList()) {
 					
 					String sourceRawName = source.getRawName();
-					String linkName = linkInfo.getName();
+					String linkName = attributeInfo.getName();
 					String destinationRawName = String.format(entityNamePattern, sourceRawName, linkName);
 	
 					assert link.getDestinations().size() == 1 : "Expected: link.getDestinations().size() == 1";
@@ -87,7 +87,7 @@ public class SetNameByOneToOneLinks extends IfcGroundingProcessor {
 							IfcEntity destinationEntity = (IfcEntity)destination; 
 							if (!destinationEntity.hasName()) {
 								String sourceRawName = source.getRawName();
-								String linkName = linkInfo.getName();
+								String linkName = attributeInfo.getName();
 								String destinationRawName = String.format(entityNamePattern, sourceRawName, linkName + index);
 								trySetEntityName(destinationEntity, destinationRawName);
 								

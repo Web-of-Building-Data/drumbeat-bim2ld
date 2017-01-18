@@ -20,7 +20,7 @@
 		<!-- Drumbeat -->		 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>drumbeat2-data.bedm</artifactId>
+			<artifactId>drumbeat2-data.bem</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

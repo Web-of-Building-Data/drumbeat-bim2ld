@@ -685,13 +685,13 @@ public class Ifc2RdfSchemaExporter {
 	// // write owl:inverseOf
 	// // See: http://www.w3.org/TR/owl-ref/#inverseOf-def
 	// //
-	// if (attributeInfoList.get(0) instanceof IfcInverseLinkInfo &&
+	// if (attributeInfoList.get(0) instanceof IfcInverseAttributeInfo &&
 	// context.supportsRdfProperty(OWL.inverseOf,
 	// OwlProfile.RdfTripleObjectTypeEnum.SingleObject)) {
-	// IfcInverseLinkInfo inverseLinkInfo =
-	// (IfcInverseLinkInfo)attributeInfoList.get(0);
+	// IfcInverseAttributeInfo inverseAttributeInfo =
+	// (IfcInverseAttributeInfo)attributeInfoList.get(0);
 	// jenaModel.add(attributeResource, OWL.inverseOf,
-	// createUriResource(converter.formatAttributeName(inverseLinkInfo.getOutgoingLinkInfo())));
+	// createUriResource(converter.formatAttributeName(inverseAttributeInfo.getOutgoingAttributeInfo())));
 	// }
 	// } else {
 	// if (avoidDuplicationOfPropertyNames) {

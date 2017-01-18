@@ -407,7 +407,7 @@ class IfcSpfModelSectionParser {
 								
 							}
 							
-						} else { // attributeInfo instanceof IfcLinkInfo								
+						} else { // attributeInfo instanceof IfcAttributeInfo								
 							
 							if (attributeValue instanceof IfcTemporaryCollectionValueWrapper) {
 								
@@ -426,12 +426,12 @@ class IfcSpfModelSectionParser {
 										destinations.add((IfcEntityBase)destination);
 									}
 									
-									entity.addOutgoingLink(new IfcLink((IfcLinkInfo)attributeInfo, attributeIndex, entity, destinations));
+									entity.addOutgoingLink(new IfcLink((IfcAttributeInfo)attributeInfo, attributeIndex, entity, destinations));
 									
 								} else {										
 									
 									for (IfcValue destination : ((IfcTemporaryCollectionValueWrapper)attributeValue).getValues()) {
-										IfcLink link = new IfcLink((IfcLinkInfo)attributeInfo, attributeIndex, entity, (IfcEntityBase)destination);
+										IfcLink link = new IfcLink((IfcAttributeInfo)attributeInfo, attributeIndex, entity, (IfcEntityBase)destination);
 										entity.addOutgoingLink(link);
 									}										
 									
@@ -442,7 +442,7 @@ class IfcSpfModelSectionParser {
 								assert (attributeValue instanceof IfcEntityBase) :
 									String.format("Object is not an entity, line number: %s, attributeInfo: %s, attribute value: %s, value type: %s",
 											entity.getLocalId(), attributeInfo.getName(), attributeValue, attributeInfo.getAttributeTypeInfo().getValueTypes());
-								IfcLink link = new IfcLink((IfcLinkInfo)attributeInfo, attributeIndex, entity, (IfcEntityBase)attributeValue);
+								IfcLink link = new IfcLink((IfcAttributeInfo)attributeInfo, attributeIndex, entity, (IfcEntityBase)attributeValue);
 								entity.addOutgoingLink(link);
 								
 							}

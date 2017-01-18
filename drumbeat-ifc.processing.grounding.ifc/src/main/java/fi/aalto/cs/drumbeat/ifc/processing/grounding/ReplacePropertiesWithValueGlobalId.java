@@ -15,7 +15,7 @@ import fi.aalto.cs.drumbeat.ifc.data.model.IfcLiteralValue;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcAttributeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcDefinedTypeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcEntityTypeInfo;
-import fi.aalto.cs.drumbeat.ifc.data.schema.IfcLinkInfo;
+import fi.aalto.cs.drumbeat.ifc.data.schema.IfcAttributeInfo;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcSchema;
 import fi.aalto.cs.drumbeat.ifc.data.schema.DrbTypeEnum;
 
@@ -69,7 +69,7 @@ public class ReplacePropertiesWithValueGlobalId extends IfcGroundingProcessor {
 			for (IfcAttributeInfo attributeInfo : inheritedAttributeInfos) {
 				String attributeName = attributeInfo.getName();
 				
-				logger.debug(((attributeInfo instanceof IfcLinkInfo) ?
+				logger.debug(((attributeInfo instanceof IfcAttributeInfo) ?
 						"   Link: " : "   Attribute: ") + attributeName);
 				if (attributeName.equals(IFCPROPERTY_NAME_ATTRIBUTE)) {
 					nameAttributeInfo = attributeInfo;
@@ -121,7 +121,7 @@ public class ReplacePropertiesWithValueGlobalId extends IfcGroundingProcessor {
 //					IfcShortEntity newValue = new IfcShortEntity(oldValue.getTypeInfo(),
 //							new IfcLiteralValue(newGuid, IfcTypeEnum.STRING));
 //					
-//					IfcLink newLink = new IfcLink(oldLink.getLinkInfo(), oldLink.getIndex(), oldLink.getSource(), newValue);
+//					IfcLink newLink = new IfcLink(oldLink.getAttributeInfo(), oldLink.getIndex(), oldLink.getSource(), newValue);
 //					
 //					entity.getOutgoingLinks().set(0, newLink);
 					
