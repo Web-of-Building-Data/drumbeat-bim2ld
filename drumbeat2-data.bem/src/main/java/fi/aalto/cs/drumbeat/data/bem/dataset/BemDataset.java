@@ -7,7 +7,7 @@ import java.util.List;
 import fi.aalto.cs.drumbeat.data.bem.BemNotFoundException;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 
-public abstract class BemDataset {
+public class BemDataset {
 
 	private BemSchema schema;
 	private List<BemEntity> entities;

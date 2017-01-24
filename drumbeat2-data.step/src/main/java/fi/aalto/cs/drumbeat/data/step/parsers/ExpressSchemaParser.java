@@ -7,7 +7,6 @@ import java.util.Collection;
 import fi.aalto.cs.drumbeat.data.bem.BemException;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemSchemaParser;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemUnsupportedDataTypeException;
-import fi.aalto.cs.drumbeat.data.bem.schema.BemSchema;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary.ExpressFormat;
 import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
 
@@ -21,15 +20,15 @@ public class ExpressSchemaParser extends BemSchemaParser {
 	}
 
 	@Override
-	public BemSchema parse(InputStream in, String fileType, boolean checkFileType) throws BemException {
-		BemSchema shema = createDefaultSchema(fileType, checkFileType);
-		return new ExpressSchemaInternalParser(shema, in, fileType).parse();
+	public ExpressSchema parse(InputStream in, String fileType, boolean checkFileType) throws BemException {
+		ExpressSchemaBuilder schemaBuilder = getSchemaBuilder(fileType, checkFileType);
+		return new ExpressSchemaInternalParser(schemaBuilder, in).parse();
 	}
 
 	@Override
-	public BemSchema createDefaultSchema(String fileType, boolean checkFileType) throws BemUnsupportedDataTypeException {
+	public ExpressSchemaBuilder getSchemaBuilder(String fileType, boolean checkFileType) throws BemUnsupportedDataTypeException {
 		internalCheckFileType(fileType, checkFileType);
-		return new ExpressSchema();
+		return new ExpressSchemaBuilder(fileType);
 	}
 
 }

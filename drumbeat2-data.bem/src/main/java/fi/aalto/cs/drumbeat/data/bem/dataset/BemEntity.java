@@ -5,6 +5,7 @@ import java.util.*;
 import org.apache.commons.lang3.NotImplementedException;
 
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
+import fi.aalto.cs.drumbeat.data.bem.BemNotFoundException;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 
 
@@ -107,6 +108,11 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 
 	public List<BemAttribute> getAttributes(BemAttributeInfo attributeInfo) {
 		return attributes.selectAll(attributeInfo);
+	}
+	
+	public List<BemAttribute> getAttributes(String attributeName) throws BemNotFoundException {
+		BemAttributeInfo attributeInfo = getTypeInfo().getAttributeInfo(attributeName); 
+		return getAttributes(attributeInfo);
 	}
 
 

@@ -26,6 +26,7 @@ import fi.aalto.cs.drumbeat.data.bem.parsers.BemParserException;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary.ExpressFormat;
+import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,7 +43,7 @@ import java.util.List;
  *
  */
 
-class ExpressSchemaInternalParser extends StepInternalParser {
+class ExpressSchemaInternalParser {
 	
 //	/**
 //	 * Cache for EXPRESS schema of STFF header section
@@ -57,15 +58,17 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 	/**
 	 * The output schema
 	 */
-	private BemSchema schema;	
+//	private ExpressSchemaBuilder builder;
+	private ExpressSchema schema;	
 	
 	/**
 	 * Creates a new parser. For internal use.
 	 * 
 	 * @param in
 	 */	
-	ExpressSchemaInternalParser(BemSchema schema, InputStream in, String fileType) {
-		this.schema = schema;
+	ExpressSchemaInternalParser(ExpressSchemaBuilder builder, InputStream in) {
+//		this.builder = builder;
+		this.schema = builder.createSchema();
 		lineReader = new StepLineReader(in);
 	}
 
@@ -76,7 +79,7 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 	 * @return {@link BemSchema}
 	 * @throws BemException
 	 */
-	BemSchema parse() throws BemException {		
+	ExpressSchema parse() throws BemException {		
 		try {
 			String statement = lineReader.getNextStatement();
 			String tokens[] = RegexUtils.split2(statement, RegexUtils.WHITE_SPACE);
@@ -690,5 +693,26 @@ class ExpressSchemaInternalParser extends StepInternalParser {
 	private static String parseAndFormatAttributeName(String attributeName) {
 		return attributeName.substring(0, 1).toLowerCase() + attributeName.substring(1);
 	}
+	
+	/**
+	 * Parses collection kind strings: "LIST", "ARRAY", "SET", "BAG" 
+	 * @param collectionKind
+	 * @return the corresponding collection kind, or null if collectionKind param is not one of "LIST", "ARRAY", "SET", "BAG" 
+	 */	
+	private static BemCollectionKindEnum parseCollectionKind(String collectionKind) {
+		switch(collectionKind.toUpperCase()) {
+		case StepVocabulary.ExpressFormat.LIST:
+			return BemCollectionKindEnum.List;
+		case StepVocabulary.ExpressFormat.ARRAY:
+			return BemCollectionKindEnum.Array;
+		case StepVocabulary.ExpressFormat.SET:
+			return BemCollectionKindEnum.Set;
+		case StepVocabulary.ExpressFormat.BAG:
+			return BemCollectionKindEnum.Bag;
+		}
+//		throw new BemParserException("Unsupported collection kind: " + collectionKind);
+		return null;
+	}
+	
 	
 }
