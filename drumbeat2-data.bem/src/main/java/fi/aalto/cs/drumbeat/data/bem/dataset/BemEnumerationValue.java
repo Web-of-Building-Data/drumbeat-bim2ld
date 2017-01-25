@@ -5,5 +5,5 @@ public class BemEnumerationValue extends BemSimpleValue {
 	public BemEnumerationValue(Object value) {
 		super(value);
 	}
-
+	
 }

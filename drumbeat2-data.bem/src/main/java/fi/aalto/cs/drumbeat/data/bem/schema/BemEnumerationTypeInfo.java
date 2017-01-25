@@ -45,6 +45,11 @@ public class BemEnumerationTypeInfo extends BemSimpleTypeInfo {
 	public void setValues(Collection<String> values) {
 		this.values = new ArrayList<>(values);
 	}
+
+	@Override
+	public BemValueKindEnum getValueKind() {
+		return BemValueKindEnum.ENUM;
+	}
 	
 	
 

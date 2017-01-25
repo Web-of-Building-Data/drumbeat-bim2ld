@@ -13,6 +13,5 @@ public class ExpressSchemaBuilder extends BemSchemaBuilder {
 	public ExpressSchema createSchema() {
 		return new ExpressSchema();
 	}
-	
 
 }

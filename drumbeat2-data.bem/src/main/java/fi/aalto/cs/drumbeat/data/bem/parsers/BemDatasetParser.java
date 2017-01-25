@@ -11,9 +11,13 @@ public abstract class BemDatasetParser {
 	
 	public abstract Collection<String> getSupportedFileTypes();
 	
-	public abstract BemDataset parse(BemSchema schema, InputStream in, String fileType, boolean checkFileType) throws BemException;
-	
-	public abstract BemDatasetBuilder getDatasetBuilder(BemSchema schema, String fileType, boolean checkFileType) throws BemUnsupportedDataTypeException;	
+	public BemDataset parse(InputStream in, String fileType, boolean checkFileType) throws BemException {
+		return parse(in, fileType, checkFileType, null);
+	}
+
+	public abstract BemDataset parse(InputStream in, String fileType, boolean checkFileType, BemSchema schema) throws BemException;	
+
+	public abstract BemDatasetBuilder getDatasetBuilder(String fileType, boolean checkFileType) throws BemUnsupportedDataTypeException;	
 	
 	public boolean checkFileType(String fileType) {
 		// case-sensitive checking (like in UNIX)

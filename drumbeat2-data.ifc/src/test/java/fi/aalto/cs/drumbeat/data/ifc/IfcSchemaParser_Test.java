@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 
 public class IfcSchemaParser_Test {
 	
-	public static final String RESOURCES_FOLDER = "src/test/java/resources/";
+	public static final String RESOURCES_FOLDER = "src/test/resources/";
 	
 	@Before
 	public void setUp() {
@@ -27,18 +27,18 @@ public class IfcSchemaParser_Test {
 	@Test(expected=FileNotFoundException.class)
 	public void test_parseNonExistingFile() throws BemException, IOException {
 		BemParserUtil.registerSchemaParser(new IfcSchemaParser());
-		BemParserUtil.parseSchema("../resources/IFC/IFC2X3_TC1.ex", true);
+		test_parse("IFC2X3_TC1.ex");
 	}
 
 	@Test(expected=BemUnsupportedDataTypeException.class)
 	public void test_parseWrongTypeFile() throws BemException, IOException {
 		BemParserUtil.registerSchemaParser(new IfcSchemaParser());
-		BemParserUtil.parseSchema("../resources/IFC/sample.ifc", true);
+		test_parse("sample.ifc");
 	}
 
 	@Test(expected=BemUnsupportedDataTypeException.class)
 	public void test_parseNoParserRegistered() throws BemException, IOException {
-		BemParserUtil.parseSchema("../resources/IFC/IFC2X3_TC1.exp", true);
+		BemParserUtil.parseSchema(RESOURCES_FOLDER + "IFC2X3_TC1.exp", true);
 	}
 	
 	@Test

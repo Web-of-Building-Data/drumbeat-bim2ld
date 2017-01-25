@@ -58,7 +58,7 @@ class ExpressSchemaInternalParser {
 	/**
 	 * The output schema
 	 */
-//	private ExpressSchemaBuilder builder;
+	private ExpressSchemaBuilder builder;
 	private ExpressSchema schema;	
 	
 	/**
@@ -67,7 +67,7 @@ class ExpressSchemaInternalParser {
 	 * @param in
 	 */	
 	ExpressSchemaInternalParser(ExpressSchemaBuilder builder, InputStream in) {
-//		this.builder = builder;
+		this.builder = builder;
 		this.schema = builder.createSchema();
 		lineReader = new StepLineReader(in);
 	}
@@ -203,13 +203,13 @@ class ExpressSchemaInternalParser {
 		BemTypeInfo typeInfo;
 		
 		if (collectionKind != null) {
-			typeInfo = new BemCollectionTypeInfo(schema, typeName);
+			typeInfo = builder.createCollectionTypeInfo(schema, typeName);
 		} else if (tokens[0].equals(StepVocabulary.ExpressFormat.SELECT)) {
-			typeInfo = new BemSelectTypeInfo(schema, typeName);
+			typeInfo = builder.createSelectTypeInfo(schema, typeName);
 		} else if (tokens[0].equals(StepVocabulary.ExpressFormat.ENUMERATION)) {
-			typeInfo = new BemEnumerationTypeInfo(schema, typeName);
+			typeInfo = builder.createEnumerationTypeInfo(schema, typeName);
 		} else {			
-			typeInfo = new BemDefinedTypeInfo(schema, typeName);
+			typeInfo = builder.createDefinedTypeInfo(schema, typeName);
 		}
 		
 		ExpressNonEntityTypeInfoTextWrapper typeWrapper = new ExpressNonEntityTypeInfoTextWrapper(typeInfo, typeInfoString);					
@@ -267,7 +267,7 @@ class ExpressSchemaInternalParser {
 			tokens = RegexUtils.split2(itemTypeInfoName, RegexUtils.WHITE_SPACE);
 			
 			if (isCollectionTypeHeader(tokens[0])) {				
-				BemTypeInfo itemTypeInfo = new BemCollectionTypeInfo(schema, itemTypeInfoName);				
+				BemTypeInfo itemTypeInfo = builder.createCollectionTypeInfo(schema, itemTypeInfoName);				
 				parseNonEntityTypeBody(itemTypeInfo, typeInfoString);
 				((BemCollectionTypeInfo)typeInfo).setItemTypeInfo(itemTypeInfo);				
 			} else {
@@ -323,7 +323,7 @@ class ExpressSchemaInternalParser {
 	 * @param isArrayIndex
 	 * @return
 	 */
-	private static BemCardinality parseCardinality(String s, boolean isArrayIndex) {
+	private BemCardinality parseCardinality(String s, boolean isArrayIndex) {
 		
 		s = s.trim();
 		
@@ -340,7 +340,7 @@ class ExpressSchemaInternalParser {
 		int max = cardinalityTokens[1].equals(StepVocabulary.ExpressFormat.UNBOUNDED) ?
 				BemCardinality.UNBOUNDED : Integer.parseInt(cardinalityTokens[1]);
 		
-		return new BemCardinality(min, max, isArrayIndex);
+		return builder.createCardinality(min, max, isArrayIndex);
 			
 	}
 
@@ -471,7 +471,7 @@ class ExpressSchemaInternalParser {
 			} catch (BemNotFoundException e) {					
 			
 				// create collection type (with cardinality)
-				BemCollectionTypeInfo collectionTypeInfo = new BemCollectionTypeInfo(schema, collectionTypeInfoName);
+				BemCollectionTypeInfo collectionTypeInfo = builder.createCollectionTypeInfo(schema, collectionTypeInfoName);
 				collectionTypeInfo.setCollectionKind(collectionKind);
 				
 				BemTypeInfo collectionItemTypeInfo = schema.getTypeInfo(collectionItemTypeInfoName);
@@ -497,7 +497,7 @@ class ExpressSchemaInternalParser {
 			String collectionTypeInfoName = BemCollectionTypeInfo.formatCollectionTypeName(collectionKind, collectionItemTypeInfo.getName(), collectionCardinality);
 			
 			// create collection type (with cardinality)
-			BemCollectionTypeInfo collectionTypeInfo = new BemCollectionTypeInfo(schema, collectionTypeInfoName);
+			BemCollectionTypeInfo collectionTypeInfo = builder.createCollectionTypeInfo(schema, collectionTypeInfoName);
 			collectionTypeInfo.setCollectionKind(collectionKind2);
 			collectionTypeInfo.setItemTypeInfo(collectionItemTypeInfo);
 			collectionTypeInfo.setCardinality(collectionCardinality);
@@ -535,37 +535,37 @@ class ExpressSchemaInternalParser {
 				tokens = RegexUtils.split2(tokens[1].trim(), RegexUtils.WHITE_SPACE);
 			}
 			
-			BemTypeInfo attributeTypeInfo;
+			BemTypeInfo attributeValueTypeInfo;
 			
 			BemCollectionKindEnum collectionKind = parseCollectionKind(tokens[0]); 
 			
 			if (collectionKind != null) {				
-				attributeTypeInfo = parseCollectionType(collectionKind, tokens[1]);				
+				attributeValueTypeInfo = parseCollectionType(collectionKind, tokens[1]);				
 			} else {
-				String attributeTypeInfoName = parseAndFormatTypeName(tokens[0]);
-				attributeTypeInfo = schema.getTypeInfo(attributeTypeInfoName);
+				String attributeValueTypeInfoName = parseAndFormatTypeName(tokens[0]);
+				attributeValueTypeInfo = schema.getTypeInfo(attributeValueTypeInfoName);
 			}
 			
 			BemAttributeInfo attributeInfo;
-			if (attributeTypeInfo instanceof BemEntityTypeInfo ||
-					attributeTypeInfo instanceof BemSelectTypeInfo ||
-					attributeTypeInfo instanceof BemCollectionTypeInfo) {
-				attributeInfo = new BemAttributeInfo(entityTypeInfo, attributeName, attributeTypeInfo);
+			if (attributeValueTypeInfo instanceof BemEntityTypeInfo ||
+					attributeValueTypeInfo instanceof BemSelectTypeInfo ||
+					attributeValueTypeInfo instanceof BemCollectionTypeInfo) {
+				attributeInfo = new BemAttributeInfo(entityTypeInfo, attributeName, attributeValueTypeInfo);
 			} else {
-				assert (attributeTypeInfo instanceof BemDefinedTypeInfo ||
-						attributeTypeInfo instanceof BemEnumerationTypeInfo ||
-						attributeTypeInfo instanceof BemPrimitiveTypeInfo) :
-					attributeTypeInfo.getClass();
+				assert (attributeValueTypeInfo instanceof BemDefinedTypeInfo ||
+						attributeValueTypeInfo instanceof BemEnumerationTypeInfo ||
+						attributeValueTypeInfo instanceof BemPrimitiveTypeInfo) :
+					attributeValueTypeInfo.getClass();
 				
-//				if (attributeTypeInfo instanceof BemLiteralTypeInfo) {
-//				attributeTypeInfo = schema.getEquivalentDefinedType((BemLiteralTypeInfo)attributeTypeInfo);
+//				if (attributeValueTypeInfo instanceof BemLiteralTypeInfo) {
+//				attributeValueTypeInfo = schema.getEquivalentDefinedType((BemLiteralTypeInfo)attributeValueTypeInfo);
 //			}
 
 // TODO: Convert IfcTimeStamp (=Long) to DateTime.
 //				if (attributeName.equals(StepVocabulary.TypeNames.IFC_TIME_STAMP)) {
-//					attributeTypeInfo = schema.IFC_TIME_STAMP;
+//					attributeValueTypeInfo = schema.IFC_TIME_STAMP;
 //				}
-				attributeInfo = new BemAttributeInfo(entityTypeInfo, attributeName, attributeTypeInfo);				
+				attributeInfo = new BemAttributeInfo(entityTypeInfo, attributeName, attributeValueTypeInfo);				
 			}
 			attributeInfo.setOptional(isOptional);
 			attributeInfo.setFunctional(true);
@@ -609,7 +609,7 @@ class ExpressSchemaInternalParser {
 			
 			if (tokens.length == 1) {
 								
-				cardinality = new BemCardinality(BemCardinality.ONE, BemCardinality.ONE, false);
+				cardinality = builder.createCardinality(BemCardinality.ONE, BemCardinality.ONE, false);
 				tokens = RegexUtils.split2(tokens[0].trim(), RegexUtils.WHITE_SPACE);
 				
 			} else {

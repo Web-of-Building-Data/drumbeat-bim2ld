@@ -22,7 +22,14 @@ public class ExpressSchemaParser extends BemSchemaParser {
 	@Override
 	public ExpressSchema parse(InputStream in, String fileType, boolean checkFileType) throws BemException {
 		ExpressSchemaBuilder schemaBuilder = getSchemaBuilder(fileType, checkFileType);
-		return new ExpressSchemaInternalParser(schemaBuilder, in).parse();
+		try {
+			return new ExpressSchemaInternalParser(schemaBuilder, in).parse();
+		} finally {
+			try {
+				in.close();
+			} catch (Exception e) {				
+			}
+		}
 	}
 
 	@Override

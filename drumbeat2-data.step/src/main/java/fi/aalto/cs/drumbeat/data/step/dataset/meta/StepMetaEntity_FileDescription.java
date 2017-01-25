@@ -12,7 +12,7 @@ public class StepMetaEntity_FileDescription extends StepMetaEntity {
 	}
 	
 	public List<String> getDescriptions() {
-		return getValues(SpfFormat.Header.FileDescription.DESCRIPTION);
+		return getAttributeValues(SpfFormat.Header.FileDescription.DESCRIPTION);
 	}
 	
 	public String getImplementationLevel() {

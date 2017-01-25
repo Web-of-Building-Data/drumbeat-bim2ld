@@ -10,6 +10,11 @@ public class BemCollectionTypeInfo extends BemTypeInfo {
 		super(schema, name);
 	}
 	
+	@Override
+	public BemValueKindEnum getValueKind() {
+		return BemValueKindEnum.COLLECTION;		
+	}
+
 	public BemCollectionKindEnum getCollectionKind() {
 		return collectionKind;
 	}
@@ -21,7 +26,7 @@ public class BemCollectionTypeInfo extends BemTypeInfo {
 	public boolean isSorted() {
 		return collectionKind.isSorted();
 	}
-
+	
 	/**
 	 * @return the itemsAreUnique
 	 */

@@ -21,19 +21,26 @@ public class StepDatasetParser extends BemDatasetParser {
 	}
 
 	@Override
-	public BemDataset parse(BemSchema schema, InputStream in, String fileType, boolean checkFileType) throws BemException {
-		StepDatasetBuilder builder = getDatasetBuilder(schema, fileType, checkFileType);
-		switch (fileType) {
-		case SpfFormat.FILE_EXTENSION_STP:
-			return new SpfDatasetInternalParser(builder, in).parse();			
+	public BemDataset parse(InputStream in, String fileType, boolean checkFileType, BemSchema schema) throws BemException {
+		StepDatasetBuilder builder = getDatasetBuilder(fileType, checkFileType);
+//		switch (fileType) {
+//		case SpfFormat.FILE_EXTENSION_STP:
+		try {
+			return new SpfDatasetInternalParser(builder, in).parse();
+		} finally {
+			try {
+				in.close();
+			} catch (Exception e) {				
+			}
 		}
-		throw new BemUnsupportedDataTypeException("Invalid file type: " + fileType);
+//		}
+//		throw new BemUnsupportedDataTypeException("Invalid file type: " + fileType);
 	}
 
 	@Override
-	public StepDatasetBuilder getDatasetBuilder(BemSchema schema, String fileType, boolean checkFileType) throws BemUnsupportedDataTypeException {
+	public StepDatasetBuilder getDatasetBuilder(String fileType, boolean checkFileType) throws BemUnsupportedDataTypeException {
 		internalCheckFileType(fileType, checkFileType);
-		return new StepDatasetBuilder(schema, fileType);
+		return new StepDatasetBuilder(fileType);
 	}
 
 }

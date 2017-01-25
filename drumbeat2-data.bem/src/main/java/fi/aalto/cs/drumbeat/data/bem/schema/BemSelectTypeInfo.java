@@ -19,6 +19,10 @@ public class BemSelectTypeInfo extends BemComplexTypeInfo {
 		itemTypeInfos = new LinkedList<>();
 	}
 	
+	@Override
+	public BemValueKindEnum getValueKind() {
+		return BemValueKindEnum.SELECT;		
+	}
 	
 	/**
 	 * @return the selectTypeInfos

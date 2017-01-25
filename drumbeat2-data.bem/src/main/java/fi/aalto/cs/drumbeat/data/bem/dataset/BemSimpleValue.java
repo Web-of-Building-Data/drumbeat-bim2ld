@@ -11,5 +11,10 @@ public abstract class BemSimpleValue extends BemValue {
 	public Object getValue() {
 		return value;
 	}
+	
+	@Override
+	public String toString() {
+		return value.toString();
+	}	
 
 }

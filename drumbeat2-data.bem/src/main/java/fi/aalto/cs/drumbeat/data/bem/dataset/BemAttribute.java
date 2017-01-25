@@ -6,15 +6,13 @@ import java.util.List;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemAttributeInfo;
 
 
-public abstract class BemAttribute implements Comparable<BemAttribute> { 
+public class BemAttribute implements Comparable<BemAttribute> { 
 	
 	private final BemAttributeInfo attributeInfo;
-	private final int index;
 	private final BemValue value;
 	
-	public BemAttribute(BemAttributeInfo attributeInfo, int attributeIndex, BemValue value) {
+	public BemAttribute(BemAttributeInfo attributeInfo, BemValue value) {
 		this.attributeInfo = attributeInfo;
-		this.index = attributeIndex;
 		this.value = value;
 	}
 
@@ -22,10 +20,6 @@ public abstract class BemAttribute implements Comparable<BemAttribute> {
 		return attributeInfo;
 	}
 
-	public int getIndex() {
-		return index;
-	}
-	
 	public BemValue getValue() {
 		return value;	
 	}	
@@ -62,5 +56,4 @@ public abstract class BemAttribute implements Comparable<BemAttribute> {
 		return value.toString();		
 	}
 
-	public abstract boolean isLiteralType();	
 }

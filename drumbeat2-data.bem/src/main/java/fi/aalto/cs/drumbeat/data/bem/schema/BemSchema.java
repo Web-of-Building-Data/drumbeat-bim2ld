@@ -100,4 +100,9 @@ public class BemSchema {
 		}
 	}
 	
+	@Override
+	public String toString() {
+		return getName();
+	}
+	
 }

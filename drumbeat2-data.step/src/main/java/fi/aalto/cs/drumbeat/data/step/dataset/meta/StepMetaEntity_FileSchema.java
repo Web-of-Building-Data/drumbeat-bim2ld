@@ -12,6 +12,6 @@ public class StepMetaEntity_FileSchema extends StepMetaEntity {
 	}
 
 	public List<String> getSchemas() {
-		return getValues(SpfFormat.Header.FileSchema.SCHEMA_IDENTIFIERS);
+		return getAttributeValues(SpfFormat.Header.FileSchema.SCHEMA_IDENTIFIERS);
 	}	
 }

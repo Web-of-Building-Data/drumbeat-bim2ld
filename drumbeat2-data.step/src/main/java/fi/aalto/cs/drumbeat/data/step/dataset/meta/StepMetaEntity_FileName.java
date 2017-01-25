@@ -28,11 +28,11 @@ public class StepMetaEntity_FileName extends StepMetaEntity {
 	}
 
 	public List<String> getAuthors() {
-		return getValues(SpfFormat.Header.FileName.AUTHOR);
+		return getAttributeValues(SpfFormat.Header.FileName.AUTHOR);
 	}
 	
 	public List<String> getOrganizations() {
-		return getValues(SpfFormat.Header.FileName.ORGANIZATION);
+		return getAttributeValues(SpfFormat.Header.FileName.ORGANIZATION);
 	}
 	
 	public String getPreprocessorVersion() {

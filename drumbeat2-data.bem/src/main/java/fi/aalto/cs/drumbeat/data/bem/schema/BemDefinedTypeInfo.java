@@ -1,7 +1,5 @@
 package fi.aalto.cs.drumbeat.data.bem.schema;
 
-import fi.aalto.cs.drumbeat.common.DrbNotFoundException;
-
 /**
  * A data type which is super to another data type.
  * 
@@ -15,9 +13,13 @@ public class BemDefinedTypeInfo extends BemTypeInfo {
 	public BemDefinedTypeInfo(BemSchema schema, String name) {
 		super(schema, name);
 	}
-
 	
-	public BemTypeInfo getWrappedTypeInfo() throws DrbNotFoundException {
+	@Override
+	public BemValueKindEnum getValueKind() {
+		return getWrappedTypeInfo().getValueKind();		
+	}
+	
+	public BemTypeInfo getWrappedTypeInfo() {
 		return wrappedTypeInfo;
 	}
 	

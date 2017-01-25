@@ -16,7 +16,7 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 	private String name;
 	private String rawName;
 	private BemAttributeList attributes = new BemAttributeList();
-//	private BemAttributeList incomingLinks = new BemAttributeList();
+	private BemAttributeList incomingLinks = new BemAttributeList();
 //	private BemAttributeList<BemInverseAttribute> inverseAttributes = new BemAttributeList<>();
 //	private List<BemUniqueKeyValue> uniqueKeyValues;
 	private BemEntity parent;
@@ -102,8 +102,8 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 		return attributes;
 	}
 	
-	public void addAttribute(BemAttribute literalAttribute) {
-		attributes.add(literalAttribute);
+	public void addAttribute(BemAttribute attribute) {
+		attributes.add(attribute);
 	}	
 
 	public List<BemAttribute> getAttributes(BemAttributeInfo attributeInfo) {
@@ -114,43 +114,20 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 		BemAttributeInfo attributeInfo = getTypeInfo().getAttributeInfo(attributeName); 
 		return getAttributes(attributeInfo);
 	}
+	
+	public BemAttribute getFirstAttribute(BemAttributeInfo attributeInfo) {
+		return attributes.selectFirst(attributeInfo);
+	}
 
+	public BemAttribute getFirstAttribute(String attributeName) throws BemNotFoundException {
+		BemAttributeInfo attributeInfo = getTypeInfo().getAttributeInfo(attributeName); 
+		return attributes.selectFirst(attributeInfo);
+	}
 
-	public void bindInverseLinks() {
-		
-		throw new NotImplementedException("Not implemented after change");
-		
-//		for (BemAttribute attribute : attributes) {		
-//			//
-//			// bind link with inverse link (if any)
-//			//
-//			BemAttributeInfo attributeInfo = attribute.getAttributeInfo();
-//			
-//			// Bind inverse outgoingLinks with direct outgoingLinks
-//			for (BemEntity destination : link.getDestinations()) {
-//
-//				if (destination instanceof BemEntity) {
-//					List<BemInverseAttributeInfo> inverseAttributeInfos = attributeInfo
-//							.getInverseAttributeInfos();
-//
-//					BemInverseAttributeInfo inverseAttributeInfo = findInverseAttributeInfo(
-//							(BemEntity) destination, inverseAttributeInfos);
-//					if (inverseAttributeInfo != null) {
-//						link.setInverseAttributeInfo(inverseAttributeInfo);
-//					}
-//
-//					((BemEntity) destination).addIncomingLink(link);
-//				}
-//
-//			}
-//		}
-		
+	public void addIncomingLink(BemAttribute link) {
+		incomingLinks.add(link); 
 	}
 	
-//	private void addIncomingLink(BemAttribute link) {
-//		incomingLinks.add(link); 
-//	}
-//	
 //	private BemInverseAttributeInfo findInverseAttributeInfo(BemEntity destination, List<BemInverseAttributeInfo> inverseAttributeInfos) {
 //
 //		if (inverseAttributeInfos != null) {
@@ -187,7 +164,7 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 	}
 
 	public boolean isInstanceOf(BemEntityTypeInfo typeInfo) {
-		assert(this.typeInfo != null) : "typeInfo is null";
+		assert(this.typeInfo != null) : "entity typeInfo is null (class=" + getClass() + ")";
 		return this.typeInfo.isTypeOf(typeInfo);
 	}
 	

@@ -2,15 +2,16 @@ package fi.aalto.cs.drumbeat.data.bem.schema;
 
 public class BemPrimitiveTypeInfo extends BemSimpleTypeInfo {
 
-	private final BemPrimitiveKindEnum valueType;
+	private final BemValueKindEnum valueKind;
 	
-	public BemPrimitiveTypeInfo(BemSchema schema, String name, BemPrimitiveKindEnum valueType) {
+	public BemPrimitiveTypeInfo(BemSchema schema, String name, BemValueKindEnum valueKind) {
 		super(schema, name);
-		this.valueType = valueType;
+		this.valueKind = valueKind;
 	}
 	
-	public BemPrimitiveKindEnum getValueType() {
-		return valueType;
+	@Override
+	public BemValueKindEnum getValueKind() {
+		return valueKind;
 	}
 
 }

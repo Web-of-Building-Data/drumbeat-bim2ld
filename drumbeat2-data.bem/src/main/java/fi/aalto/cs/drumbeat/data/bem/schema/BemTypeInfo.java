@@ -59,4 +59,7 @@ public abstract class BemTypeInfo implements Comparable<BemTypeInfo> {
 	
 //	public abstract String getShortDescription(String typeNameFormat);
 	
+	public abstract BemValueKindEnum getValueKind();		
+	
+	
 }

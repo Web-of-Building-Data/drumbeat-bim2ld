@@ -19,6 +19,11 @@ public class BemEntityTypeInfo extends BemComplexTypeInfo {
 		super(schema, name);
 	}
 	
+	@Override
+	public BemValueKindEnum getValueKind() {
+		return BemValueKindEnum.COLLECTION;		
+	}	
+	
 	public BemEntityTypeInfo getSuperTypeInfo() {
 		return superTypeInfo;
 	}

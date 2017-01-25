@@ -15,7 +15,7 @@ public class BemInverseAttributeInfo extends BemAttributeInfo {
 			BemAttributeInfo outgoingAttributeInfo) {
 		super(entityTypeInfo, name, linkSourceEntityTypeInfo);
 		this.outgoingAttributeInfo = outgoingAttributeInfo;
-		outgoingAttributeInfo.addInverseAttributeInfo(this);
+		outgoingAttributeInfo.addPossibleInverseAttributeInfo(this);
 	}
 
 	public BemEntityTypeInfo getSourceEntityTypeInfo() {

@@ -1,17 +1,17 @@
 package fi.aalto.cs.drumbeat.data.bem.dataset;
 
-import fi.aalto.cs.drumbeat.data.bem.schema.BemPrimitiveKindEnum;
+import fi.aalto.cs.drumbeat.data.bem.schema.BemValueKindEnum;
 
 public class BemPrimitiveValue extends BemSimpleValue {
 	
-	private final BemPrimitiveKindEnum valueKind;
+	private final BemValueKindEnum valueKind;
 
-	public BemPrimitiveValue(Object value, BemPrimitiveKindEnum valueKind) {
+	public BemPrimitiveValue(Object value, BemValueKindEnum valueKind) {
 		super(value);
 		this.valueKind = valueKind;
 	}
 	
-	public BemPrimitiveKindEnum getValueKind() {
+	public BemValueKindEnum getValueKind() {
 		return valueKind;
 	}
 

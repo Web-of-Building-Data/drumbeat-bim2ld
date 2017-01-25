@@ -9,11 +9,9 @@ import fi.aalto.cs.drumbeat.data.bem.BemException;
 import fi.aalto.cs.drumbeat.data.bem.BemNotFoundException;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemDataset;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemEntity;
-import fi.aalto.cs.drumbeat.data.bem.parsers.BemDatasetBuilder;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemFormatException;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemParserException;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchemaPool;
-import fi.aalto.cs.drumbeat.data.step.StepVocabulary;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary.SpfFormat;
 import fi.aalto.cs.drumbeat.data.step.dataset.StepDataset;
 import fi.aalto.cs.drumbeat.data.step.dataset.meta.StepMetaDataset;
@@ -30,10 +28,8 @@ class SpfDatasetInternalParser {
 		this.in = in;
 	}
 
-	BemDataset parse() {
-		try {
-			
-			StepDataset dataset = builder.createDataset();			
+	BemDataset parse() throws BemParserException {
+		try {			
 
 			StepLineReader lineReader = new StepLineReader(in);
 
@@ -55,8 +51,7 @@ class SpfDatasetInternalParser {
 				StepLineReader headerReader = new StepLineReader(
 						new ByteArrayInputStream(headerStringBuilder.toString().getBytes()));
 				ExpressSchema stepMetaSchema = getStepMetaSchema();
-				List<BemEntity> entities = new SpfDatasetSectionParser().parseEntities(headerReader, stepMetaSchema,
-						true, true);
+				List<BemEntity> entities = new SpfDatasetSectionParser().parseEntities(headerReader, builder, stepMetaSchema, true, true);
 
 				metaDataset = new StepMetaDataset(stepMetaSchema);
 				metaDataset.addEntities(entities);
@@ -67,11 +62,15 @@ class SpfDatasetInternalParser {
 
 			ExpressSchema schema = null;
 			List<String> schemaVersions = metaDataset.getFileSchema().getSchemas();
-			for (String schemaVersion : schemaVersions) {
-				schema = (ExpressSchema) BemSchemaPool.getSchema(schemaVersion);
-				if (schema != null) {
-					break;
+			if (schemaVersions != null) {
+				for (String schemaVersion : schemaVersions) {
+					schema = (ExpressSchema) BemSchemaPool.getSchema(schemaVersion);
+					if (schema != null) {
+						break;
+					}
 				}
+			} else {
+				throw new BemParserException("Undefined schema version");				
 			}
 
 			if (schema == null) {
@@ -79,8 +78,9 @@ class SpfDatasetInternalParser {
 			}
 
 			//
-			// create a new model
+			// create a new dataset
 			//
+			StepDataset dataset = builder.createDataset(schema);			
 			dataset.setMetaDataset(metaDataset);
 
 			//
@@ -92,7 +92,7 @@ class SpfDatasetInternalParser {
 				throw new BemParserException("Expected statement: " + SpfFormat.DATA);
 			}
 
-			List<BemEntity> entities = new SpfDatasetSectionParser().parseEntities(lineReader, schema, false, false);
+			List<BemEntity> entities = new SpfDatasetSectionParser().parseEntities(lineReader, builder, schema, false, false);
 			dataset.addEntities(entities);
 
 			return dataset;

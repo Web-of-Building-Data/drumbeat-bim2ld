@@ -21,7 +21,7 @@ public class BemAttributeInfo implements Comparable<BemAttributeInfo>{
 	private boolean isOptional;
 	private boolean isFunctional;
 	private boolean isInverseFunctional;
-	private List<BemInverseAttributeInfo> inverseAttributeInfos;	
+	private List<BemInverseAttributeInfo> possibleInverseAttributeInfos;	
 
 	public BemAttributeInfo(BemEntityTypeInfo entityTypeInfo, String name, BemTypeInfo valueTypeInfo) {
 		this.entityTypeInfo = entityTypeInfo;
@@ -99,15 +99,15 @@ public class BemAttributeInfo implements Comparable<BemAttributeInfo>{
 		this.isInverseFunctional = isInverseFunctional;
 	}
 	
-	public List<BemInverseAttributeInfo> getInverseAttributeInfos() {
-		return inverseAttributeInfos;
+	public List<BemInverseAttributeInfo> getPossibleInverseAttributeInfos() {
+		return possibleInverseAttributeInfos;
 	}
 
-	public void addInverseAttributeInfo(BemInverseAttributeInfo inverseAttributeInfo) {
-		if (inverseAttributeInfos == null) {
-			inverseAttributeInfos = new ArrayList<>();
+	public void addPossibleInverseAttributeInfo(BemInverseAttributeInfo inverseAttributeInfo) {
+		if (possibleInverseAttributeInfos == null) {
+			possibleInverseAttributeInfos = new ArrayList<>();
 		}
-		inverseAttributeInfos.add(inverseAttributeInfo);
+		possibleInverseAttributeInfos.add(inverseAttributeInfo);
 	}	
 
 	@Override

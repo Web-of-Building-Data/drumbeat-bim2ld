@@ -9,20 +9,19 @@ import org.apache.log4j.Logger;
 import fi.aalto.cs.drumbeat.common.string.RegexUtils;
 import fi.aalto.cs.drumbeat.common.string.StrBuilderWrapper;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
+import fi.aalto.cs.drumbeat.data.bem.BemNotFoundException;
 import fi.aalto.cs.drumbeat.data.bem.dataset.*;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemFormatException;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemParserException;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary;
+import fi.aalto.cs.drumbeat.data.step.dataset.StepValue;
 import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
-import fi.aalto.cs.drumbeat.common.DrbNotFoundException;
 
 class SpfDatasetSectionParser {
 	
 	private class StepTemporaryCollectionValueWrapper extends BemValue {
 		
-		private static final long serialVersionUID = 1L;
-
 		private List<BemValue> values;
 
 		public StepTemporaryCollectionValueWrapper(List<BemValue> values) {
@@ -49,8 +48,9 @@ class SpfDatasetSectionParser {
 	
 	private static final Logger logger = Logger.getLogger(StepDatasetParser.class);	
 
-	private ExpressSchema schema;
 	private StepLineReader reader;
+	private StepDatasetBuilder builder; 
+	private ExpressSchema schema;
 
 	private Map<String, BemEntity> entityMap = new HashMap<>(); 	// map of entities indexed by line numbers
 	
@@ -58,13 +58,14 @@ class SpfDatasetSectionParser {
 	/**
 	 * Reads line by line and creates new entities
 	 * @throws IOException
-	 * @throws DrbNotFoundException
 	 * @throws BemParserException
+	 * @throws BemNotFoundException 
 	 */
-	public List<BemEntity> parseEntities(StepLineReader reader, ExpressSchema schema, boolean isHeaderSection, boolean ignoreUnknownTypes) throws IOException, DrbNotFoundException, BemParserException {		
+	public List<BemEntity> parseEntities(StepLineReader reader, StepDatasetBuilder builder, ExpressSchema schema, boolean isHeaderSection, boolean ignoreUnknownTypes) throws IOException, BemParserException, BemNotFoundException {		
 		
-		this.schema = schema;
 		this.reader = reader;
+		this.builder = builder; 
+		this.schema = schema;
 		
 		List<BemEntity> entities = new ArrayList<>();
 		
@@ -115,7 +116,7 @@ class SpfDatasetSectionParser {
 			
 			try {			
 				entityTypeInfo = schema.getEntityTypeInfo(entityTypeInfoName);
-			} catch (DrbNotFoundException e) {
+			} catch (BemNotFoundException e) {
 				if (ignoreUnknownTypes) {
 					continue;
 				} else {
@@ -128,26 +129,25 @@ class SpfDatasetSectionParser {
 					entityAttributesString.length() - 1);
 			
 			List<BemAttributeInfo> attributeInfos = entityTypeInfo.getInheritedAttributeInfos();
-
+			BemAttributeInfo[] attributeInfoArray = new BemAttributeInfo[attributeInfos.size()];
+			attributeInfos.toArray(attributeInfoArray);
+					
 			//
 			// parse attribute string to get attribute values
 			//
-			List<BemValue> attributeValues = parseAttributeValues(new StrBuilderWrapper(entityAttributesString), entity, attributeInfos, null, null);
+			List<BemValue> attributeValues = parseAttributeValues(new StrBuilderWrapper(entityAttributesString), entity, false, null, attributeInfoArray);
 
-			setEntityAttributeValues(entity, attributeInfos, attributeValues);
+			assignEntityAttributeValues(entity, attributeInfos, attributeValues);
 			
 			//
 			// add entity to the model
 			//
 			entities.add(entity);
-			
 						
 		}
 		
 		if (!isHeaderSection) {
-			for (BemEntity entity : entities) {
-				entity.bindInverseLinks();
-			}
+			bindInverseLinks(entities);
 		}
 		
 		return entities;
@@ -174,39 +174,38 @@ class SpfDatasetSectionParser {
 	 * @param attributeValueType
 	 * @return a single attribute value or list of attribute values
 	 * @throws BemFormatException
-	 * @throws DrbNotFoundException
+	 * @throws BemNotFoundException
 	 * @throws BemValueTypeConflictException 
 	 */
 	private List<BemValue> parseAttributeValues(StrBuilderWrapper attributeStrBuilderWrapper, BemEntity entity,
-			List<BemAttributeInfo> entityAttributeInfos, BemTypeInfo commonAttributeTypeInfo, EnumSet<BemTypeEnum> commonValueTypes) throws BemFormatException, DrbNotFoundException {
+			boolean areCollectionItems, BemTypeInfo fixedValueTypeInfo, BemAttributeInfo... entityAttributeInfos) throws BemFormatException, BemNotFoundException {
 
-		logger.debug(String.format("Parsing entity '%s'", entity));			
+		logger.debug(String.format("Parsing entity '%s'", entity));
 
 		List<BemValue> attributeValues = new ArrayList<>();
 		
 		for (int attributeIndex = 0; !attributeStrBuilderWrapper.trimLeft().isEmpty(); ++attributeIndex) {
+			
+			BemTypeInfo valueTypeInfo;
 
-			EnumSet<BemTypeEnum> attributeValueTypes;
 			BemAttributeInfo attributeInfo;
-			BemTypeInfo attributeTypeInfo;
-			if (commonValueTypes == null) {
-				assert(attributeIndex < entityAttributeInfos.size()) :
+			if (!areCollectionItems) {
+				assert(attributeIndex < entityAttributeInfos.length) :
 					String.format("attributeIndex=%d, entityAttributeInfos.size=%s, attributeStrBuilderWrapper='%s'",
 							attributeIndex,
 							entityAttributeInfos,
 							attributeStrBuilderWrapper);
-				attributeInfo = entityAttributeInfos.get(attributeIndex);
-				attributeTypeInfo = attributeInfo.getValueTypeInfo();
-				attributeValueTypes = attributeTypeInfo.getValueTypes();				
+				attributeInfo = entityAttributeInfos[attributeIndex];
+				
+				valueTypeInfo = fixedValueTypeInfo != null ? fixedValueTypeInfo : attributeInfo.getValueTypeInfo();
 			} else {
-				assert(commonAttributeTypeInfo != null);
-				attributeInfo = entityAttributeInfos.get(0);
-				attributeTypeInfo = commonAttributeTypeInfo;
-				attributeValueTypes = commonValueTypes;
+				assert(fixedValueTypeInfo != null);
+				valueTypeInfo = fixedValueTypeInfo;
+				attributeInfo = entityAttributeInfos[0];
 			}
 			
-			if (attributeTypeInfo instanceof BemCollectionTypeInfo) {
-				attributeTypeInfo = ((BemCollectionTypeInfo)attributeTypeInfo).getItemTypeInfo();
+			if (valueTypeInfo instanceof BemCollectionTypeInfo) {
+				valueTypeInfo = ((BemCollectionTypeInfo)valueTypeInfo).getItemTypeInfo();
 			}
 
 			switch (attributeStrBuilderWrapper.charAt(0)) {
@@ -217,16 +216,15 @@ class SpfDatasetSectionParser {
 				String remoteLineNumber = Long.toString(attributeStrBuilderWrapper.getLong());
 				BemEntity remoteEntity = getEntity(remoteLineNumber);
 				if (remoteEntity == null) {
-					throw new DrbNotFoundException("Entity not found: #" + remoteLineNumber);
+					throw new BemNotFoundException("Entity not found: #" + remoteLineNumber);
 				}
 				attributeValues.add(remoteEntity);
 				break;
 
 			case StepVocabulary.SpfFormat.STRING_VALUE_SYMBOL:
 				String s = attributeStrBuilderWrapper.getStringBetweenSingleQuotes();
-				assert attributeValueTypes.size() == 1 : "Expect attributeValueTypes.size() == 1"; 
 //				if (!attributeValueTypes.contains(StepTypeEnum.GUID)) {
-					attributeValues.add(new BemPrimitiveValue(s, attributeTypeInfo, BemTypeEnum.STRING));
+					attributeValues.add(builder.createPrimitiveValue(s, BemValueKindEnum.STRING));
 //					break;
 //				} else {
 //					attributeValues.add(new StepGuidValue(s));
@@ -236,36 +234,37 @@ class SpfDatasetSectionParser {
 
 			case StepVocabulary.SpfFormat.ENUMERATION_VALUE_SYMBOL:
 
-				s = attributeStrBuilderWrapper.getStringBetweenSimilarCharacters(StepVocabulary.SpfFormat.ENUMERATION_VALUE_SYMBOL);
+				s = attributeStrBuilderWrapper.getStringBetweenSimilarCharacters(StepVocabulary.SpfFormat.ENUMERATION_VALUE_SYMBOL);				
 
-				assert attributeValueTypes.size() == 1 : "Expect attributeValueTypes.size() == 1"; 
-				if (!attributeValueTypes.contains(BemTypeEnum.LOGICAL)) {
-					attributeValues.add(new BemPrimitiveValue(s, attributeTypeInfo, BemTypeEnum.ENUM));
-				} else {
+				if (valueTypeInfo.getValueKind() == BemValueKindEnum.ENUM) {
+					attributeValues.add(new BemEnumerationValue(s));
+				} else if (valueTypeInfo.getValueKind() == BemValueKindEnum.LOGICAL) {
 					switch (s) {
 					case "T":
 					case "TRUE":
-						attributeValues.add(new BemPrimitiveValue(LogicalEnum.TRUE, attributeTypeInfo, BemTypeEnum.LOGICAL));
+						attributeValues.add(builder.createPrimitiveValue(BemLogicalEnum.TRUE, BemValueKindEnum.LOGICAL));
 						break;
 					case "F":
 					case "FALSE":
-						attributeValues.add(new BemPrimitiveValue(LogicalEnum.FALSE, attributeTypeInfo, BemTypeEnum.LOGICAL));
+						attributeValues.add(builder.createPrimitiveValue(BemLogicalEnum.FALSE, BemValueKindEnum.LOGICAL));
 						break;
 					default:
-						attributeValues.add(new BemPrimitiveValue(LogicalEnum.UNKNOWN, attributeTypeInfo, BemTypeEnum.LOGICAL));
+						attributeValues.add(builder.createPrimitiveValue(BemLogicalEnum.UNKNOWN, BemValueKindEnum.LOGICAL));
 						break;
 
 					}
+				} else {
+					throw new BemFormatException(reader.getCurrentLineNumber(), "Expected enum type or logical type");
 				}
 				break;
 
 			case StepVocabulary.SpfFormat.NULL_SYMBOL: // $
-				attributeValues.add(BemValue.NULL);
+				attributeValues.add(StepValue.NULL);
 				attributeStrBuilderWrapper.skip(1);
 				break;
 
 			case StepVocabulary.SpfFormat.ANY_SYMBOL: // *
-				attributeValues.add(BemValue.ANY);
+				attributeValues.add(StepValue.ANY);
 				attributeStrBuilderWrapper.skip(1);
 				break;
 
@@ -275,55 +274,60 @@ class SpfDatasetSectionParser {
 
 				StrBuilderWrapper sbWrapper = new StrBuilderWrapper(stringBetweenBrackets);
 				
-				List<BemAttributeInfo> attributeInfos = new ArrayList<>(1);
-				attributeInfos.add(attributeInfo);
-
-				List<BemValue> values = parseAttributeValues(sbWrapper, null, attributeInfos, attributeTypeInfo, attributeValueTypes);
+				List<BemValue> values = parseAttributeValues(sbWrapper, null, true, valueTypeInfo, attributeInfo);
 				attributeValues.add(new StepTemporaryCollectionValueWrapper(values));
 				break;
 
 			default:
 
 				if (Character.isAlphabetic(attributeStrBuilderWrapper.charAt(0))) {
-
+					
+					// 
+					// Parsing SELECT type value, e.g. IfcLength(130.5)
+					//
+					assert(valueTypeInfo instanceof BemSelectTypeInfo);
+					
 					// 
 					// parsing sub entity
 					//
 					String subEntityTypeInfoName = attributeStrBuilderWrapper.getIdentifierName();
-					DrbNonEntityTypeInfo subNonEntityTypeInfo = schema.getNonEntityTypeInfo(subEntityTypeInfoName);
-					attributeValueTypes = subNonEntityTypeInfo.getValueTypes();
+					BemTypeInfo subNonEntityTypeInfo = schema.getTypeInfo(subEntityTypeInfoName);
+					assert(!(subNonEntityTypeInfo instanceof BemSelectTypeInfo));
+					
 					s = attributeStrBuilderWrapper.getStringBetweenRoundBrackets();
 					
 					assert (s != null);
 
-					attributeInfos = new ArrayList<>(1);
-					attributeInfos.add(attributeInfo);
-
-					values = parseAttributeValues(new StrBuilderWrapper(s), null, attributeInfos, subNonEntityTypeInfo, attributeValueTypes);
-					assert values.size() == 1 : "Expect only 1 argument: " + entity + ":" + values.toString();
-					attributeValues.add(new StepShortEntity(subNonEntityTypeInfo, (BemPrimitiveValue)values.get(0)));
+					values = parseAttributeValues(new StrBuilderWrapper(s), null, false, subNonEntityTypeInfo, attributeInfo);
+					assert (values.size() == 1) : "Expect only 1 argument: " + entity + ":" + values.toString();
+					assert(values.get(0) instanceof BemPrimitiveValue) : values.get(0);
+					
+					attributeValues.add(builder.createTypedSimpleValue((BemPrimitiveValue)values.get(0), subNonEntityTypeInfo));
 //					attributeValues.add((BemPrimitiveValue)values.get(0));
 				} else {
 					
 					//
 					// parsing number or datetime
 					//
-					assert attributeValueTypes.size() == 1 : "Expect attributeValueTypes.size() == 1";
-					BemTypeEnum attributeValueType = (BemTypeEnum)attributeValueTypes.iterator().next();
+					assert(!(valueTypeInfo instanceof BemSelectTypeInfo));
+
+					BemValueKindEnum valueKind = valueTypeInfo.getValueKind();
+					assert(BemValueKindEnum.PRIMITIVE.contains(valueKind)) : valueTypeInfo.getValueKind();
+					
 					Object value;
-					if (attributeValueType == BemTypeEnum.INTEGER) {
+					if (valueKind == BemValueKindEnum.INTEGER) {
 						value = attributeStrBuilderWrapper.getLong();
-					} else if (attributeValueType == BemTypeEnum.REAL || attributeValueType == BemTypeEnum.NUMBER) {
+					} else if (valueKind == BemValueKindEnum.REAL || valueKind == BemValueKindEnum.NUMBER) {
 						value = attributeStrBuilderWrapper.getDouble();
-					} else if (attributeValueType == BemTypeEnum.DATETIME) {
+					} else if (valueKind == BemValueKindEnum.DATETIME) {
 						long timeStamp = attributeStrBuilderWrapper.getLong();
 						value = Calendar.getInstance();
 						((Calendar)value).setTimeInMillis(timeStamp * 1000);
 					} else {
-						throw new BemFormatException(reader.getCurrentLineNumber(), "Invalid attributeValueType: " + attributeValueType);
+						throw new BemFormatException(reader.getCurrentLineNumber(), "Invalid attributeValueType: " + valueKind);
 					}
 					
-					attributeValues.add(new BemPrimitiveValue(value, (DrbNonEntityTypeInfo)attributeTypeInfo, attributeValueType));						
+					attributeValues.add(builder.createPrimitiveValue(value, valueKind));						
 				}
 
 				break;
@@ -343,104 +347,64 @@ class SpfDatasetSectionParser {
 	 * @param attributeValues
 	 * @throws BemParserException
 	 */
-	private void setEntityAttributeValues(BemEntity entity, List<BemAttributeInfo> attributeInfos, List<BemValue> attributeValues) throws BemParserException {
-		try {
+	private void assignEntityAttributeValues(BemEntity entity, List<BemAttributeInfo> attributeInfos, List<BemValue> attributeValues) throws BemParserException {
+		if (attributeValues.size() != attributeInfos.size()) {
+			throw new BemParserException(String.format("Type %s: Expected %d attributes, but %d were found: %s, %s",
+					entity.getTypeInfo().getName(), attributeInfos.size(), attributeValues.size(), attributeInfos, attributeValues));						
+		}
+
+		for (int attributeIndex = 0; attributeIndex < attributeValues.size(); ++attributeIndex) {
 			
-			if (attributeValues.size() == attributeInfos.size()) {
-				boolean isLiteralValueContainer = true;
-				for (int attributeIndex = 0; attributeIndex < attributeValues.size(); ++attributeIndex) {
-					
-					BemAttributeInfo attributeInfo = attributeInfos.get(attributeIndex);
-					BemValue attributeValue = attributeValues.get(attributeIndex);
-					
-					Boolean isLiteralValue = attributeValue.isLiteralType();
-					
-					if (isLiteralValue != null) {
-						isLiteralValueContainer = isLiteralValueContainer && isLiteralValue == Boolean.TRUE;							
-						if (isLiteralValue) {
-						
-							if (attributeValue instanceof StepTemporaryCollectionValueWrapper) {
-								
-								if (attributeInfo.isCollection()) {
-									
-									BemPrimitiveValueCollection values = new BemPrimitiveValueCollection();										
-									for (BemValue value : ((StepTemporaryCollectionValueWrapper)attributeValue).getValues()) {
-										values.add((BemPrimitiveValue)value);
-									}
-									
-									entity.addLiteralAttribute(new StepLiteralAttribute(attributeInfo, attributeIndex, values));
-									
-								} else {										
-									
-									for (BemValue value : ((StepTemporaryCollectionValueWrapper)attributeValue).getValues()) {
-										entity.addLiteralAttribute(new StepLiteralAttribute(attributeInfo, attributeIndex, value));
-									}										
-									
-								}
-								
-							} else {
-								
-								assert(attributeValue instanceof BemPrimitiveValue) :
-									String.format("Object is not a literal value, line number: %s, attributeInfo: %s, attribute value: %s, value type: %s",
-											entity.getLocalId(), attributeInfo.getName(), attributeValue, attributeInfo.getValueTypeInfo().getValueTypes()); 
-								entity.addLiteralAttribute(new StepLiteralAttribute(attributeInfo, attributeIndex, attributeValue));
-								
-							}
-							
-						} else { // attributeInfo instanceof BemAttributeInfo								
-							
-							if (attributeValue instanceof StepTemporaryCollectionValueWrapper) {
-								
-								if (attributeInfo.isCollection()) {
-									
-									BemEntityCollection destinations = new BemEntityCollection();										
-									for (BemValue destination : ((StepTemporaryCollectionValueWrapper)attributeValue).getValues()) {
-										if (!(destination instanceof BemEntityBase)) {
-											throw new BemParserException(
-													String.format("Entity attribute %s.%s has non-entity value: %s (%s)", 
-															entity,
-															attributeInfo,
-															destination.getClass(),
-															destination));
-										}
-										destinations.add((BemEntityBase)destination);
-									}
-									
-									entity.addOutgoingLink(new StepLink((BemAttributeInfo)attributeInfo, attributeIndex, entity, destinations));
-									
-								} else {										
-									
-									for (BemValue destination : ((StepTemporaryCollectionValueWrapper)attributeValue).getValues()) {
-										StepLink link = new StepLink((BemAttributeInfo)attributeInfo, attributeIndex, entity, (BemEntityBase)destination);
-										entity.addOutgoingLink(link);
-									}										
-									
-								}
-								
-							} else {
-								
-								assert (attributeValue instanceof BemEntityBase) :
-									String.format("Object is not an entity, line number: %s, attributeInfo: %s, attribute value: %s, value type: %s",
-											entity.getLocalId(), attributeInfo.getName(), attributeValue, attributeInfo.getValueTypeInfo().getValueTypes());
-								StepLink link = new StepLink((BemAttributeInfo)attributeInfo, attributeIndex, entity, (BemEntityBase)attributeValue);
-								entity.addOutgoingLink(link);
-								
-							}
-						}
+			BemAttributeInfo attributeInfo = attributeInfos.get(attributeIndex);
+			BemTypeInfo attributeValueTypeInfo = attributeInfo.getValueTypeInfo();
+			BemValue attributeValue = attributeValues.get(attributeIndex);
+			
+			if (attributeValue instanceof StepTemporaryCollectionValueWrapper) {
+				
+				if ((attributeValueTypeInfo instanceof BemCollectionTypeInfo) && 
+						((BemCollectionTypeInfo)attributeValueTypeInfo).isSorted())
+				{
+					for (BemValue value : ((StepTemporaryCollectionValueWrapper)attributeValue).getValues()) {
+						entity.addAttribute(new BemAttribute(attributeInfo, value));
 					}
-					
-				}						
-				entity.setLiteralValueContainer(isLiteralValueContainer);
+				} else {
+					BemCollectionValue<BemValue> valueCollection = new BemCollectionValue<>();						
+					for (BemValue value : ((StepTemporaryCollectionValueWrapper)attributeValue).getValues()) {
+						valueCollection.add(value);
+					}
+					entity.addAttribute(new BemAttribute(attributeInfo, valueCollection));
+				}
 				
 			} else {
-				throw new BemParserException(String.format("Type %s: Expected %d attributes, but %d were found: %s, %s",
-						entity.getTypeInfo().getName(), attributeInfos.size(), attributeValues.size(), attributeInfos, attributeValues));						
+				
+				entity.addAttribute(new BemAttribute(attributeInfo, attributeValue));					
+				
 			}
-
-		} catch (Exception e) {
-			throw new BemParserException(String.format("Error parsing entity %s (line %s): %s", entity.toString(), entity.getLocalId(),
-					e.getMessage()), e);
+			
 		}
-	}	
+				
+	}
+	
+	
+	private void bindInverseLinks(List<BemEntity> entities) {
+		for (BemEntity entity : entities) {
+			for (BemAttribute attribute : entity.getAttributes()) {
+				List<BemInverseAttributeInfo> possibleInverseAttributeInfos = attribute.getAttributeInfo().getPossibleInverseAttributeInfos();
+				if (possibleInverseAttributeInfos != null && !possibleInverseAttributeInfos.isEmpty()) {
+					
+					BemValue value = attribute.getValue();
+					if (value instanceof BemEntity) {
+						
+						for (BemInverseAttributeInfo inverseAttributeInto : possibleInverseAttributeInfos) {
+							if (((BemEntity)value).isInstanceOf(inverseAttributeInto.getDestinationEntityTypeInfo())) {
+								((BemEntity)value).addIncomingLink(attribute);
+							}
+						}
+						
+					}
+				}
+			}
+		}
+	}
 
 }
