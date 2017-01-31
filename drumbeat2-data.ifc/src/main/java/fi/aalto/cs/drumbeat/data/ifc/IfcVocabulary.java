@@ -29,7 +29,11 @@ public class IfcVocabulary extends StepVocabulary {
 	}
 	
 	public static class IfcAttributes {	
-		public static final String GLOBAL_ID = "globalId";		
+		public static final String GLOBAL_ID = "globalId";
+		public static final String NAME = "name";
+		public static final String DESCRIPTION = "description";
+		public static final String OWNER_HISTORY = "ownerHistory";
+		public static final String LONG_NAME = "longName";
 	}
 	
 	public static class IfcFormat {

@@ -15,8 +15,8 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 	private String localId;
 	private String name;
 	private String rawName;
-	private BemAttributeList attributes = new BemAttributeList();
-	private BemAttributeList incomingLinks = new BemAttributeList();
+	private BemAttributeList attributeList;
+	private BemAttributeList incomingAttributeList;
 //	private BemAttributeList<BemInverseAttribute> inverseAttributes = new BemAttributeList<>();
 //	private List<BemUniqueKeyValue> uniqueKeyValues;
 	private BemEntity parent;
@@ -27,6 +27,8 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 	
 	public BemEntity(String localId) {
 		this.localId = localId;
+		
+		attributeList = new BemAttributeList();
 	}
 
 	public BemEntity(BemEntityTypeInfo typeInfo, String localId) {
@@ -98,35 +100,35 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 //		return attribute;
 //	}
 
-	public BemAttributeList getAttributes() {
-		return attributes;
+	public BemAttributeList getAttributeList() {
+		return attributeList;
 	}
 	
-	public void addAttribute(BemAttribute attribute) {
-		attributes.add(attribute);
-	}	
-
-	public List<BemAttribute> getAttributes(BemAttributeInfo attributeInfo) {
-		return attributes.selectAll(attributeInfo);
-	}
-	
-	public List<BemAttribute> getAttributes(String attributeName) throws BemNotFoundException {
-		BemAttributeInfo attributeInfo = getTypeInfo().getAttributeInfo(attributeName); 
-		return getAttributes(attributeInfo);
-	}
-	
-	public BemAttribute getFirstAttribute(BemAttributeInfo attributeInfo) {
-		return attributes.selectFirst(attributeInfo);
-	}
-
-	public BemAttribute getFirstAttribute(String attributeName) throws BemNotFoundException {
-		BemAttributeInfo attributeInfo = getTypeInfo().getAttributeInfo(attributeName); 
-		return attributes.selectFirst(attributeInfo);
-	}
-
-	public void addIncomingLink(BemAttribute link) {
-		incomingLinks.add(link); 
-	}
+//	public void addAttribute(BemAttribute attribute) {
+//		attributeList.add(attribute);
+//	}	
+//
+//	public List<BemAttribute> getAttributes(BemAttributeInfo attributeInfo) {
+//		return attributeList.selectAll(attributeInfo);
+//	}
+//	
+//	public List<BemAttribute> getAttributes(String attributeName) throws BemNotFoundException {
+//		BemAttributeInfo attributeInfo = getTypeInfo().getAttributeInfo(attributeName); 
+//		return getAttributes(attributeInfo);
+//	}
+//	
+//	public BemAttribute getFirstAttribute(BemAttributeInfo attributeInfo) {
+//		return attributeList.selectFirst(attributeInfo);
+//	}
+//
+//	public BemAttribute getFirstAttribute(String attributeName) throws BemNotFoundException {
+//		BemAttributeInfo attributeInfo = getTypeInfo().getAttributeInfo(attributeName); 
+//		return attributeList.selectFirst(attributeInfo);
+//	}
+//
+//	public void addIncomingLink(BemAttribute link) {
+//		incomingLinks.add(link); 
+//	}
 	
 //	private BemInverseAttributeInfo findInverseAttributeInfo(BemEntity destination, List<BemInverseAttributeInfo> inverseAttributeInfos) {
 //
@@ -149,9 +151,12 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 //		return null;
 //	}
 //	
-//	public BemAttributeList getIncomingLinks() {
-//		return incomingLinks;
-//	}
+	public BemAttributeList getIncomingAttributeList() {
+		if (incomingAttributeList == null) {
+			incomingAttributeList = new BemAttributeList();			
+		}
+		return incomingAttributeList;
+	}
 	
 	@Override
 	public int compareTo(BemEntity o) {

@@ -31,17 +31,6 @@ class SpfDatasetSectionParser {
 		public List<BemValue> getValues() {
 			return values;
 		}
-
-		@Override
-		public String toString() {
-			return null;
-		}
-		
-		@Override
-		public boolean equals(Object other) {
-			return false;
-		}
-
 	}
 	
 	
@@ -364,20 +353,23 @@ class SpfDatasetSectionParser {
 				if ((attributeValueTypeInfo instanceof BemCollectionTypeInfo) && 
 						((BemCollectionTypeInfo)attributeValueTypeInfo).isSorted())
 				{
-					for (BemValue value : ((StepTemporaryCollectionValueWrapper)attributeValue).getValues()) {
-						entity.addAttribute(new BemAttribute(attributeInfo, value));
-					}
-				} else {
+					// sorted collection
 					BemCollectionValue<BemValue> valueCollection = new BemCollectionValue<>();						
 					for (BemValue value : ((StepTemporaryCollectionValueWrapper)attributeValue).getValues()) {
 						valueCollection.add(value);
 					}
-					entity.addAttribute(new BemAttribute(attributeInfo, valueCollection));
+					entity.getAttributeList().add(new BemAttribute(attributeInfo, valueCollection));
+				} else {
+					// unsorted collection
+					for (BemValue value : ((StepTemporaryCollectionValueWrapper)attributeValue).getValues()) {
+						entity.getAttributeList().add(new BemAttribute(attributeInfo, value));
+					}
 				}
 				
 			} else {
 				
-				entity.addAttribute(new BemAttribute(attributeInfo, attributeValue));					
+				// single attribute				
+				entity.getAttributeList().add(new BemAttribute(attributeInfo, attributeValue));					
 				
 			}
 			
@@ -388,7 +380,7 @@ class SpfDatasetSectionParser {
 	
 	private void bindInverseLinks(List<BemEntity> entities) {
 		for (BemEntity entity : entities) {
-			for (BemAttribute attribute : entity.getAttributes()) {
+			for (BemAttribute attribute : entity.getAttributeList()) {
 				List<BemInverseAttributeInfo> possibleInverseAttributeInfos = attribute.getAttributeInfo().getPossibleInverseAttributeInfos();
 				if (possibleInverseAttributeInfos != null && !possibleInverseAttributeInfos.isEmpty()) {
 					
@@ -397,7 +389,7 @@ class SpfDatasetSectionParser {
 						
 						for (BemInverseAttributeInfo inverseAttributeInto : possibleInverseAttributeInfos) {
 							if (((BemEntity)value).isInstanceOf(inverseAttributeInto.getDestinationEntityTypeInfo())) {
-								((BemEntity)value).addIncomingLink(attribute);
+								((BemEntity)value).getIncomingAttributeList().add(attribute);
 							}
 						}
 						
