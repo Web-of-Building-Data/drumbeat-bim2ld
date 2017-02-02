@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.aalto.cs.drumbeat.data.bem.BemException;
-import fi.aalto.cs.drumbeat.data.bem.BemNotFoundException;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemUnsupportedDataTypeException;
 import fi.aalto.cs.drumbeat.data.bem.parsers.util.BemParserUtil;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
@@ -42,36 +41,47 @@ public class IfcSchemaParser_Test {
 	}
 	
 	@Test
-	public void test_parseIfc2x3() throws BemException, BemNotFoundException, IOException {
+	public void test_parseIfc2x3() throws BemException, IOException {
 		test_parse("IFC2X3_TC1.exp");
 	}
 
 	@Test
-	public void test_parseIfc4Add1() throws BemException, BemNotFoundException, IOException {
+	public void test_parseIfc4Add1() throws BemException, IOException {
 		test_parse("IFC4_ADD1.exp");
 	}
 
-	private void test_parse(String fileName) throws BemException, BemNotFoundException, IOException 
+	private void test_parse(String fileName) throws BemException, IOException 
 	{
 		BemParserUtil.registerSchemaParser(new IfcSchemaParser());		
 		BemSchema schema = BemParserUtil.parseSchema(RESOURCES_FOLDER + fileName, true);
 		assertNotNull(schema);
 		
-		BemTypeInfo typeIfcProject = schema.getTypeInfo("IfcProject");
-		assertNotNull(typeIfcProject);
-		assertEquals("IfcProject", typeIfcProject.getName());
-		assertEquals(BemEntityTypeInfo.class, typeIfcProject.getClass());
+		BemEntityTypeInfo type_IfcProject = (BemEntityTypeInfo)schema.getTypeInfo("IfcProject");
+		assertNotNull(type_IfcProject);
+		assertEquals("IfcProject", type_IfcProject.getName());
+		assertEquals(BemEntityTypeInfo.class, type_IfcProject.getClass());
 		
-		BemTypeInfo typeIfcProject2 = schema.getTypeInfo("IFCPROJECT");
-		assertEquals(typeIfcProject, typeIfcProject2);
+		BemTypeInfo type_IfcProject2 = schema.getTypeInfo("IFCPROJECT");
+		assertEquals(type_IfcProject, type_IfcProject2);
 		
-		BemTypeInfo typeInteger = schema.getTypeInfo("INTEGER");
-		assertNotNull(typeInteger);
-		assertEquals(BemPrimitiveTypeInfo.class, typeInteger.getClass());
+		BemTypeInfo type_Integer = schema.getTypeInfo("INTEGER");
+		assertNotNull(type_Integer);
+		assertEquals(BemPrimitiveTypeInfo.class, type_Integer.getClass());
 		
-		BemTypeInfo typeIfcInteger = schema.getTypeInfo("IFCINTEGER");
-		assertNotNull(typeIfcInteger);
-		assertEquals(BemDefinedTypeInfo.class, typeIfcInteger.getClass());
+		BemTypeInfo type_IfcInteger = schema.getTypeInfo("IFCINTEGER");
+		assertNotNull(type_IfcInteger);
+		assertEquals(BemDefinedTypeInfo.class, type_IfcInteger.getClass());
+		
+		BemAttributeInfo attribute_IfcProject_Name = type_IfcProject.getAttributeInfo("NAME");
+		assertNotNull(attribute_IfcProject_Name);
+		assertEquals("name", attribute_IfcProject_Name.getName());
+		
+		assertNotNull(type_IfcProject.getInverseAttributeInfos(true));
+		assertTrue(!type_IfcProject.getInverseAttributeInfos(true).isEmpty());
+
+		BemAttributeInfo attribute_IfcProject_HasAssociations = type_IfcProject.getInverseAttributeInfo("HasAssociations");
+		assertNotNull(attribute_IfcProject_HasAssociations);
+		assertEquals("hasAssociations", attribute_IfcProject_HasAssociations.getName());
 	}
 	
 	

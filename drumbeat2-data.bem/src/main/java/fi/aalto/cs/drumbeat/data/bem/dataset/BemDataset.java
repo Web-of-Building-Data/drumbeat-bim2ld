@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import fi.aalto.cs.drumbeat.data.bem.BemNotFoundException;
+import fi.aalto.cs.drumbeat.data.bem.BemEntityNotFoundException;
+import fi.aalto.cs.drumbeat.data.bem.BemTypeNotFoundException;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 
 public class BemDataset {
@@ -29,7 +30,7 @@ public class BemDataset {
 		return entities;
 	}
 	
-	public List<BemEntity> getEntitiesByType(BemEntityTypeInfo entityType) {
+	public List<BemEntity> getAllEntitiesByType(BemEntityTypeInfo entityType) {
 		List<BemEntity> selectedEntities = new ArrayList<>();		
 		for (BemEntity entity : entities) {
 			if (entity.isInstanceOf(entityType)) {
@@ -39,21 +40,21 @@ public class BemDataset {
 		return selectedEntities;
 	}
 	
-	public List<BemEntity> getEntitiesByType(String entityTypeName) throws BemNotFoundException {
+	public List<BemEntity> getEntitiesByType(String entityTypeName) throws BemEntityNotFoundException, BemTypeNotFoundException {
 		BemEntityTypeInfo entityType = getSchema().getEntityTypeInfo(entityTypeName);
-		return getEntitiesByType(entityType);
+		return getAllEntitiesByType(entityType);
 	}
 	
-	public BemEntity getFirstEntityByType(BemEntityTypeInfo entityType) throws BemNotFoundException {
+	public BemEntity getFirstEntityByType(BemEntityTypeInfo entityType) throws BemEntityNotFoundException {
 		for (BemEntity entity : entities) {
 			if (entity.isInstanceOf(entityType)) {
 				return entity;
 			}
 		}
-		throw new BemNotFoundException("Entity with type " + entityType + " not found");
+		throw new BemEntityNotFoundException("Entity with type " + entityType + " not found");
 	}
 	
-	public BemEntity getFirstEntityByType(String entityTypeName) throws BemNotFoundException {		
+	public BemEntity getAnyEntityByType(String entityTypeName) throws BemEntityNotFoundException, BemTypeNotFoundException {		
 		BemEntityTypeInfo entityType = getSchema().getEntityTypeInfo(entityTypeName);
 		return getFirstEntityByType(entityType);
 	}

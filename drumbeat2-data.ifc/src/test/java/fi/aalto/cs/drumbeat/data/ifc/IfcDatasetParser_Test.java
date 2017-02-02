@@ -1,6 +1,5 @@
 package fi.aalto.cs.drumbeat.data.ifc;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -9,22 +8,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import fi.aalto.cs.drumbeat.data.bem.BemException;
-import fi.aalto.cs.drumbeat.data.bem.BemNotFoundException;
-import fi.aalto.cs.drumbeat.data.bem.dataset.BemAttribute;
-import fi.aalto.cs.drumbeat.data.bem.dataset.BemAttributeList;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemDataset;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemEntity;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemPrimitiveValue;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemValue;
-import fi.aalto.cs.drumbeat.data.bem.parsers.BemUnsupportedDataTypeException;
 import fi.aalto.cs.drumbeat.data.bem.parsers.util.BemParserUtil;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 import fi.aalto.cs.drumbeat.data.ifc.parsers.IfcDatasetParser;
 import fi.aalto.cs.drumbeat.data.ifc.parsers.IfcSchemaParser;
-import fi.aalto.cs.drumbeat.data.ifc.schema.IfcSchema;
-import fi.aalto.cs.drumbeat.data.step.StepVocabulary;
 import fi.aalto.cs.drumbeat.data.step.dataset.StepDataset;
-import fi.aalto.cs.drumbeat.data.step.parsers.StepDatasetParser;
 
 import static org.junit.Assert.*;
 
@@ -65,24 +57,22 @@ public class IfcDatasetParser_Test {
 //	}
 //	
 	@Test
-	public void test_parseSampleIfc() throws BemException, BemNotFoundException, IOException {
+	public void test_parseSampleIfc() throws BemException, IOException {
 		StepDataset dataset = test_parse(RESOURCES_FOLDER + "sample.ifc");
 
-		BemEntity projectEntity = dataset.getFirstEntityByType(IfcVocabulary.IfcTypes.IFC_PROJECT);
+		BemEntity projectEntity = dataset.getAnyEntityByType(IfcVocabulary.IfcTypes.IFC_PROJECT);
 		assertNotNull(projectEntity);
 		assertTrue(projectEntity.getTypeInfo().getName().equals(IfcVocabulary.IfcTypes.IFC_PROJECT));
 		
-		BemAttribute guidAttribute = projectEntity.getAttributeList().selectFirstByName(IfcVocabulary.IfcAttributes.GLOBAL_ID);
-		assertNotNull(guidAttribute);
-		BemValue guidValue = guidAttribute.getValue();
+		BemValue guidValue = projectEntity.getAttributeMap().getAny(IfcVocabulary.IfcAttributes.GLOBAL_ID);
 		assertNotNull(guidValue);
 		assertTrue(guidValue instanceof BemPrimitiveValue);
 		assertEquals("0YvctVUKr0kugbFTf53O9L", ((BemPrimitiveValue)guidValue).getValue());
 		
-		List<BemAttribute> representationContextAttributes = projectEntity.getAttributeList().selectAllByName("RepresentationContexts");
+		List<BemValue> representationContextAttributes = projectEntity.getAttributeMap().getAll("RepresentationContexts");
 		assertNotNull(representationContextAttributes);
 		assertEquals(1, representationContextAttributes.size());
-		BemValue representationContext = ((BemAttribute)representationContextAttributes.get(0)).getValue();
+		BemValue representationContext = representationContextAttributes.get(0);
 		assertNotNull(representationContext);
 		assertTrue("Expected: representationContext instanceof BemEntity: " + representationContext.getClass(), representationContext instanceof BemEntity);
 		
@@ -90,17 +80,32 @@ public class IfcDatasetParser_Test {
 		assertNotNull(geometricRepresentationContextType);
 		assertEquals(geometricRepresentationContextType, ((BemEntity)representationContext).getTypeInfo());
 		
-		assertEquals(1, projectEntity.getIncomingAttributeList().size());
-		BemEntity relAggregatesEntity = (BemEntity)projectEntity.getIncomingAttributeList().getFirst().getValue();
+		assertEquals(1, projectEntity.getIncomingAttributeMap().size());
+		BemEntity decomposesEntity = (BemEntity)projectEntity.getIncomingAttributeMap().getAny("Decomposes");
+		assertNull(decomposesEntity);		
+		
+		BemEntity relAggregatesEntity = (BemEntity)projectEntity.getIncomingAttributeMap().getAny("IsDecomposedBy");
+		assertNotNull(relAggregatesEntity);		
+
+		BemEntityTypeInfo relDecomposesEntityTypeInfo = dataset.getSchema().getEntityTypeInfo("IfcRelDecomposes"); 
+		assertTrue(relAggregatesEntity.isInstanceOf(relDecomposesEntityTypeInfo));
+		
+		List<BemValue> siteEntities = relAggregatesEntity.getAttributeMap().getAll("relatedObjects");
+		assertEquals(1, siteEntities.size());
+		
+		BemEntity siteEntity = (BemEntity)siteEntities.get(0);
+		assertEquals("Default Site", ((BemPrimitiveValue)siteEntity.getAttributeMap().getAny("name")).getValue());		
 		
 	}
+	
+	
 //
 //	@Test
 //	public void test_parseIfc4Add1() throws BemException, BemNotFoundException, IOException {
 //		test_parse("IFC4_ADD1.exp");
 //	}
 
-	private StepDataset test_parse(String filePath) throws BemException, BemNotFoundException, IOException 
+	private StepDataset test_parse(String filePath) throws BemException, IOException 
 	{
 		BemParserUtil.registerDatasetParser(new IfcDatasetParser());
 		
@@ -108,9 +113,6 @@ public class IfcDatasetParser_Test {
 		assertNotNull(dataset);
 		assertTrue(dataset instanceof StepDataset);
 		return (StepDataset)dataset;
-		
-}
-	
-	
+	}
 
 }

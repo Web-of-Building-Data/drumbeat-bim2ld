@@ -1,11 +1,8 @@
 package fi.aalto.cs.drumbeat.data.bem.dataset;
 
-import java.util.*;
-
 import org.apache.commons.lang3.NotImplementedException;
 
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
-import fi.aalto.cs.drumbeat.data.bem.BemNotFoundException;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 
 
@@ -15,9 +12,9 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 	private String localId;
 	private String name;
 	private String rawName;
-	private BemAttributeList attributeList;
-	private BemAttributeList incomingAttributeList;
-//	private BemAttributeList<BemInverseAttribute> inverseAttributes = new BemAttributeList<>();
+	private BemAttributeMap attributeMap;
+	private BemAttributeMap incomingAttributeMap;
+//	private BemAttributeMap<BemInverseAttribute> inverseAttributes = new BemAttributeMap<>();
 //	private List<BemUniqueKeyValue> uniqueKeyValues;
 	private BemEntity parent;
 //	private boolean isSharedBlankNode;
@@ -28,7 +25,7 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 	public BemEntity(String localId) {
 		this.localId = localId;
 		
-		attributeList = new BemAttributeList();
+		attributeMap = new BemAttributeMap(this, false);
 	}
 
 	public BemEntity(BemEntityTypeInfo typeInfo, String localId) {
@@ -100,16 +97,16 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 //		return attribute;
 //	}
 
-	public BemAttributeList getAttributeList() {
-		return attributeList;
+	public BemAttributeMap getAttributeMap() {
+		return attributeMap;
 	}
 	
 //	public void addAttribute(BemAttribute attribute) {
-//		attributeList.add(attribute);
+//		attributeMap.add(attribute);
 //	}	
 //
 //	public List<BemAttribute> getAttributes(BemAttributeInfo attributeInfo) {
-//		return attributeList.selectAll(attributeInfo);
+//		return attributeMap.selectAll(attributeInfo);
 //	}
 //	
 //	public List<BemAttribute> getAttributes(String attributeName) throws BemNotFoundException {
@@ -118,12 +115,12 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 //	}
 //	
 //	public BemAttribute getFirstAttribute(BemAttributeInfo attributeInfo) {
-//		return attributeList.selectFirst(attributeInfo);
+//		return attributeMap.selectFirst(attributeInfo);
 //	}
 //
 //	public BemAttribute getFirstAttribute(String attributeName) throws BemNotFoundException {
 //		BemAttributeInfo attributeInfo = getTypeInfo().getAttributeInfo(attributeName); 
-//		return attributeList.selectFirst(attributeInfo);
+//		return attributeMap.selectFirst(attributeInfo);
 //	}
 //
 //	public void addIncomingLink(BemAttribute link) {
@@ -151,11 +148,11 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 //		return null;
 //	}
 //	
-	public BemAttributeList getIncomingAttributeList() {
-		if (incomingAttributeList == null) {
-			incomingAttributeList = new BemAttributeList();			
+	public BemAttributeMap getIncomingAttributeMap() {
+		if (incomingAttributeMap == null) {
+			incomingAttributeMap = new BemAttributeMap(this, true);
 		}
-		return incomingAttributeList;
+		return incomingAttributeMap;
 	}
 	
 	@Override

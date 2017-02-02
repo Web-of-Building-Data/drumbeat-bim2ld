@@ -19,8 +19,9 @@ package fi.aalto.cs.drumbeat.data.step.parsers;
 
 import fi.aalto.cs.drumbeat.common.string.RegexUtils;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
+import fi.aalto.cs.drumbeat.data.bem.BemAttributeNotFoundException;
 import fi.aalto.cs.drumbeat.data.bem.BemException;
-import fi.aalto.cs.drumbeat.data.bem.BemNotFoundException;
+import fi.aalto.cs.drumbeat.data.bem.BemTypeNotFoundException;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemFormatException;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemParserException;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
@@ -187,7 +188,7 @@ class ExpressSchemaInternalParser {
 	 * @throws BemNotFoundException
 	 * @throws BemParserException
 	 */
-	private ExpressNonEntityTypeInfoTextWrapper parseNonEntityTypeHeader(String[] tokens) throws IOException, BemNotFoundException, BemParserException {
+	private ExpressNonEntityTypeInfoTextWrapper parseNonEntityTypeHeader(String[] tokens) throws IOException, BemTypeNotFoundException, BemParserException {
 		
 		assert(tokens[0].equals(ExpressFormat.TYPE));
 		tokens = RegexUtils.split2(tokens[1].trim(), RegexUtils.WHITE_SPACE);			
@@ -241,7 +242,7 @@ class ExpressSchemaInternalParser {
 	 * @throws BemParserException 
 	 * @throws BemNotFoundException 
 	 */
-	private BemTypeInfo parseNonEntityTypeBody(BemTypeInfo typeInfo, String... statements) throws IOException, BemParserException, BemNotFoundException {
+	private BemTypeInfo parseNonEntityTypeBody(BemTypeInfo typeInfo, String... statements) throws IOException, BemParserException, BemTypeNotFoundException {
 		
 		String[] tokens = RegexUtils.split2(statements[0], RegexUtils.WHITE_SPACE);
 		
@@ -377,7 +378,7 @@ class ExpressSchemaInternalParser {
 		BemEntityTypeInfo entityTypeInfo;
 		try {
 			entityTypeInfo = schema.getEntityTypeInfo(entityTypeName);
-		} catch (BemNotFoundException e) {
+		} catch (BemTypeNotFoundException e) {
 			entityTypeInfo = new BemEntityTypeInfo(schema, entityTypeName);
 		}
 		ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper = new ExpressEntityTypeInfoTextWrapper(entityTypeInfo);			
@@ -447,7 +448,7 @@ class ExpressSchemaInternalParser {
 		} // for
 	}
 	
-	private BemCollectionTypeInfo parseCollectionType(BemCollectionKindEnum collectionKind, String typeInfoString) throws BemParserException, BemNotFoundException {
+	private BemCollectionTypeInfo parseCollectionType(BemCollectionKindEnum collectionKind, String typeInfoString) throws BemParserException, BemTypeNotFoundException {
 		
 		// read collection cardinality
 		String[] tokens = RegexUtils.split2(typeInfoString, StepVocabulary.ExpressFormat.OF);				
@@ -468,7 +469,7 @@ class ExpressSchemaInternalParser {
 			String collectionTypeInfoName = BemCollectionTypeInfo.formatCollectionTypeName(collectionKind, collectionItemTypeInfoName, collectionCardinality);
 			try {
 				return (BemCollectionTypeInfo)schema.getTypeInfo(collectionTypeInfoName);
-			} catch (BemNotFoundException e) {					
+			} catch (BemTypeNotFoundException e) {					
 			
 				// create collection type (with cardinality)
 				BemCollectionTypeInfo collectionTypeInfo = builder.createCollectionTypeInfo(schema, collectionTypeInfoName);
@@ -510,7 +511,7 @@ class ExpressSchemaInternalParser {
 			
 	}
 	
-	private void bindEntitySuperTypeAndAttributes(ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper) throws BemNotFoundException, IOException, BemParserException {		
+	private void bindEntitySuperTypeAndAttributes(ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper) throws BemTypeNotFoundException, IOException, BemParserException {		
 				
 		BemEntityTypeInfo entityTypeInfo = entityTypeInfoTextWrapper.getEntityTypeInfo();
 		
@@ -586,15 +587,15 @@ class ExpressSchemaInternalParser {
 		int attributeCount = 0;
 		
 		if (entityTypeInfo.getSuperTypeInfo() != null) {
-			attributeCount = entityTypeInfo.getSuperTypeInfo().getInheritedAttributeInfos().size();
+			attributeCount = entityTypeInfo.getSuperTypeInfo().getAttributeInfos(true).size();
 		}
 		
-		for (BemAttributeInfo attributeInfo : entityTypeInfo.getAttributeInfos()) {
+		for (BemAttributeInfo attributeInfo : entityTypeInfo.getAttributeInfos(false)) {
 			attributeInfo.setAttributeIndex(attributeCount++);
 		}			
 	}
 	
-	private void bindEntityInverseLinks(ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper) throws BemParserException, BemNotFoundException {
+	private void bindEntityInverseLinks(ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper) throws BemParserException, BemTypeNotFoundException, BemAttributeNotFoundException {
 
 		BemEntityTypeInfo entityTypeInfo = entityTypeInfoTextWrapper.getEntityTypeInfo();
 		
@@ -642,7 +643,7 @@ class ExpressSchemaInternalParser {
 		}
 	}
 	
-	private void bindEntityUniqueKeys(ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper) throws BemParserException, BemNotFoundException {
+	private void bindEntityUniqueKeys(ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper) throws BemParserException, BemTypeNotFoundException, BemAttributeNotFoundException {
 
 		BemEntityTypeInfo entityTypeInfo = entityTypeInfoTextWrapper.getEntityTypeInfo();
 		

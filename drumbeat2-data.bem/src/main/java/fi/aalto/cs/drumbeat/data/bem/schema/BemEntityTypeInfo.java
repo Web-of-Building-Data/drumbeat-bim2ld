@@ -2,7 +2,7 @@ package fi.aalto.cs.drumbeat.data.bem.schema;
 
 import java.util.*;
 
-import fi.aalto.cs.drumbeat.data.bem.BemNotFoundException;
+import fi.aalto.cs.drumbeat.data.bem.BemAttributeNotFoundException;
 
 public class BemEntityTypeInfo extends BemComplexTypeInfo {
 	
@@ -53,8 +53,20 @@ public class BemEntityTypeInfo extends BemComplexTypeInfo {
 	 * Gets the list of attributeInfos
 	 * @return
 	 */
-	public List<BemAttributeInfo> getAttributeInfos() {
-		return attributeInfos;
+	public List<BemAttributeInfo> getAttributeInfos(boolean includeInherited) {
+		if (!includeInherited) {
+			return attributeInfos;
+		}
+		
+		// includeInherited = true
+		if (inheritedAttributeInfos == null) {
+			inheritedAttributeInfos = new ArrayList<>();
+			if (superTypeInfo != null) {
+				inheritedAttributeInfos.addAll(superTypeInfo.getAttributeInfos(includeInherited));
+			}
+			inheritedAttributeInfos.addAll(attributeInfos);
+		}
+		return inheritedAttributeInfos;
 	}
 	
 	public void addAttributeInfo(BemAttributeInfo attributeInfo) {
@@ -66,26 +78,16 @@ public class BemEntityTypeInfo extends BemComplexTypeInfo {
 	 * Gets list of all attributes including inherited ones from the super type. 
 	 * @return List of all attributes
 	 */
-	public List<BemAttributeInfo> getInheritedAttributeInfos() {
-		if (inheritedAttributeInfos == null) {
-			inheritedAttributeInfos = new ArrayList<>();
-			if (superTypeInfo != null) {
-				inheritedAttributeInfos.addAll(superTypeInfo.getInheritedAttributeInfos());
-			}
-			inheritedAttributeInfos.addAll(attributeInfos);
+	public List<BemInverseAttributeInfo> getInverseAttributeInfos(boolean includeInherited) {
+		if (!includeInherited) {
+			return inverseAttributeInfos;
 		}
-		return inheritedAttributeInfos;
-	}
-	
-	/**
-	 * Gets list of all attributes including inherited ones from the super type. 
-	 * @return List of all attributes
-	 */
-	public List<BemInverseAttributeInfo> getInheritedInverseAttributeInfos() {
+		
+		// includeInherited = true
 		if (inheritedInverseAttributeInfos == null) {
 			inheritedInverseAttributeInfos = new ArrayList<>();
 			if (superTypeInfo != null) {
-				inheritedInverseAttributeInfos.addAll(superTypeInfo.getInheritedInverseAttributeInfos());
+				inheritedInverseAttributeInfos.addAll(superTypeInfo.getInverseAttributeInfos(includeInherited));
 			}
 			inheritedInverseAttributeInfos.addAll(inverseAttributeInfos);
 		}
@@ -124,25 +126,24 @@ public class BemEntityTypeInfo extends BemComplexTypeInfo {
 		return this.equals(typeInfo) || isSubtypeOf(typeInfo);
 	}
 	
-	public BemAttributeInfo getAttributeInfo(String name) throws BemNotFoundException {
-		return getAttributeInfo(name, false);
+	public BemAttributeInfo getAttributeInfo(String name) throws BemAttributeNotFoundException {
+		return getAttributeInfo(name, true, false);
+	}
+	
+	public BemInverseAttributeInfo getInverseAttributeInfo(String name) throws BemAttributeNotFoundException {
+		return (BemInverseAttributeInfo)getAttributeInfo(name, false, true);
 	}
 
-	public BemAttributeInfo getAttributeInfo(String name, boolean includeInverseLinks) throws BemNotFoundException {
-		for (BemAttributeInfo attributeInfo : attributeInfos) {
-			if (attributeInfo.getName().equalsIgnoreCase(name)) {
-				return attributeInfo;
+	private BemAttributeInfo getAttributeInfo(String name, boolean includeDirectAttributeInfos, boolean includeInverseAttributeInfos) throws BemAttributeNotFoundException {
+		if (includeDirectAttributeInfos) {
+			for (BemAttributeInfo attributeInfo : attributeInfos) {
+				if (attributeInfo.getName().equalsIgnoreCase(name)) {
+					return attributeInfo;
+				}
 			}
 		}
 		
-		if (superTypeInfo != null) {
-			try {
-				return superTypeInfo.getAttributeInfo(name, includeInverseLinks);
-			} catch (BemNotFoundException e) {				
-			}
-		}
-		
-		if (includeInverseLinks) {
+		if (includeInverseAttributeInfos) {
 			for (BemInverseAttributeInfo inverseAttributeInfo : inverseAttributeInfos) {
 				if (inverseAttributeInfo.getName().equalsIgnoreCase(name)) {
 					return inverseAttributeInfo;
@@ -150,11 +151,14 @@ public class BemEntityTypeInfo extends BemComplexTypeInfo {
 			}			
 		}
 		
-		throw new BemNotFoundException(String.format("Entity type '%s' has no such attribute: '%s'", toString(), name));
-	}
-
-	public List<BemInverseAttributeInfo> getInverseAttributeInfos() {
-		return inverseAttributeInfos;
+		if (superTypeInfo != null) {
+			try {
+				return superTypeInfo.getAttributeInfo(name, includeDirectAttributeInfos, includeInverseAttributeInfos);
+			} catch (BemAttributeNotFoundException e) {				
+			}
+		}
+		
+		throw new BemAttributeNotFoundException(String.format("Entity type '%s' has no such attribute: '%s'", toString(), name));
 	}
 	
 	public void addInverseAttributeInfo(BemInverseAttributeInfo inverseAttributeInfo) {

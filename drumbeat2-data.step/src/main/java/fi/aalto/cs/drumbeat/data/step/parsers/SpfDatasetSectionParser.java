@@ -2,6 +2,7 @@ package fi.aalto.cs.drumbeat.data.step.parsers;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.text.StrMatcher;
 import org.apache.log4j.Logger;
@@ -9,13 +10,14 @@ import org.apache.log4j.Logger;
 import fi.aalto.cs.drumbeat.common.string.RegexUtils;
 import fi.aalto.cs.drumbeat.common.string.StrBuilderWrapper;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
-import fi.aalto.cs.drumbeat.data.bem.BemNotFoundException;
+import fi.aalto.cs.drumbeat.data.bem.BemEntityNotFoundException;
+import fi.aalto.cs.drumbeat.data.bem.BemTypeNotFoundException;
 import fi.aalto.cs.drumbeat.data.bem.dataset.*;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemFormatException;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemParserException;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary;
-import fi.aalto.cs.drumbeat.data.step.dataset.StepValue;
+import fi.aalto.cs.drumbeat.data.step.dataset.StepSpecialValue;
 import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
 
 class SpfDatasetSectionParser {
@@ -48,9 +50,11 @@ class SpfDatasetSectionParser {
 	 * Reads line by line and creates new entities
 	 * @throws IOException
 	 * @throws BemParserException
+	 * @throws BemEntityNotFoundException 
+	 * @throws BemTypeNotFoundException 
 	 * @throws BemNotFoundException 
 	 */
-	public List<BemEntity> parseEntities(StepLineReader reader, StepDatasetBuilder builder, ExpressSchema schema, boolean isHeaderSection, boolean ignoreUnknownTypes) throws IOException, BemParserException, BemNotFoundException {		
+	public List<BemEntity> parseEntities(StepLineReader reader, StepDatasetBuilder builder, ExpressSchema schema, boolean isHeaderSection, boolean ignoreUnknownTypes) throws IOException, BemParserException, BemTypeNotFoundException, BemEntityNotFoundException {		
 		
 		this.reader = reader;
 		this.builder = builder; 
@@ -105,7 +109,7 @@ class SpfDatasetSectionParser {
 			
 			try {			
 				entityTypeInfo = schema.getEntityTypeInfo(entityTypeInfoName);
-			} catch (BemNotFoundException e) {
+			} catch (BemTypeNotFoundException e) {
 				if (ignoreUnknownTypes) {
 					continue;
 				} else {
@@ -117,7 +121,7 @@ class SpfDatasetSectionParser {
 			entityAttributesString = entityAttributesString.substring(indexOfOpeningBracket + 1,
 					entityAttributesString.length() - 1);
 			
-			List<BemAttributeInfo> attributeInfos = entityTypeInfo.getInheritedAttributeInfos();
+			List<BemAttributeInfo> attributeInfos = entityTypeInfo.getAttributeInfos(true);
 			BemAttributeInfo[] attributeInfoArray = new BemAttributeInfo[attributeInfos.size()];
 			attributeInfos.toArray(attributeInfoArray);
 					
@@ -163,11 +167,12 @@ class SpfDatasetSectionParser {
 	 * @param attributeValueType
 	 * @return a single attribute value or list of attribute values
 	 * @throws BemFormatException
+	 * @throws BemEntityNotFoundException 
 	 * @throws BemNotFoundException
 	 * @throws BemValueTypeConflictException 
 	 */
 	private List<BemValue> parseAttributeValues(StrBuilderWrapper attributeStrBuilderWrapper, BemEntity entity,
-			boolean areCollectionItems, BemTypeInfo fixedValueTypeInfo, BemAttributeInfo... entityAttributeInfos) throws BemFormatException, BemNotFoundException {
+			boolean areCollectionItems, BemTypeInfo fixedValueTypeInfo, BemAttributeInfo... entityAttributeInfos) throws BemFormatException, BemTypeNotFoundException, BemEntityNotFoundException {
 
 		logger.debug(String.format("Parsing entity '%s'", entity));
 
@@ -205,7 +210,7 @@ class SpfDatasetSectionParser {
 				String remoteLineNumber = Long.toString(attributeStrBuilderWrapper.getLong());
 				BemEntity remoteEntity = getEntity(remoteLineNumber);
 				if (remoteEntity == null) {
-					throw new BemNotFoundException("Entity not found: #" + remoteLineNumber);
+					throw new BemEntityNotFoundException("Entity not found: #" + remoteLineNumber);
 				}
 				attributeValues.add(remoteEntity);
 				break;
@@ -248,12 +253,12 @@ class SpfDatasetSectionParser {
 				break;
 
 			case StepVocabulary.SpfFormat.NULL_SYMBOL: // $
-				attributeValues.add(StepValue.NULL);
+				attributeValues.add(StepSpecialValue.NULL);
 				attributeStrBuilderWrapper.skip(1);
 				break;
 
 			case StepVocabulary.SpfFormat.ANY_SYMBOL: // *
-				attributeValues.add(StepValue.ANY);
+				attributeValues.add(StepSpecialValue.ANY);
 				attributeStrBuilderWrapper.skip(1);
 				break;
 
@@ -358,18 +363,18 @@ class SpfDatasetSectionParser {
 					for (BemValue value : ((StepTemporaryCollectionValueWrapper)attributeValue).getValues()) {
 						valueCollection.add(value);
 					}
-					entity.getAttributeList().add(new BemAttribute(attributeInfo, valueCollection));
+					entity.getAttributeMap().add(attributeInfo, valueCollection);
 				} else {
 					// unsorted collection
 					for (BemValue value : ((StepTemporaryCollectionValueWrapper)attributeValue).getValues()) {
-						entity.getAttributeList().add(new BemAttribute(attributeInfo, value));
+						entity.getAttributeMap().add(attributeInfo, value);
 					}
 				}
 				
 			} else {
 				
 				// single attribute				
-				entity.getAttributeList().add(new BemAttribute(attributeInfo, attributeValue));					
+				entity.getAttributeMap().add(attributeInfo, attributeValue);					
 				
 			}
 			
@@ -379,20 +384,20 @@ class SpfDatasetSectionParser {
 	
 	
 	private void bindInverseLinks(List<BemEntity> entities) {
-		for (BemEntity entity : entities) {
-			for (BemAttribute attribute : entity.getAttributeList()) {
-				List<BemInverseAttributeInfo> possibleInverseAttributeInfos = attribute.getAttributeInfo().getPossibleInverseAttributeInfos();
-				if (possibleInverseAttributeInfos != null && !possibleInverseAttributeInfos.isEmpty()) {
-					
-					BemValue value = attribute.getValue();
-					if (value instanceof BemEntity) {
-						
+		for (BemEntity sourceEntity : entities) {
+			for (Entry<BemAttributeInfo, BemValue> entry : sourceEntity.getAttributeMap().entries()) {
+				BemAttributeInfo attributeInfo = entry.getKey();				
+				BemValue attributeValue = entry.getValue();
+				if (attributeValue instanceof BemEntity) {
+					List<BemInverseAttributeInfo> possibleInverseAttributeInfos = attributeInfo.getPossibleInverseAttributeInfos();
+					if (possibleInverseAttributeInfos != null && !possibleInverseAttributeInfos.isEmpty()) {					
+						BemEntity destinationEntity = (BemEntity)attributeValue;
 						for (BemInverseAttributeInfo inverseAttributeInto : possibleInverseAttributeInfos) {
-							if (((BemEntity)value).isInstanceOf(inverseAttributeInto.getDestinationEntityTypeInfo())) {
-								((BemEntity)value).getIncomingAttributeList().add(attribute);
+							if (destinationEntity.isInstanceOf(inverseAttributeInto.getDestinationEntityTypeInfo())) {
+								destinationEntity.getIncomingAttributeMap().add(inverseAttributeInto, sourceEntity);
+								break;
 							}
 						}
-						
 					}
 				}
 			}

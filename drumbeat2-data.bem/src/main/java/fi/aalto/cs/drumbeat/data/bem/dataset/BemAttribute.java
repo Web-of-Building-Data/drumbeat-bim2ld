@@ -6,6 +6,13 @@ import java.util.List;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemAttributeInfo;
 
 
+/**
+ * @deprecated Use {@link BemAttributeMap} 
+ *  
+ * @author Nam Vu
+ *
+ */
+@Deprecated
 public class BemAttribute implements Comparable<BemAttribute> { 
 	
 	private final BemAttributeInfo attributeInfo;

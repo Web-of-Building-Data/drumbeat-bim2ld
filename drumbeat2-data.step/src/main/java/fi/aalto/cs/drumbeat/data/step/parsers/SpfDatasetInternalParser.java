@@ -6,13 +6,14 @@ import java.util.List;
 
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.data.bem.BemException;
-import fi.aalto.cs.drumbeat.data.bem.BemNotFoundException;
+import fi.aalto.cs.drumbeat.data.bem.BemSchemaNotFoundException;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemDataset;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemEntity;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemFormatException;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemParserException;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchemaPool;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary.SpfFormat;
+import fi.aalto.cs.drumbeat.data.step.StepVocabulary.SpfFormat.Header.FileSchema;
 import fi.aalto.cs.drumbeat.data.step.dataset.StepDataset;
 import fi.aalto.cs.drumbeat.data.step.dataset.meta.StepMetaDataset;
 import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
@@ -61,7 +62,7 @@ class SpfDatasetInternalParser {
 			}
 
 			ExpressSchema schema = null;
-			List<String> schemaVersions = metaDataset.getFileSchema().getSchemas();
+			List<String> schemaVersions = metaDataset.getFileSchemaEntity().getAttributeMap().getAllPrimitiveValues(FileSchema.SCHEMA_IDENTIFIERS);
 			if (schemaVersions != null) {
 				for (String schemaVersion : schemaVersions) {
 					schema = (ExpressSchema) BemSchemaPool.getSchema(schemaVersion);
@@ -74,7 +75,7 @@ class SpfDatasetInternalParser {
 			}
 
 			if (schema == null) {
-				throw new BemNotFoundException("None of schemas " + schemaVersions + " is found");
+				throw new BemSchemaNotFoundException("None of schemas " + schemaVersions + " is found");
 			}
 
 			//

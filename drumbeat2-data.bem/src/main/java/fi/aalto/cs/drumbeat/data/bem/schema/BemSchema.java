@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import fi.aalto.cs.drumbeat.data.bem.BemNotFoundException;
+import fi.aalto.cs.drumbeat.data.bem.BemTypeNotFoundException;
 
 /**
  * A data schema, i.e. a container for data types. 
@@ -67,11 +67,11 @@ public class BemSchema {
 	 * @return an instance of {@link BemTypeInfo} with the specified name
 	 * @throws BemNotFoundException
 	 */
-	public BemTypeInfo getTypeInfo(String typeName) throws BemNotFoundException {
+	public BemTypeInfo getTypeInfo(String typeName) throws BemTypeNotFoundException {
 		String upperTypeName = typeName.toUpperCase();
 		BemTypeInfo result = allTypeInfoDictionary.get(upperTypeName);
 		if (result == null) {
-			throw new BemNotFoundException(String.format("Type not found: '%s'", typeName));
+			throw new BemTypeNotFoundException(String.format("Type not found: '%s'", typeName));
 		}
 		return result;
 	}
@@ -83,11 +83,11 @@ public class BemSchema {
 	 * @return an instance of {@link BemTypeInfo} with the specified name
 	 * @throws BemNotFoundException
 	 */
-	public BemEntityTypeInfo getEntityTypeInfo(String typeName) throws BemNotFoundException {
+	public BemEntityTypeInfo getEntityTypeInfo(String typeName) throws BemTypeNotFoundException {
 		String upperTypeName = typeName.toUpperCase();
 		BemEntityTypeInfo result = entityTypeInfoDictionary.get(upperTypeName);
 		if (result == null) {
-			throw new BemNotFoundException(String.format("Entity type not found: '%s'", typeName));
+			throw new BemTypeNotFoundException(String.format("Entity type not found: '%s'", typeName));
 		}
 		return result;
 	}
