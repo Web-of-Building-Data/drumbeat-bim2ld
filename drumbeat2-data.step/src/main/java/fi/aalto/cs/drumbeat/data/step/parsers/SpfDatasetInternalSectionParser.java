@@ -20,7 +20,7 @@ import fi.aalto.cs.drumbeat.data.step.StepVocabulary;
 import fi.aalto.cs.drumbeat.data.step.dataset.StepSpecialValue;
 import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
 
-class SpfDatasetSectionParser {
+class SpfDatasetInternalSectionParser {
 	
 	private class StepTemporaryCollectionValueWrapper extends BemValue {
 		

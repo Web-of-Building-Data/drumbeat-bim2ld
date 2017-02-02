@@ -52,7 +52,7 @@ class SpfDatasetInternalParser {
 				StepLineReader headerReader = new StepLineReader(
 						new ByteArrayInputStream(headerStringBuilder.toString().getBytes()));
 				ExpressSchema stepMetaSchema = getStepMetaSchema();
-				List<BemEntity> entities = new SpfDatasetSectionParser().parseEntities(headerReader, builder, stepMetaSchema, true, true);
+				List<BemEntity> entities = new SpfDatasetInternalSectionParser().parseEntities(headerReader, builder, stepMetaSchema, true, true);
 
 				metaDataset = new StepMetaDataset(stepMetaSchema);
 				metaDataset.addEntities(entities);
@@ -93,7 +93,7 @@ class SpfDatasetInternalParser {
 				throw new BemParserException("Expected statement: " + SpfFormat.DATA);
 			}
 
-			List<BemEntity> entities = new SpfDatasetSectionParser().parseEntities(lineReader, builder, schema, false, false);
+			List<BemEntity> entities = new SpfDatasetInternalSectionParser().parseEntities(lineReader, builder, schema, false, false);
 			dataset.addEntities(entities);
 
 			return dataset;
