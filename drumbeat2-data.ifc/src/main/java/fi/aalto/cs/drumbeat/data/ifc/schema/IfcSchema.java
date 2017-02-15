@@ -46,6 +46,7 @@ public class IfcSchema extends ExpressSchema {
 	 * @param schemaVersion - the version of the schema.
 	 */
 	public IfcSchema() {
+		this(null);
 //		//
 //		// add some predefined types
 //		//
@@ -65,6 +66,10 @@ public class IfcSchema extends ExpressSchema {
 //		addNonEntityTypeInfo(IFC_REAL);
 //		addNonEntityTypeInfo(IFC_TEXT);
 //		addNonEntityTypeInfo(IFC_TIME_STAMP);
+	}
+	
+	public IfcSchema(String name) {
+		super(name);
 	}
 	
 }

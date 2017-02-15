@@ -43,12 +43,14 @@
 		<!-- All versions updated on 04.05.2015 -->
 		<commons-cli.version>1.2</commons-cli.version>
 		<commons-codec.version>1.10</commons-codec.version>
+		<commons-io.version>2.5</commons-io.version>
 		<commons-lang3.version>3.3.2</commons-lang3.version>
 		<httpcomponents.version>4.4</httpcomponents.version>
 		<jackson.version>2.5.1</jackson.version>
 		<jena.version>3.0.0</jena.version>
-		<jena-iri.version>1.1.1</jena-iri.version>
+		<!--  jena-iri.version>1.1.1</jena-iri.version-->
 		<jsonld-java.version>0.5.1</jsonld-java.version>
+		<google-collections.version>1.0</google-collections.version>
 		<log4j.version>1.2.17</log4j.version>
 		<slf4j.version>1.7.10</slf4j.version>
 		<xercesImpl.version>2.11.0</xercesImpl.version>
@@ -117,6 +119,7 @@
 		<module>../drumbeat2-data.bedm</module>
 		<module>../drumbeat2-data.step</module>
 		<module>../drumbeat2-data.ifc</module>
+		<module>../drumbeat2-data.rdf</module>
 		<!-- 
 		<module>../drumbeat2-rdf</module>
 		<module>../drumbeat2-ifc.common</module>

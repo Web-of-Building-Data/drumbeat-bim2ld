@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import fi.aalto.cs.drumbeat.data.bem.BemTypeAlreadyExistsException;
 import fi.aalto.cs.drumbeat.data.bem.BemTypeNotFoundException;
 
 /**
@@ -15,14 +16,19 @@ import fi.aalto.cs.drumbeat.data.bem.BemTypeNotFoundException;
 public class BemSchema {
 	
 	private String name;
+	private String language;
 	private BemSchema header;
 	private Map<String, BemTypeInfo> allTypeInfoDictionary;
 	private Map<String, BemEntityTypeInfo> entityTypeInfoDictionary;
 	
-	
 	public BemSchema() {
 		allTypeInfoDictionary = new HashMap<>();
 		entityTypeInfoDictionary = new HashMap<>();
+	}
+	
+	public BemSchema(String name) {
+		this();
+		this.name = name;
 	}
 	
 	/**
@@ -36,6 +42,15 @@ public class BemSchema {
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getLanguage() {
+		return language;
+	}
+	
+	public void setLanguage(String language) {
+		this.language = language;
+		
 	}
 	
 	/**
@@ -92,8 +107,11 @@ public class BemSchema {
 		return result;
 	}
 	
-	public void addTypeInfo(BemTypeInfo typeInfo) {
+	public void addTypeInfo(BemTypeInfo typeInfo) throws BemTypeAlreadyExistsException {
 		String upperCaseTypeName = typeInfo.getName().toUpperCase();
+		if (allTypeInfoDictionary.containsKey(upperCaseTypeName)) {
+			throw new BemTypeAlreadyExistsException(typeInfo.getName());
+		}
 		allTypeInfoDictionary.put(upperCaseTypeName, typeInfo);
 		if (typeInfo instanceof BemEntityTypeInfo) {
 			entityTypeInfoDictionary.put(upperCaseTypeName, (BemEntityTypeInfo)typeInfo);			

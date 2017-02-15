@@ -23,8 +23,8 @@ public class StepDatasetBuilder extends BemDatasetBuilder {
 		return new BemPrimitiveValue(value, valueKind);
 	}
 
-	public BemTypedPrimitiveValue createTypedSimpleValue(BemPrimitiveValue value, BemTypeInfo type) {
-		return new BemTypedPrimitiveValue(value, type);
+	public BemTypedSimpleValue createTypedSimpleValue(BemSimpleValue value, BemTypeInfo type) {
+		return new BemTypedSimpleValue(value, type);
 	}
 	
 }

@@ -23,15 +23,15 @@ import static org.junit.Assert.*;
 public class IfcDatasetParser_Test {
 	
 	public static final String RESOURCES_FOLDER = "src/test/resources/";
+	public static final String RESOURCES_SCHEMAS_FOLDER = RESOURCES_FOLDER + "schemas/";
+	public static final String RESOURCES_DATASETS_FOLDER = RESOURCES_FOLDER + "datasets/";
 	
 	@BeforeClass
     public static void runOnceBeforeClass() throws IOException, BemException {
 		BemParserUtil.getSchemaParsers().clear();
 		BemParserUtil.registerSchemaParser(new IfcSchemaParser());
-		List<BemSchema> schemas = BemParserUtil.parseSchemas(RESOURCES_FOLDER, null, true, true);
-		for (BemSchema schema : schemas) {
-			BemSchemaPool.addSchema(schema);			
-		}
+		List<BemSchema> schemas = BemParserUtil.parseSchemas(RESOURCES_SCHEMAS_FOLDER, null, true, true);
+		BemSchemaPool.addAll(schemas);
     }
 	
 	@Before
@@ -58,7 +58,7 @@ public class IfcDatasetParser_Test {
 //	
 	@Test
 	public void test_parseSampleIfc() throws BemException, IOException {
-		StepDataset dataset = test_parse(RESOURCES_FOLDER + "sample.ifc");
+		StepDataset dataset = test_parse(RESOURCES_DATASETS_FOLDER + "sample.ifc");
 
 		BemEntity projectEntity = dataset.getAnyEntityByType(IfcVocabulary.IfcTypes.IFC_PROJECT);
 		assertNotNull(projectEntity);

@@ -3,6 +3,7 @@ package fi.aalto.cs.drumbeat.data.bem.dataset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import fi.aalto.cs.drumbeat.data.bem.BemEntityNotFoundException;
 import fi.aalto.cs.drumbeat.data.bem.BemTypeNotFoundException;
@@ -12,6 +13,8 @@ public class BemDataset {
 
 	private BemSchema schema;
 	private List<BemEntity> entities;
+	private String name;
+	private String language;
 
 	public BemDataset(BemSchema schema) {
 		this.schema = schema;
@@ -26,26 +29,59 @@ public class BemDataset {
 		return schema;
 	}
 	
-	public List<BemEntity> getEntities() {
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+	
+	public void setLanguage(String language) {
+		this.language = language;
+		
+	}
+	
+	public List<BemEntity> getAllEntities() {
 		return entities;
 	}
 	
-	public List<BemEntity> getAllEntitiesByType(BemEntityTypeInfo entityType) {
-		List<BemEntity> selectedEntities = new ArrayList<>();		
-		for (BemEntity entity : entities) {
-			if (entity.isInstanceOf(entityType)) {
-				selectedEntities.add(entity);
-			}
+	public List<BemEntity> getAllEntities(String subSetId) {
+		if (subSetId == null) {
+			return entities;
 		}
-		return selectedEntities;
+		return getAllEntitiesByType(subSetId, (BemEntityTypeInfo)null);
+	}
+
+	public List<BemEntity> getAllEntitiesByType(BemEntityTypeInfo entityType) {
+		return getAllEntitiesByType(null, entityType);
 	}
 	
-	public List<BemEntity> getEntitiesByType(String entityTypeName) throws BemEntityNotFoundException, BemTypeNotFoundException {
+	public List<BemEntity> getAllEntitiesByType(String subSetId, BemEntityTypeInfo entityType) {
+		
+		return entities
+				.stream()
+				.filter(entity -> 
+					(subSetId == null || entity.getSubSetId().equals(subSetId)) &&
+					(entityType == null || entity.isInstanceOf(entityType)))
+				.collect(Collectors.toList());
+		
+	}
+
+	public List<BemEntity> getAllEntitiesByType(String entityTypeName) throws BemEntityNotFoundException, BemTypeNotFoundException {
+		return getAllEntitiesByType(null, entityTypeName);
+	}
+	
+	public List<BemEntity> getAllEntitiesByType(String subSetId, String entityTypeName) throws BemEntityNotFoundException, BemTypeNotFoundException {
 		BemEntityTypeInfo entityType = getSchema().getEntityTypeInfo(entityTypeName);
-		return getAllEntitiesByType(entityType);
-	}
+		return getAllEntitiesByType(subSetId, entityType);
+	}	
 	
-	public BemEntity getFirstEntityByType(BemEntityTypeInfo entityType) throws BemEntityNotFoundException {
+	public BemEntity getAnyEntityByType(BemEntityTypeInfo entityType) throws BemEntityNotFoundException {
 		for (BemEntity entity : entities) {
 			if (entity.isInstanceOf(entityType)) {
 				return entity;
@@ -56,7 +92,7 @@ public class BemDataset {
 	
 	public BemEntity getAnyEntityByType(String entityTypeName) throws BemEntityNotFoundException, BemTypeNotFoundException {		
 		BemEntityTypeInfo entityType = getSchema().getEntityTypeInfo(entityTypeName);
-		return getFirstEntityByType(entityType);
+		return getAnyEntityByType(entityType);
 	}
 
 	public void addEntities(Collection<BemEntity> entities) {

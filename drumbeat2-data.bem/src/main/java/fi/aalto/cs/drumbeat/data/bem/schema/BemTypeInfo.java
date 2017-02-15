@@ -10,6 +10,7 @@ public abstract class BemTypeInfo implements Comparable<BemTypeInfo> {
 	
 	private final BemSchema schema;
 	private final String name;
+	private boolean isBuiltInType;
 	
 	/**
 	 * Creates a new type info.
@@ -55,6 +56,14 @@ public abstract class BemTypeInfo implements Comparable<BemTypeInfo> {
 	@Override
 	public int compareTo(BemTypeInfo o) {
 		return name.compareTo(o.name);
+	}
+	
+	public boolean isBuiltInType() {
+		return this.isBuiltInType;
+	}
+	
+	public void setBuiltInType(boolean isBuiltInType) {
+		this.isBuiltInType = isBuiltInType;
 	}
 	
 //	public abstract String getShortDescription(String typeNameFormat);

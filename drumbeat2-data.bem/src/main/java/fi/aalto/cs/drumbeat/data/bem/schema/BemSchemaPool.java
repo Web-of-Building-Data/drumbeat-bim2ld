@@ -1,6 +1,7 @@
 package fi.aalto.cs.drumbeat.data.bem.schema;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,34 +25,40 @@ public class BemSchemaPool implements Serializable {
 	}
 	
 	/**
-	 * Gets the {@link BemSchema} with the specified version.
+	 * Gets the {@link BemSchema} with the specified name.
 	 * 
-	 * @param version - the version of the schema 
-	 * @return the {@link BemSchema} with the specified version, or <code>null</code> if the version is not found.
+	 * @param name - the name of the schema 
+	 * @return the {@link BemSchema} with the specified name, or <code>null</code> if the name is not found.
 	 */
-	public static BemSchema getSchema(String version) {
-		return schemas.get(version);
+	public static BemSchema getSchema(String name) {
+		return schemas.get(name);
 	}
 	
 	
 	/**
-	 * Add a new {@link BemSchema} using its default version string.
+	 * Add a new {@link BemSchema} using its default name string.
 	 * 
 	 * @param schema - the schema to be added.
 	 */
-	public static void addSchema(BemSchema schema) {
-		addSchema(schema.getName(), schema);
+	public static void add(BemSchema schema) {
+		add(schema.getName(), schema);
 	}
 	
 
 	/**
-	 * Add a new {@link BemSchema} using the specified version string.
+	 * Add a new {@link BemSchema} using the specified name string.
 	 * 
-	 * @param version - the version to be used as key of the schema.
+	 * @param name - the name to be used as key of the schema.
 	 * @param schema - the schema to be added.
 	 */
-	public static void addSchema(String version, BemSchema schema) {
-		schemas.put(version, schema);
+	public static void add(String name, BemSchema schema) {
+		schemas.put(name, schema);
+	}
+	
+	public static void addAll(Collection<BemSchema> schemas) {
+		for (BemSchema schema : schemas) {
+			BemSchemaPool.schemas.put(schema.getName(), schema);
+		}
 	}
 	
 	

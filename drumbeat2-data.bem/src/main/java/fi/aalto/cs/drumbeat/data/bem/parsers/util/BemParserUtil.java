@@ -43,6 +43,11 @@ public class BemParserUtil {
 			logger.info(String.format("Parsing schemas in folder '%s'", filePath));
 			
 			for (File schemaFile: file.listFiles(filter)) {
+				// skip child folders
+				if (schemaFile.isDirectory()) {
+					continue;
+				}
+				
 				try {
 					BemSchema schema = parseSchema(schemaFile.getPath(), checkFileType);
 					schemas.add(schema);

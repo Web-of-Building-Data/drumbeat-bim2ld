@@ -17,6 +17,8 @@ import static org.junit.Assert.*;
 public class IfcSchemaParser_Test {
 	
 	public static final String RESOURCES_FOLDER = "src/test/resources/";
+	public static final String RESOURCES_SCHEMAS_FOLDER = RESOURCES_FOLDER + "schemas/";
+	public static final String RESOURCES_DATASETS_FOLDER = RESOURCES_FOLDER + "datasets/";
 	
 	@Before
 	public void setUp() {
@@ -26,34 +28,34 @@ public class IfcSchemaParser_Test {
 	@Test(expected=FileNotFoundException.class)
 	public void test_parseNonExistingFile() throws BemException, IOException {
 		BemParserUtil.registerSchemaParser(new IfcSchemaParser());
-		test_parse("IFC2X3_TC1.ex");
+		test_parse(RESOURCES_SCHEMAS_FOLDER + "IFC2X3_TC1.ex");
 	}
 
 	@Test(expected=BemUnsupportedDataTypeException.class)
 	public void test_parseWrongTypeFile() throws BemException, IOException {
 		BemParserUtil.registerSchemaParser(new IfcSchemaParser());
-		test_parse("sample.ifc");
+		test_parse(RESOURCES_DATASETS_FOLDER + "sample.ifc");
 	}
 
 	@Test(expected=BemUnsupportedDataTypeException.class)
 	public void test_parseNoParserRegistered() throws BemException, IOException {
-		BemParserUtil.parseSchema(RESOURCES_FOLDER + "IFC2X3_TC1.exp", true);
+		BemParserUtil.parseSchema(RESOURCES_SCHEMAS_FOLDER + "IFC2X3_TC1.exp", true);
 	}
 	
 	@Test
 	public void test_parseIfc2x3() throws BemException, IOException {
-		test_parse("IFC2X3_TC1.exp");
+		test_parse(RESOURCES_SCHEMAS_FOLDER + "IFC2X3_TC1.exp");
 	}
 
 	@Test
 	public void test_parseIfc4Add1() throws BemException, IOException {
-		test_parse("IFC4_ADD1.exp");
+		test_parse(RESOURCES_SCHEMAS_FOLDER + "IFC4_ADD1.exp");
 	}
 
-	private void test_parse(String fileName) throws BemException, IOException 
+	private void test_parse(String filePath) throws BemException, IOException 
 	{
 		BemParserUtil.registerSchemaParser(new IfcSchemaParser());		
-		BemSchema schema = BemParserUtil.parseSchema(RESOURCES_FOLDER + fileName, true);
+		BemSchema schema = BemParserUtil.parseSchema(filePath, true);
 		assertNotNull(schema);
 		
 		BemEntityTypeInfo type_IfcProject = (BemEntityTypeInfo)schema.getTypeInfo("IfcProject");

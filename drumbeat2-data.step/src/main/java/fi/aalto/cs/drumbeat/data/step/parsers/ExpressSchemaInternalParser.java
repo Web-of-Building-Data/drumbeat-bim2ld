@@ -21,6 +21,7 @@ import fi.aalto.cs.drumbeat.common.string.RegexUtils;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.data.bem.BemAttributeNotFoundException;
 import fi.aalto.cs.drumbeat.data.bem.BemException;
+import fi.aalto.cs.drumbeat.data.bem.BemTypeAlreadyExistsException;
 import fi.aalto.cs.drumbeat.data.bem.BemTypeNotFoundException;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemFormatException;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemParserException;
@@ -448,7 +449,9 @@ class ExpressSchemaInternalParser {
 		} // for
 	}
 	
-	private BemCollectionTypeInfo parseCollectionType(BemCollectionKindEnum collectionKind, String typeInfoString) throws BemParserException, BemTypeNotFoundException {
+	private BemCollectionTypeInfo parseCollectionType(BemCollectionKindEnum collectionKind, String typeInfoString)
+			throws BemParserException, BemTypeNotFoundException, BemTypeAlreadyExistsException
+	{
 		
 		// read collection cardinality
 		String[] tokens = RegexUtils.split2(typeInfoString, StepVocabulary.ExpressFormat.OF);				
@@ -497,21 +500,28 @@ class ExpressSchemaInternalParser {
 			// create or get the super collection type (without cardinality)
 			String collectionTypeInfoName = BemCollectionTypeInfo.formatCollectionTypeName(collectionKind, collectionItemTypeInfo.getName(), collectionCardinality);
 			
-			// create collection type (with cardinality)
-			BemCollectionTypeInfo collectionTypeInfo = builder.createCollectionTypeInfo(schema, collectionTypeInfoName);
-			collectionTypeInfo.setCollectionKind(collectionKind2);
-			collectionTypeInfo.setItemTypeInfo(collectionItemTypeInfo);
-			collectionTypeInfo.setCardinality(collectionCardinality);
-			//collectionTypeInfo.bindTypeInfo(schema);
-			schema.addTypeInfo(collectionTypeInfo);
+			BemCollectionTypeInfo collectionTypeInfo;
+			
+			try {
+				collectionTypeInfo = (BemCollectionTypeInfo) schema.getTypeInfo(collectionTypeInfoName);
+			} catch (BemTypeNotFoundException e) {				
+				// create collection type (with cardinality)
+				collectionTypeInfo = builder.createCollectionTypeInfo(schema, collectionTypeInfoName);
+				collectionTypeInfo.setCollectionKind(collectionKind2);
+				collectionTypeInfo.setItemTypeInfo(collectionItemTypeInfo);
+				collectionTypeInfo.setCardinality(collectionCardinality);
+				//collectionTypeInfo.bindTypeInfo(schema);
+				schema.addTypeInfo(collectionTypeInfo);				
+			}
 			
 			return collectionTypeInfo;
-			
 		}
 			
 	}
 	
-	private void bindEntitySuperTypeAndAttributes(ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper) throws BemTypeNotFoundException, IOException, BemParserException {		
+	private void bindEntitySuperTypeAndAttributes(ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper)
+			throws BemParserException, BemTypeNotFoundException, BemTypeAlreadyExistsException, IOException
+	{		
 				
 		BemEntityTypeInfo entityTypeInfo = entityTypeInfoTextWrapper.getEntityTypeInfo();
 		

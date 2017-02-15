@@ -17,26 +17,33 @@
 
 	<dependencies>
 
-		<!-- Drumbeat -->		 
+		<!-- Drumbeat -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>drumbeat2-common</artifactId>
 			<version>${drumbeat2-common.version}</version>
 		</dependency>
-		
+
 		<!-- Apache Commons IO -->
 		<dependency>
-		    <groupId>commons-io</groupId>
-		    <artifactId>commons-io</artifactId>
-		    <version>2.5</version>
-		</dependency>		
-		
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.google.collections/google-collections -->
+		<dependency>
+			<groupId>com.google.collections</groupId>
+			<artifactId>google-collections</artifactId>
+			<version>${google-collections.version}</version>
+		</dependency>
+
 		<!-- Apache Log4j -->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
-		</dependency>		
+		</dependency>
 
 		<!-- JUnit -->
 		<dependency>

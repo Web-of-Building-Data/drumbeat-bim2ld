@@ -16,6 +16,9 @@ public class StepVocabulary {
 		public static final String FALSE = "FALSE";
 		public static final String UNKNOWN = "UNKNOWN";
 		
+		public static final String T = "T"; // TRUE
+		public static final String F = "F"; // FALSE
+		public static final String U = "U"; // UNKNOWN
 	}
 	
 	public static class StepTypes {
@@ -39,7 +42,9 @@ public class StepVocabulary {
 	 * EXPRESS format
 	 *
 	 */
-	public static class ExpressFormat {		
+	public static class ExpressFormat {
+		
+		public static final String EXPRESS = "EXPRESS";
 		
 		public static final String FILE_EXTENSION_EXP = "exp";
 

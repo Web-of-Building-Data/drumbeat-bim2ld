@@ -21,6 +21,7 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 //	private boolean isLiteralValueContainer;
 //	private BemEntity sameAsEntity;
 	private String debugMessage;
+	private boolean isDuplicated;
 	
 	public BemEntity(String localId) {
 		this.localId = localId;
@@ -351,6 +352,20 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 	@Override
 	public int hashCode() {
 		return localId.hashCode() ^ typeInfo.hashCode();
+	}
+
+	/**
+	 * @return the isDuplicated
+	 */
+	public boolean isDuplicated() {
+		return isDuplicated;
+	}
+
+	/**
+	 * @param isDuplicated the isDuplicated to set
+	 */
+	public void setDuplicated(boolean isDuplicated) {
+		this.isDuplicated = isDuplicated;
 	}
 
 //	@Override

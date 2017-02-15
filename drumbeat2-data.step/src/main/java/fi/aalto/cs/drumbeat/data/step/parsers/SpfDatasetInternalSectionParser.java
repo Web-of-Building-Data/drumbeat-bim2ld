@@ -18,6 +18,7 @@ import fi.aalto.cs.drumbeat.data.bem.parsers.BemParserException;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary;
 import fi.aalto.cs.drumbeat.data.step.dataset.StepSpecialValue;
+import fi.aalto.cs.drumbeat.data.step.schema.ExpressLogicalTypeInfo;
 import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
 
 class SpfDatasetInternalSectionParser {
@@ -166,13 +167,13 @@ class SpfDatasetInternalSectionParser {
 	 * @param attributeStringBuilder
 	 * @param attributeValueType
 	 * @return a single attribute value or list of attribute values
-	 * @throws BemFormatException
 	 * @throws BemEntityNotFoundException 
+	 * @throws BemParserException 
 	 * @throws BemNotFoundException
 	 * @throws BemValueTypeConflictException 
 	 */
 	private List<BemValue> parseAttributeValues(StrBuilderWrapper attributeStrBuilderWrapper, BemEntity entity,
-			boolean areCollectionItems, BemTypeInfo fixedValueTypeInfo, BemAttributeInfo... entityAttributeInfos) throws BemFormatException, BemTypeNotFoundException, BemEntityNotFoundException {
+			boolean areCollectionItems, BemTypeInfo fixedValueTypeInfo, BemAttributeInfo... entityAttributeInfos) throws BemTypeNotFoundException, BemEntityNotFoundException, BemParserException {
 
 		logger.debug(String.format("Parsing entity '%s'", entity));
 
@@ -227,28 +228,45 @@ class SpfDatasetInternalSectionParser {
 				break;
 
 			case StepVocabulary.SpfFormat.ENUMERATION_VALUE_SYMBOL:
+				
+				BemValue value = null;
 
 				s = attributeStrBuilderWrapper.getStringBetweenSimilarCharacters(StepVocabulary.SpfFormat.ENUMERATION_VALUE_SYMBOL);				
 
 				if (valueTypeInfo.getValueKind() == BemValueKindEnum.ENUM) {
-					attributeValues.add(new BemEnumerationValue(s));
-				} else if (valueTypeInfo.getValueKind() == BemValueKindEnum.LOGICAL) {
+					if (valueTypeInfo instanceof ExpressLogicalTypeInfo) {
+						switch (s) {
+						case StepVocabulary.StepValues.T:
+							s = StepVocabulary.StepValues.TRUE;
+							break;
+						case StepVocabulary.StepValues.F:
+							s = StepVocabulary.StepValues.FALSE;
+							break;
+						case StepVocabulary.StepValues.U:
+							s = StepVocabulary.StepValues.UNKNOWN;
+							break;
+						}
+					}
+					value = new BemEnumerationValue(s);						
+				} else if (valueTypeInfo.getValueKind() == BemValueKindEnum.BOOLEAN) {
 					switch (s) {
 					case "T":
 					case "TRUE":
-						attributeValues.add(builder.createPrimitiveValue(BemLogicalEnum.TRUE, BemValueKindEnum.LOGICAL));
+						value = builder.createPrimitiveValue(Boolean.TRUE, BemValueKindEnum.BOOLEAN);
 						break;
 					case "F":
 					case "FALSE":
-						attributeValues.add(builder.createPrimitiveValue(BemLogicalEnum.FALSE, BemValueKindEnum.LOGICAL));
+						value = builder.createPrimitiveValue(Boolean.FALSE, BemValueKindEnum.BOOLEAN);
 						break;
-					default:
-						attributeValues.add(builder.createPrimitiveValue(BemLogicalEnum.UNKNOWN, BemValueKindEnum.LOGICAL));
-						break;
-
 					}
 				} else {
 					throw new BemFormatException(reader.getCurrentLineNumber(), "Expected enum type or logical type");
+				}
+				
+				if (value != null) {
+					attributeValues.add(value);
+				} else {
+					throw new BemFormatException(reader.getCurrentLineNumber(), "Unknown enum/logical value: " + value);
 				}
 				break;
 
@@ -293,10 +311,23 @@ class SpfDatasetInternalSectionParser {
 					assert (s != null);
 
 					values = parseAttributeValues(new StrBuilderWrapper(s), null, false, subNonEntityTypeInfo, attributeInfo);
-					assert (values.size() == 1) : "Expect only 1 argument: " + entity + ":" + values.toString();
-					assert(values.get(0) instanceof BemPrimitiveValue) : values.get(0);
 					
-					attributeValues.add(builder.createTypedSimpleValue((BemPrimitiveValue)values.get(0), subNonEntityTypeInfo));
+					if (values.size() != 1) {
+						throw new BemParserException("Expect only 1 argument: " + entity + ":" + values.toString());
+					}
+					
+					value = values.get(0);
+					
+					if (!(value instanceof BemSimpleValue)) {
+						throw new BemParserException(
+								String.format(
+										"Expected a BemSimpleValue: %s (class: %s, typeInfo: %s)",
+										values.get(0),
+										values.get(0).getClass(),
+										subNonEntityTypeInfo));						
+					}
+					
+					attributeValues.add(builder.createTypedSimpleValue((BemSimpleValue)value, subNonEntityTypeInfo));
 //					attributeValues.add((BemPrimitiveValue)values.get(0));
 				} else {
 					
@@ -308,20 +339,20 @@ class SpfDatasetInternalSectionParser {
 					BemValueKindEnum valueKind = valueTypeInfo.getValueKind();
 					assert(BemValueKindEnum.PRIMITIVE.contains(valueKind)) : valueTypeInfo.getValueKind();
 					
-					Object value;
+					Object primitiveValue;
 					if (valueKind == BemValueKindEnum.INTEGER) {
-						value = attributeStrBuilderWrapper.getLong();
+						primitiveValue = attributeStrBuilderWrapper.getLong();
 					} else if (valueKind == BemValueKindEnum.REAL || valueKind == BemValueKindEnum.NUMBER) {
-						value = attributeStrBuilderWrapper.getDouble();
+						primitiveValue = attributeStrBuilderWrapper.getDouble();
 					} else if (valueKind == BemValueKindEnum.DATETIME) {
 						long timeStamp = attributeStrBuilderWrapper.getLong();
-						value = Calendar.getInstance();
-						((Calendar)value).setTimeInMillis(timeStamp * 1000);
+						primitiveValue = Calendar.getInstance();
+						((Calendar)primitiveValue).setTimeInMillis(timeStamp * 1000);
 					} else {
 						throw new BemFormatException(reader.getCurrentLineNumber(), "Invalid attributeValueType: " + valueKind);
 					}
 					
-					attributeValues.add(builder.createPrimitiveValue(value, valueKind));						
+					attributeValues.add(builder.createPrimitiveValue(primitiveValue, valueKind));						
 				}
 
 				break;

@@ -8,7 +8,7 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import fi.aalto.cs.drumbeat.common.params.*;
 
-public class Ifc2RdfConversionParams extends TypedParams {
+public class Ifc2RdfConversionParams extends SimpleTypeParams {
 	
 	private static final long serialVersionUID = 1L;
 	
