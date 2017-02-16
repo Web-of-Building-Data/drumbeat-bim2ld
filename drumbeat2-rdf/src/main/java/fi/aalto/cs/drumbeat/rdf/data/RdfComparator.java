@@ -1,15 +1,75 @@
 package fi.aalto.cs.drumbeat.rdf.data;
 
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import org.apache.jena.rdf.model.*;
 
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.Statement;
-import org.apache.jena.rdf.model.StmtIterator;
+import fi.aalto.cs.drumbeat.common.collections.Pair;
 
 public class RdfComparator {
+	
+	public static class RdfNodeComparatorCache {
+		
+		private static final Map<Model, RdfNodeComparatorCache> cacheMap = new HashMap<>();
+		
+		private final Map<Pair<Resource, Resource>, Integer> cache;
+		
+		public RdfNodeComparatorCache() {
+			cache = new HashMap<>();
+		}
+		
+		public static RdfNodeComparatorCache getInstance(Model model) {
+			RdfNodeComparatorCache cache = cacheMap.get(model);
+			if (cache == null) {
+				cache = new RdfNodeComparatorCache();
+				cacheMap.put(model, cache);
+			}
+			return cache;
+		}
+		
+		public void clear() {
+			cache.clear();
+		}
+		
+		private int compareAnonId(Resource r1, Resource r2) {
+			return r1.getId().toString().compareTo(r2.getId().toString());
+		}
+		
+		private void internalPut(Resource r1, Resource r2, int comparisonResult) {
+//			System.out.printf("Putting comparison result: %s, %s, %d%n", r1, r2, comparisonResult);
+			cache.put(new Pair<Resource, Resource>(r1, r2), comparisonResult);			
+		}
+		
+		public void put(Resource r1, Resource r2, int comparisonResult) {
+			assert(r1.isAnon() && r2.isAnon());
+			if (compareAnonId(r1, r2) <= 0) {
+				internalPut(r1, r2, comparisonResult);
+			} else {
+				internalPut(r2, r1, -comparisonResult);
+			}
+		}
+		
+		private Integer internalGet(Resource r1, Resource r2) {
+			Integer result = cache.get(new Pair<Resource, Resource>(r1, r2));
+//			System.out.printf("Getting comparison result: %s, %s, %d%n", r1, r2, result);
+			return result;
+		}
+		
+		public Integer get(Resource r1, Resource r2) {
+			assert(r1.isAnon() && r2.isAnon());
+			if (compareAnonId(r1, r2) <= 0) {
+				return internalGet(r1, r2);
+			} else {
+				Integer result = internalGet(r2, r1);
+				if (result != null) {
+					result = -result;
+				}
+				return result;
+			}
+		}
+		
+	}
+	
+	
 	
 //	public static final Comparator<Literal> LITERAL_COMPARATOR = new LiteralComparator();
 //	public static final Comparator<RDFNode> NODE_COMPARATOR_NOT_IGNORING_ = new RdfNodeComparator(false);
@@ -43,12 +103,20 @@ public class RdfComparator {
 			this.depthOfAnonPropertiesToCompare = depthOfAnonPropertiesToCompare;
 		}
 		
+		public static RdfNodeComparator createSubjectNodeComparator(boolean compareAnonIds) {
+			return new RdfNodeComparator(compareAnonIds, 0);
+		}
+		
+		public static RdfNodeComparator createPredicateNodeComparator() {
+			return new RdfNodeComparator(false, 0);
+		}
+
 		@Override
 		public int compare(RDFNode o1, RDFNode o2) {
 
 			RdfNodeTypeEnum type1 = RdfNodeTypeEnum.getType(o1);
 			RdfNodeTypeEnum type2 = RdfNodeTypeEnum.getType(o2);
-			int result;
+			Integer result;
 			if ((result = type1.compareTo(type2)) != 0) {
 				return result;			
 			}
@@ -61,10 +129,25 @@ public class RdfComparator {
 			} else {
 				assert(o1.isAnon() && o2.isAnon());
 				
-				if (compareAnonIds && o1.getModel().equals(o2.getModel())) {
-					return o1.asResource().getId().toString().compareTo(o2.asResource().getId().toString());
-				} else if (o1.equals(o2)) {
-					return 0;
+				Resource r1 = o1.asResource();
+				Resource r2 = o2.asResource();
+				
+				boolean sameModel = r1.getModel().equals(r2.getModel());
+				
+				if (sameModel) {
+					
+					if (compareAnonIds) {
+						return r1.getId().toString().compareTo(r2.getId().toString());						
+					} else if (r1.equals(r2)) {
+						return 0;
+					} else {
+						
+						result = RdfNodeComparatorCache.getInstance(r1.getModel()).get(r1, r2);
+						if (result != null) {
+							return result;
+						}
+						
+					}
 				}
 				
 				if (depthOfAnonPropertiesToCompare > 0) {
@@ -73,10 +156,17 @@ public class RdfComparator {
 
 					final Comparator<StmtIterator> stmtIteratorComparator = new StmtIteratorComparator(false, compareAnonIds, depthOfAnonPropertiesToCompare);					
 					if ((result = stmtIteratorComparator.compare(properties1, properties2)) != 0) {
+						
+						if (sameModel) {
+							RdfNodeComparatorCache.getInstance(r1.getModel()).put(r1, r2, result);
+						}
 						return result;
 					}
 				}
 				
+				if (sameModel) {
+					RdfNodeComparatorCache.getInstance(r1.getModel()).put(r1, r2, 0);
+				}
 				return 0;				
 			}
 		}
@@ -99,19 +189,18 @@ public class RdfComparator {
 		public int compare(Statement o1, Statement o2) {
 			
 			int result;
-			final RdfNodeComparator nodeComparator = new RdfNodeComparator(compareAnonIds, depthOfAnonPropertiesToCompare);
-			
-			if ((result = nodeComparator.compare(o1.getPredicate(), o2.getPredicate())) != 0) {
-				return result;
+			if (compareStatementSubjects) {
+				if ((result = RdfNodeComparator.createSubjectNodeComparator(compareAnonIds).compare(o1.getSubject(), o2.getSubject())) != 0) {
+					return result;
+				}
 			}
 			
-			if (compareStatementSubjects &&
-				(result = nodeComparator.compare(o1.getSubject(), o2.getSubject())) != 0)
-			{
+			if ((result = RdfNodeComparator.createPredicateNodeComparator().compare(o1.getPredicate(), o2.getPredicate())) != 0) {
 				return result;
-			}			
-			
-			return nodeComparator.compare(o1.getObject(), o2.getObject());
+			}
+
+			RdfNodeComparator objectNodeComparator = new RdfNodeComparator(compareAnonIds, depthOfAnonPropertiesToCompare);
+			return objectNodeComparator.compare(o1.getObject(), o2.getObject());
 		}
 		
 	}

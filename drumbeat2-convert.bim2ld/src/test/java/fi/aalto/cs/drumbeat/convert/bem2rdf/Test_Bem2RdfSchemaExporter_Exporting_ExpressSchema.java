@@ -9,6 +9,8 @@ import org.junit.Test;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
 
 import fi.aalto.cs.drumbeat.convert.bem2rdf.RdfAsserter.ModelAsserter;
 import fi.aalto.cs.drumbeat.data.bem.BemException;
@@ -71,7 +73,6 @@ public class Test_Bem2RdfSchemaExporter_Exporting_ExpressSchema {
 					String.format("Reminder: Compare manually files %s and %s", expectedModelFilePath, actualModelFilePath));
 		}
 	}
-	
 	
 	@Test
 	public void test_export_ExpressSchema() throws IOException, BemException {

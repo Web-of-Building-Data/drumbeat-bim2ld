@@ -13,6 +13,7 @@ import org.apache.jena.rdf.model.StmtIterator;
 
 import fi.aalto.cs.drumbeat.rdf.data.RdfComparator;
 import fi.aalto.cs.drumbeat.rdf.data.RdfNodeTypeEnum;
+import fi.aalto.cs.drumbeat.rdf.data.RdfComparator.RdfNodeComparatorCache;
 
 public class RdfAsserter {
 	
@@ -34,12 +35,22 @@ public class RdfAsserter {
 	
 	public static class RdfNodeAsserter implements Asserter<RDFNode> {
 		
+		private final int currentDepth; 
 		private final boolean compareAnonIds;
 		private final int depthOfAnonPropertiesToCompare;
 		
-		public RdfNodeAsserter(boolean compareAnonIds, int depthOfAnonPropertiesToCompare) {
+		public RdfNodeAsserter(int currentDepth, boolean compareAnonIds, int depthOfAnonPropertiesToCompare) {
+			this.currentDepth = currentDepth;
 			this.compareAnonIds = compareAnonIds;
 			this.depthOfAnonPropertiesToCompare = depthOfAnonPropertiesToCompare;
+		}
+		
+		public static RdfNodeAsserter createSubjectNodeAsserter(boolean compareAnonIds) {
+			return new RdfNodeAsserter(0, compareAnonIds, 0);
+		}
+		
+		public static RdfNodeAsserter createPredicateNodeAsserter() {
+			return new RdfNodeAsserter(0, false, 0);
 		}
 		
 		@Override
@@ -62,7 +73,7 @@ public class RdfAsserter {
 				}
 				
 				if (depthOfAnonPropertiesToCompare > 0) {
-					final Asserter<StmtIterator> stmtIteratorAsserter = new StmtIteratorAsserter(false, compareAnonIds, depthOfAnonPropertiesToCompare);
+					final Asserter<StmtIterator> stmtIteratorAsserter = new StmtIteratorAsserter(currentDepth + 1, false, compareAnonIds, depthOfAnonPropertiesToCompare - 1);
 					stmtIteratorAsserter.assertEquals(o1.asResource().listProperties(), o2.asResource().listProperties());
 				}				
 			}
@@ -72,28 +83,31 @@ public class RdfAsserter {
 	
 	public static class StatementAsserter implements Asserter<Statement> {
 
+		private final int currentDepth;
 		private final boolean compareStatementSubjects;
 		private final boolean compareAnonIds;
 		private final int depthOfAnonPropertiesToCompare;
 
-		public StatementAsserter(boolean compareStatementSubjects, boolean compareAnonIds, int depthOfAnonPropertiesToCompare) {
+		public StatementAsserter(int currentDepth, boolean compareStatementSubjects, boolean compareAnonIds, int depthOfAnonPropertiesToCompare) {
+			this.currentDepth = currentDepth;
 			this.compareStatementSubjects = compareStatementSubjects;
 			this.compareAnonIds = compareAnonIds;
 			this.depthOfAnonPropertiesToCompare = depthOfAnonPropertiesToCompare;
 		}
 		
 		@Override
-		public void assertEquals(Statement o1, Statement o2) {
+		public void assertEquals(Statement o1, Statement o2) {			
 			
-			final Asserter<RDFNode> nodeAsserter = new RdfNodeAsserter(compareAnonIds, depthOfAnonPropertiesToCompare);
-			
-			nodeAsserter.assertEquals(o1.getPredicate(), o2.getPredicate());
-			
+			System.out.printf("Comparing %n\t%s%n\t%s%n", o1, o2);
+
 			if (!compareStatementSubjects) {
-				nodeAsserter.assertEquals(o1.getSubject(), o2.getSubject());
+				RdfNodeAsserter.createSubjectNodeAsserter(compareAnonIds).assertEquals(o1.getSubject(), o2.getSubject());
 			}
 			
-			nodeAsserter.assertEquals(o1.getObject(), o2.getObject());
+			RdfNodeAsserter.createPredicateNodeAsserter().assertEquals(o1.getPredicate(), o2.getPredicate());
+			
+			RdfNodeAsserter objectNodeAsserter = new RdfNodeAsserter(currentDepth, compareAnonIds, depthOfAnonPropertiesToCompare);
+			objectNodeAsserter.assertEquals(o1.getObject(), o2.getObject());
 		}
 		
 	}
@@ -101,21 +115,37 @@ public class RdfAsserter {
 	
 	public static class StatementListAsserter implements Asserter<List<Statement>> {
 
+		private final int currentDepth;
 		private final boolean compareStatementSubjects;
 		private final boolean compareAnonIds;
 		private final int depthOfAnonPropertiesToCompare;
 
-		public StatementListAsserter(boolean compareStatementSubjects, boolean compareAnonIds, int depthOfAnonPropertiesToCompare) {
+		public StatementListAsserter(int currentDepth, boolean compareStatementSubjects, boolean compareAnonIds, int depthOfAnonPropertiesToCompare) {
+			this.currentDepth = currentDepth;
 			this.compareStatementSubjects = compareStatementSubjects;
 			this.compareAnonIds = compareAnonIds;
 			this.depthOfAnonPropertiesToCompare = depthOfAnonPropertiesToCompare;
 		}
 		
+		private static void removeStatementsWithAnonSubjects(List<Statement> statementList) {			
+			Iterator<Statement> it = statementList.iterator();			
+			while (it.hasNext()) {
+				Statement s = it.next();
+				if (s.getSubject().isAnon()) {
+					it.remove();
+				}
+			}
+		}
+		
 		@Override
 		public void assertEquals(List<Statement> o1, List<Statement> o2) {
 			
-			final StatementAsserter statementAsserter = new StatementAsserter(compareStatementSubjects, compareAnonIds, depthOfAnonPropertiesToCompare);
-			//final RdfComparator.StatementComparator statementComparator = new RdfComparator.StatementComparator(true, false, true);
+			if (currentDepth == 0) {			
+				removeStatementsWithAnonSubjects(o1);
+				removeStatementsWithAnonSubjects(o2);
+			}
+			
+//			final RdfComparator.StatementComparator statementComparator = new RdfComparator.StatementComparator(true, false, true);
 			
 			final RdfComparator.StatementComparator statementComparator =
 					new RdfComparator.StatementComparator(compareStatementSubjects, compareAnonIds, depthOfAnonPropertiesToCompare);
@@ -125,15 +155,16 @@ public class RdfAsserter {
 			
 			Iterator<Statement> it1 = o1.iterator();
 			Iterator<Statement> it2 = o2.iterator();
-			
-			while (it1.hasNext()) {
-				Assert.assertTrue(it2.hasNext());				
-				
+
+			final StatementAsserter statementAsserter = new StatementAsserter(currentDepth, compareStatementSubjects, compareAnonIds, depthOfAnonPropertiesToCompare);
+
+			while (it1.hasNext()) {				
 				Statement s1 = it1.next();
 				Statement s2 = it2.next();
 				statementAsserter.assertEquals(s1, s2);				
 			}
-			Assert.assertFalse(it2.hasNext());
+			
+//			Assert.assertFalse(it2.hasNext());
 		}
 		
 	}
@@ -142,11 +173,13 @@ public class RdfAsserter {
 	
 	public static class StmtIteratorAsserter implements Asserter<StmtIterator> {
 
+		private final int currentDepth;
 		private final boolean compareStatementSubjects;
 		private final boolean compareAnonIds;
 		private final int depthOfAnonPropertiesToCompare;
 
-		public StmtIteratorAsserter(boolean compareStatementSubjects, boolean compareAnonIds, int depthOfAnonPropertiesToCompare) {
+		public StmtIteratorAsserter(int currentDepth, boolean compareStatementSubjects, boolean compareAnonIds, int depthOfAnonPropertiesToCompare) {
+			this.currentDepth = currentDepth;
 			this.compareStatementSubjects = compareStatementSubjects;
 			this.compareAnonIds = compareAnonIds;
 			this.depthOfAnonPropertiesToCompare = depthOfAnonPropertiesToCompare;
@@ -155,7 +188,7 @@ public class RdfAsserter {
 		@Override
 		public void assertEquals(StmtIterator o1, StmtIterator o2) {
 			
-			final StatementListAsserter statementListAsserter = new StatementListAsserter(compareStatementSubjects, compareAnonIds, depthOfAnonPropertiesToCompare);
+			StatementListAsserter statementListAsserter = new StatementListAsserter(currentDepth, compareStatementSubjects, compareAnonIds, depthOfAnonPropertiesToCompare);
 			
 			List<Statement> l1 = o1.toList();
 			List<Statement> l2 = o2.toList();
@@ -174,7 +207,10 @@ public class RdfAsserter {
 		@Override
 		public void assertEquals(Model o1, Model o2) {
 			
-			final StmtIteratorAsserter stmtIteratorAsserter = new StmtIteratorAsserter(true, false, DEPTH_OF_ANON_PROPERTIES_TO_COMPARE);
+			final StmtIteratorAsserter stmtIteratorAsserter = new StmtIteratorAsserter(0, true, false, DEPTH_OF_ANON_PROPERTIES_TO_COMPARE);
+			RdfNodeComparatorCache.getInstance(o1).clear();
+			RdfNodeComparatorCache.getInstance(o2).clear();
+			
 			stmtIteratorAsserter.assertEquals(o1.listStatements(), o2.listStatements());
 			
 		}
