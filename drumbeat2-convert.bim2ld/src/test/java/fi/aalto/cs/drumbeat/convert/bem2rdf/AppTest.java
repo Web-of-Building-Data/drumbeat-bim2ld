@@ -1,5 +1,7 @@
 package fi.aalto.cs.drumbeat.convert.bem2rdf;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import fi.aalto.cs.drumbeat.convert.bem2rdf.AppTest;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -34,6 +36,19 @@ public class AppTest
      */
     public void testApp()
     {
-        assertTrue( true );
+//    	long trialNumber = 1000000000L;
+////    	long trialNumber = 10L;
+//    	for (int minLimit = 1; minLimit <= 6; ++minLimit) {
+//	    	long sum = 0L;
+//	    	for (long i = 0L; i < trialNumber; ++i) {
+//	    		int result;
+//	    		while ((result = ThreadLocalRandom.current().nextInt(1, 7)) < minLimit) {
+//	    			sum -= 1L;
+//	    		}
+////	    		System.out.print(result);
+//	    		sum += result;
+//	    	}
+//	    	System.out.printf("Stop when dice is >= %d --> %f%n", minLimit, ((double)sum) / trialNumber);
+//    	}
     }
 }

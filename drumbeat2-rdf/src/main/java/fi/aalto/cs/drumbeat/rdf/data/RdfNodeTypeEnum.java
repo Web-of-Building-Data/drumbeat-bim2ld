@@ -24,10 +24,19 @@ public enum RdfNodeTypeEnum {
 //		return this == List;
 //	}
 	
+	/**
+	 * @return
+	 */
+	@Deprecated
 	public boolean isTerminated() {
 		return this == Uri || this == Literal;
 	}
 
+	/**
+	 * @deprecated Use {@link RdfNodeTypeChecker}
+	 * @return
+	 */
+	@Deprecated
 	public static RdfNodeTypeEnum getType(RDFNode node) {
 		if (node.isLiteral()) {
 			return RdfNodeTypeEnum.Literal;
@@ -38,6 +47,11 @@ public enum RdfNodeTypeEnum {
 		}
 	}
 	
+	/**
+	 * @deprecated Use {@link RdfNodeTypeChecker}
+	 * @return
+	 */
+	@Deprecated
 	public static boolean isTerminated(RDFNode node) {
 		return node.isLiteral() || node.isURIResource();
 	}

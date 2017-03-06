@@ -5,6 +5,13 @@ import org.apache.jena.rdf.model.*;
 
 import fi.aalto.cs.drumbeat.common.collections.Pair;
 
+/**
+ * @deprecated
+ * 	Use {@link RdfModelComparator}
+ * @author Nam Vu
+ *
+ */
+@Deprecated
 public class RdfComparator {
 	
 	public static class RdfNodeComparatorCache {
@@ -258,6 +265,13 @@ public class RdfComparator {
 		
 
 	
+	/**
+	 * @deprecated
+	 * 	Use {@link RdfModelComparator}
+	 * @author Nam Vu
+	 *
+	 */
+	@Deprecated
 	public static class StmtIteratorComparator implements Comparator<StmtIterator> {
 
 		private final boolean compareStatementSubjects;
