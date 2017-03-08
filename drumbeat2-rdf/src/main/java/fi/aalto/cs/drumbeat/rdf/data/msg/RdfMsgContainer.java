@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import fi.aalto.cs.drumbeat.common.collections.Pair;
 import fi.aalto.cs.drumbeat.common.collections.SortedList;
 import fi.aalto.cs.drumbeat.common.digest.ByteArray;
+import fi.aalto.cs.drumbeat.rdf.data.RdfChecksumCalculator;
+import fi.aalto.cs.drumbeat.rdf.data.RdfChecksumException;
 import fi.aalto.cs.drumbeat.rdf.data.RdfComparatorPool;
 import fi.aalto.cs.drumbeat.rdf.data.RdfNodeTypeChecker;
 import fi.aalto.cs.drumbeat.rdf.data.RdfNodeTypeEnum;
@@ -44,6 +46,10 @@ public class RdfMsgContainer implements Iterable<RdfMsg>, Comparable<RdfMsgConta
 		return comparatorPool.getNodeTypeChecker();
 	}
 	
+	public RdfChecksumCalculator getChecksumCalculator() {
+		return comparatorPool.getChecksumCalculator();
+	}
+
 	public boolean isTerminated(RDFNode node) {
 		RdfNodeTypeEnum type = getNodeTypeChecker().getNodeType(node);
 		return !type.isBlankNode();
@@ -149,7 +155,7 @@ public class RdfMsgContainer implements Iterable<RdfMsg>, Comparable<RdfMsgConta
 	}
 
 
-	public void addMsg(RdfMsg msg) {
+	public void addMsg(RdfMsg msg) throws RdfChecksumException {
 		switch (msg.getType()) {
 		case ClassDefinitionTripleMsg:
 			classDefinitionTripleMsgs.add(msg);

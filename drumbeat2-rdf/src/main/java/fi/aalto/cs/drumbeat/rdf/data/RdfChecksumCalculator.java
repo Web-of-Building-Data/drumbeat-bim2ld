@@ -63,7 +63,7 @@ public class RdfChecksumCalculator {
 		}
 	}
 
-	public ByteArray getChecksum(Resource resource) throws RdfChecksumException {
+	public ByteArray getChecksum(Resource resource) throws RdfCircularChecksumException {
 		
 		if (!nodeTypeChecker.isLocalResource(resource)) {
 			throw new IllegalArgumentException("Resource is not local: " + resource);
@@ -73,7 +73,25 @@ public class RdfChecksumCalculator {
 		return getChecksum(resource, checksumCache);
 	}
 	
-	private ByteArray getChecksum(Resource resource, Map<Resource, ByteArray> checksumCache) throws RdfChecksumException {
+	public ByteArray getChecksum(Statement statement, boolean includeSubject) throws RdfCircularChecksumException {
+		Map<Resource, ByteArray> checksumCache = getChecksumCache(statement.getSubject().getModel());
+		return new ByteArray(getChecksum(statement, includeSubject, checksumCache));		
+	}
+	
+	private byte[] getChecksum(Statement statement, boolean includeSubject, Map<Resource, ByteArray> checksumCache) throws RdfCircularChecksumException {		
+		MessageDigest digest = getDigest();
+		
+		if (includeSubject) {
+			updateDigest(digest, statement.getSubject(), checksumCache);
+		}		
+		updateDigest(digest, statement.getPredicate(), checksumCache);
+		updateDigest(digest, statement.getObject(), checksumCache);
+		
+		return digest.digest();
+	}
+	
+	
+	private ByteArray getChecksum(Resource resource, Map<Resource, ByteArray> checksumCache) throws RdfCircularChecksumException {
 		ByteArray resultChecksum = checksumCache.get(resource);
 		if (resultChecksum != null) {
 			if (resultChecksum != defaultChecksum) {
@@ -89,15 +107,8 @@ public class RdfChecksumCalculator {
 		StmtIterator it = resource.listProperties();
 		while (it.hasNext()) {
 			Statement statement = it.next();
-			MessageDigest digest = getDigest();
-			
-			Property property = statement.getPredicate();
-			updateDigest(digest, property, checksumCache);
-
-			RDFNode object = statement.getObject();
-			updateDigest(digest, object, checksumCache);
-			
-			resultChecksum.xor(digest.digest());
+			byte[] checksum = getChecksum(statement, false, checksumCache);
+			resultChecksum.xor(checksum);
 		}
 		
 		checksumCache.put(resource, resultChecksum);
@@ -115,7 +126,7 @@ public class RdfChecksumCalculator {
 	}
 	
 
-	private void updateDigest(MessageDigest digest, RDFNode node, Map<Resource, ByteArray> checksumCache) throws RdfChecksumException {
+	private void updateDigest(MessageDigest digest, RDFNode node, Map<Resource, ByteArray> checksumCache) throws RdfCircularChecksumException {
 		if (node.isLiteral()) {
 			digest.update(RDF_NODE_TYPE_LITERAL);
 			digest.update(StringUtils.getBytesUtf8(node.toString()));			

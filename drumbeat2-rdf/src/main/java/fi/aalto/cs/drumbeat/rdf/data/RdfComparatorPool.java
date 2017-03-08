@@ -8,13 +8,11 @@ import java.util.function.Function;
 import org.apache.jena.rdf.model.*;
 
 import fi.aalto.cs.drumbeat.common.digest.ByteArray;
-import fi.aalto.cs.drumbeat.rdf.utils.print.RdfPrinter;
 
 public class RdfComparatorPool {
 
 	private final RdfChecksumCalculator checksumCalculator;
 	private final RdfNodeTypeChecker nodeTypeChecker;
-	private boolean throwException;
 	
 	/**
 	 * Creates a {@link RdfComparatorPool} with default {@link RdfNodeTypeChecker} 
@@ -44,14 +42,6 @@ public class RdfComparatorPool {
 	
 	public RdfChecksumCalculator getChecksumCalculator() {
 		return checksumCalculator;
-	}
-	
-	public boolean getThrowException() {
-		return throwException;
-	}
-	
-	public void setThrowException(boolean throwException) {
-		this.throwException = throwException;
 	}
 	
 //	public RdfModelComparator createModelComparator() {
@@ -198,34 +188,14 @@ public class RdfComparatorPool {
 			
 			int result;
 			if (compareStatementSubjects && (result = nodeComparator.compare(o1.getSubject(), o2.getSubject())) != 0) {
-				return throwExceptionIfNeeded(o1, o2, result);
+				return result;
 			}
 			
 			if ((result = nodeComparator.compare(o1.getPredicate(), o2.getPredicate())) != 0) {
-				return throwExceptionIfNeeded(o1, o2, result);
+				return result;
 			}
 
-			if ((result = nodeComparator.compare(o1.getObject(), o2.getObject())) != 0) {
-				return throwExceptionIfNeeded(o1, o2, result);
-			}
-			
-			return 0;
-		}
-		
-		private int throwExceptionIfNeeded(Statement o1, Statement o2, int result) {
-			if (throwException && result != 0) {
-				RdfPrinter printer = new RdfPrinter(null, checksumCalculator);
-				try {
-					throw new RdfComparatorRuntimeException(
-							String.format(
-									"Expected %s but was %s",
-									printer.toString(o1),
-									printer.toString(o2)));
-				} catch (RdfChecksumException e) {
-					throw new RdfComparatorRuntimeException(String.format("Expected %s but was %s", o1, o2));
-				}
-			}
-			return result;
+			return nodeComparator.compare(o1.getObject(), o2.getObject());
 		}
 		
 	}
@@ -298,9 +268,7 @@ public class RdfComparatorPool {
 	
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-		RdfComparatorPool comparatorPool = new RdfComparatorPool(nodeTypeChecker);
-		comparatorPool.setThrowException(throwException);
-		return comparatorPool;
+		return new RdfComparatorPool(nodeTypeChecker);
 	}
 	
 	

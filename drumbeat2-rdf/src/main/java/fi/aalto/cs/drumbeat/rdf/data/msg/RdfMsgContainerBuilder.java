@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import org.apache.jena.rdf.model.*;
 
+import fi.aalto.cs.drumbeat.rdf.data.RdfChecksumException;
 import fi.aalto.cs.drumbeat.rdf.data.RdfComparatorPool;
 import fi.aalto.cs.drumbeat.rdf.data.RdfNodeTypeChecker;
 
@@ -13,8 +14,7 @@ public class RdfMsgContainerBuilder {
 	private final Model model;
 	private final RdfNodeTypeChecker nodeTypeChecker;
 
-	private final Set<Resource> unprocessedLocalResources;
-	private final Map<Resource, RdfTree> processedLocalResourceTrees;
+	private final Map<Resource, RdfTree> localResourceTrees;
 	
 	private final RdfMsgContainer msgContainer;
 	private final Set<RdfMsg> msgs;
@@ -24,65 +24,57 @@ public class RdfMsgContainerBuilder {
 		this.model = model;
 		nodeTypeChecker = comparatorPool.getNodeTypeChecker();
 
-		unprocessedLocalResources = new HashSet<>(); 
-		processedLocalResourceTrees = new HashMap<>();		
+		localResourceTrees = new HashMap<>();		
 
 		msgContainer = new RdfMsgContainer(comparatorPool);
 		msgs = new HashSet<>();
 		
 	}
 	
-	public static RdfMsgContainer build(Model model, Function<Resource, Boolean> localResourceChecker) {		
+	public static RdfMsgContainer build(Model model, Function<Resource, Boolean> localResourceChecker) throws RdfChecksumException {		
 		return build(model, new RdfComparatorPool(localResourceChecker));
 	}
 	
-	public static RdfMsgContainer build(Model model, RdfNodeTypeChecker nodeTypeChecker) {		
+	public static RdfMsgContainer build(Model model, RdfNodeTypeChecker nodeTypeChecker) throws RdfChecksumException {		
 		return build(model, new RdfComparatorPool(nodeTypeChecker));
 	}
 
-	public static RdfMsgContainer build(Model model, RdfComparatorPool comparatorPool) {		
+	public static RdfMsgContainer build(Model model, RdfComparatorPool comparatorPool) throws RdfChecksumException {		
 		RdfMsgContainerBuilder builder = new RdfMsgContainerBuilder(model, comparatorPool);
 		return builder.internalBuild();		
 	}
 
-	private RdfMsgContainer internalBuild() {		
+	private RdfMsgContainer internalBuild() throws RdfChecksumException {		
 
-		Set<Resource> globalResources = new HashSet<>();
 		ResIterator subjectsResourcesIterator = model.listSubjects();
-		
+
 		while (subjectsResourcesIterator.hasNext()) {
 			Resource subjectResource = subjectsResourcesIterator.next();
+			
 			if (!nodeTypeChecker.isLocalResource(subjectResource)) {
-				globalResources.add(subjectResource);
-			} else {
-				unprocessedLocalResources.add(subjectResource);
-			}
-		}
-
-		for (Resource globalResource : globalResources) {
-			StmtIterator propertyStatements = globalResource.listProperties();
-			while (propertyStatements.hasNext()) {
-				Statement propertyStatement = propertyStatements.next();
-				List<Statement> propertyList = new ArrayList<>(1);
-				propertyList.add(propertyStatement);
+				
+				StmtIterator propertyStatements = subjectResource.listProperties();
+				while (propertyStatements.hasNext()) {
+					Statement propertyStatement = propertyStatements.next();
+					List<Statement> propertyList = new ArrayList<>(1);
+					propertyList.add(propertyStatement);
+					RdfMsg msg = new RdfMsg(msgContainer);
+					RdfTree tree = buildTree(msg, subjectResource, true, propertyList);
+					msg.addTopTree(tree);
+					msgs.add(msg);
+				}				
+				
+			} else if (!model.contains(null, null, subjectResource)) {
+				
+				// local resource with no incoming links				
 				RdfMsg msg = new RdfMsg(msgContainer);
-				RdfTree tree = buildTree(msg, globalResource, true, propertyList);
+				RdfTree tree = buildTree(msg, subjectResource, true, subjectResource.listProperties().toList());
 				msg.addTopTree(tree);
 				msgs.add(msg);
+				
 			}
 		}
-		
-		Iterator<Resource> localResourceIterator = unprocessedLocalResources.iterator();
-		while (localResourceIterator.hasNext()) {
-			Resource localResource = localResourceIterator.next();			
-			localResourceIterator.remove();
 
-			RdfMsg msg = new RdfMsg(msgContainer);			
-			RdfTree tree = buildTree(msg, localResource, true, localResource.listProperties().toList());
-			msg.addTopTree(tree);
-			msgs.add(msg);
-		}
-		
 		for (RdfMsg msg : msgs) {
 			msgContainer.addMsg(msg);
 		}
@@ -99,20 +91,18 @@ public class RdfMsgContainerBuilder {
 			tree = new RdfTree(headNode, msgContainer);
 			tree.setType(RdfTreeTypeEnum.Top);
 			
-		} else if (!unprocessedLocalResources.remove(headNode)) {
-		
-			tree = processedLocalResourceTrees.get(headNode);
-			assert(tree != null) : headNode;
-			
-			tree.setType(RdfTreeTypeEnum.SharedSub);
-			mergeMsgs(msg, tree);
-			return tree;
-			
 		} else {
-			
-			tree = new RdfTree(headNode, msgContainer);
-			tree.setType(RdfTreeTypeEnum.Sub);
-			processedLocalResourceTrees.put(headNode, tree);
+		
+			tree = localResourceTrees.get(headNode);
+			if (tree != null) {
+				tree.setType(RdfTreeTypeEnum.SharedSub);
+				mergeAndRemoveMsgs(msg, tree);
+				return tree;				
+			} else {
+				tree = new RdfTree(headNode, msgContainer);
+				tree.setType(RdfTreeTypeEnum.Sub);
+				localResourceTrees.put(headNode, tree);
+			}
 			
 		}
 		
@@ -131,25 +121,27 @@ public class RdfMsgContainerBuilder {
 		
 	}
 	
-	private void mergeMsgs(RdfMsg newMsg, RdfTree sharedTree) {
+	private void mergeAndRemoveMsgs(RdfMsg newMsg, RdfTree sharedTree) {
 		RdfMsg oldMsg = sharedTree.getMsg();
-		if (!newMsg.equals(oldMsg)) {
-			if (oldMsg == null) {
-				newMsg.addSharedTree(sharedTree);
-				sharedTree.setMsg(newMsg);
-			} else {
-				msgs.remove(oldMsg);
+		if (newMsg.equals(oldMsg)) {
+			return;
+		}
 
-				for (RdfTree tree : oldMsg.getTopTrees()) {
-					newMsg.addTopTree(tree);
-					tree.setMsg(newMsg);
-				}
-				
-				for (RdfTree tree : oldMsg.getSharedTrees().values()) {
-					newMsg.addSharedTree(tree);
-					tree.setMsg(newMsg);
-				}				
+		if (oldMsg == null) {
+			newMsg.addSharedTree(sharedTree);
+			sharedTree.setMsg(newMsg);
+		} else {
+			msgs.remove(oldMsg);
+
+			for (RdfTree tree : oldMsg.getTopTrees()) {
+				newMsg.addTopTree(tree);
+				tree.setMsg(newMsg);
 			}
+			
+			for (RdfTree tree : oldMsg.getSharedTrees().values()) {
+				newMsg.addSharedTree(tree);
+				tree.setMsg(newMsg);
+			}				
 		}
 	}
 

@@ -13,6 +13,7 @@ import org.apache.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.common.collections.Pair;
 import fi.aalto.cs.drumbeat.common.digest.ByteArray;
+import fi.aalto.cs.drumbeat.rdf.data.RdfChecksumException;
 
 public class RdfMsg implements Comparable<RdfMsg> {
 	
@@ -86,7 +87,7 @@ public class RdfMsg implements Comparable<RdfMsg> {
 		return sharedTrees;
 	}
 
-	public ByteArray getChecksum() {
+	public ByteArray getChecksum() throws RdfChecksumException {
 		
 		if (topTrees.size() == 1) {
 			

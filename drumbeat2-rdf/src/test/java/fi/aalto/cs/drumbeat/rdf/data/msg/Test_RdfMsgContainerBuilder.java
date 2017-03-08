@@ -8,7 +8,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.junit.Test;
 
-import fi.aalto.cs.drumbeat.rdf.data.RdfComparatorPool;
+import fi.aalto.cs.drumbeat.rdf.data.RdfChecksumException;
 
 public class Test_RdfMsgContainerBuilder {
 	
@@ -18,7 +18,7 @@ public class Test_RdfMsgContainerBuilder {
 	}
 	
 	@Test
-	public void testBuilder() {
+	public void testBuilder() throws RdfChecksumException {
 		Model[] models = new Model[] {
 				ModelFactory.createDefaultModel(),
 				ModelFactory.createDefaultModel(),
@@ -39,8 +39,6 @@ public class Test_RdfMsgContainerBuilder {
 			assertEquals(tripleSize, models[i].size());
 
 		}		
-		
-		RdfComparatorPool comparatorPool = new RdfComparatorPool(r -> r.isAnon());
 		
 		for (int i = 0; i < models.length; ++i) {
 			RdfMsgContainerBuilder.build(models[i], r -> r.isAnon());

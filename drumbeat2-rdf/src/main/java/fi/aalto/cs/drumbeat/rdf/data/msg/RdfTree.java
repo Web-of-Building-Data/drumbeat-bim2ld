@@ -20,6 +20,7 @@ import fi.aalto.cs.drumbeat.common.collections.Pair;
 import fi.aalto.cs.drumbeat.common.digest.ByteArray;
 import fi.aalto.cs.drumbeat.common.digest.MessageDigestManager;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
+import fi.aalto.cs.drumbeat.rdf.data.RdfChecksumException;
 import fi.aalto.cs.drumbeat.rdf.data.RdfComparatorPool.*;
 
 
@@ -193,68 +194,18 @@ public class RdfTree extends TreeMap<Statement, RdfTree> implements Comparable<R
 		return headNode;
 	}
 	
-	public ByteArray getChecksum() {
+	public ByteArray getChecksum() throws RdfChecksumException {
 		
-		MessageDigest messageDigest = MessageDigestManager.getMessageDigest();
-		
-		Resource subject = getHeadNode();
-		if (subject.isURIResource()) {
-			messageDigest.update(subject.getURI().getBytes());
-		}
-
-		Property currentPredicate = null;
-		ByteArray xorOjectChecksum = null;
-		
-		for (Entry<Statement, RdfTree> entry : entrySet()) {
-			Statement statement = entry.getKey();	
-			Property predicate = statement.getPredicate();
-			RDFNode object = statement.getObject();
-			RdfTree subMsg = entry.getValue();			
-			
-			if (predicate != currentPredicate) {
-				//
-				// handle the end of the previous predicate
-				//
-				if (currentPredicate != null) {
-					assert (xorOjectChecksum != null) : "Expected: (xorOjectChecksum != null)";
-					messageDigest.update(BYTE_START_PREDICATE);
-					messageDigest.update(currentPredicate.getURI().getBytes());
-					messageDigest.update(xorOjectChecksum.array);
-					messageDigest.update(BYTE_END_PREDICATE);
-				}
-				
-				// 
-				// handle the start of the new predicate
-				//
-				currentPredicate = predicate;
-				xorOjectChecksum = null;
-			}
-			
-			ByteArray newObjectChecksum; 
-
-			if (subMsg == null) {
-				assert(!object.isAnon()) : String.format("Expected: !object.getRdfNodeType().isBlankNode(), RdfProperty = %s", statement);
-				newObjectChecksum = new ByteArray(DigestUtils.md5(object.toString()));				
-			} else {
-				newObjectChecksum = subMsg.getChecksum();
-			}
-			
-			if (xorOjectChecksum == null) {
-				xorOjectChecksum = newObjectChecksum;
-			} else {
-				xorOjectChecksum.xor(newObjectChecksum);
-			}
+		if (msgContainer.getNodeTypeChecker().isLocalResource(headNode)) {
+			return msgContainer.getChecksumCalculator().getChecksum(headNode);
 		}
 		
-		if (currentPredicate != null) {
-			assert (xorOjectChecksum != null) : "Expected: (xorOjectChecksum != null)";
-			messageDigest.update(BYTE_START_PREDICATE);
-			messageDigest.update(currentPredicate.getURI().getBytes());
-			messageDigest.update(xorOjectChecksum.array);
-			messageDigest.update(BYTE_END_PREDICATE);
-		}
-			
-		return new ByteArray(messageDigest.digest());
+		assert(headNode.isURIResource());
+		assert(this.size() == 1);
+		
+		Statement statement = this.firstKey();		
+		return msgContainer.getChecksumCalculator().getChecksum(statement, true);
+		
 	}
 	
 	public Model toModel() {
