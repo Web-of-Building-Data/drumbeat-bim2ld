@@ -18,7 +18,6 @@ import fi.aalto.cs.drumbeat.data.bem.parsers.BemParserException;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary;
 import fi.aalto.cs.drumbeat.data.step.dataset.StepSpecialValue;
-import fi.aalto.cs.drumbeat.data.step.schema.ExpressLogicalTypeInfo;
 import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
 
 class SpfDatasetInternalSectionParser {
@@ -231,32 +230,23 @@ class SpfDatasetInternalSectionParser {
 				
 				BemValue value = null;
 
-				s = attributeStrBuilderWrapper.getStringBetweenSimilarCharacters(StepVocabulary.SpfFormat.ENUMERATION_VALUE_SYMBOL);				
-
+				s = attributeStrBuilderWrapper.getStringBetweenSimilarCharacters(StepVocabulary.SpfFormat.ENUMERATION_VALUE_SYMBOL);
+				
 				if (valueTypeInfo.getValueKind() == BemValueKindEnum.ENUM) {
-					if (valueTypeInfo instanceof ExpressLogicalTypeInfo) {
-						switch (s) {
-						case StepVocabulary.StepValues.T:
-							s = StepVocabulary.StepValues.TRUE;
-							break;
-						case StepVocabulary.StepValues.F:
-							s = StepVocabulary.StepValues.FALSE;
-							break;
-						case StepVocabulary.StepValues.U:
-							s = StepVocabulary.StepValues.UNKNOWN;
-							break;
-						}
-					}
 					value = new BemEnumerationValue(s);						
-				} else if (valueTypeInfo.getValueKind() == BemValueKindEnum.BOOLEAN) {
+				} else if (valueTypeInfo.getValueKind() == BemValueKindEnum.LOGICAL) {
 					switch (s) {
-					case "T":
-					case "TRUE":
-						value = builder.createPrimitiveValue(Boolean.TRUE, BemValueKindEnum.BOOLEAN);
+					case StepVocabulary.StepValues.T:
+					case StepVocabulary.StepValues.TRUE:
+						value = builder.createPrimitiveValue(BemLogicalEnum.TRUE, BemValueKindEnum.LOGICAL);
 						break;
-					case "F":
-					case "FALSE":
-						value = builder.createPrimitiveValue(Boolean.FALSE, BemValueKindEnum.BOOLEAN);
+					case StepVocabulary.StepValues.F:
+					case StepVocabulary.StepValues.FALSE:
+						value = builder.createPrimitiveValue(BemLogicalEnum.FALSE, BemValueKindEnum.LOGICAL);
+						break;
+					case StepVocabulary.StepValues.U:
+					case StepVocabulary.StepValues.UNKNOWN:
+						value = builder.createPrimitiveValue(BemLogicalEnum.UNKNOWN, BemValueKindEnum.LOGICAL);
 						break;
 					}
 				} else {

@@ -39,6 +39,10 @@ public class Bem2RdfConverter {
 		this(context, Bem2RdfUriBuilder.createUriBuilder(context, bemSchema));
 	}
 	
+	public Bem2RdfUriBuilder getUriBuilder() {
+		return uriBuilder;
+	}
+	
 	
 
 	//*****************************************
@@ -130,7 +134,7 @@ public class Bem2RdfConverter {
 		if (valueKind == BemValueKindEnum.BINARY) {
 //			return XSD.nonNegativeInteger;
 			return XSD.hexBinary;			
-		} else if (valueKind == BemValueKindEnum.BOOLEAN) {
+		} else if (valueKind == BemValueKindEnum.LOGICAL) {
 			return getBaseTypeForBooleans();
 		} else if (valueKind == BemValueKindEnum.INTEGER) {
 			return XSD.integer;			
@@ -493,12 +497,10 @@ public class Bem2RdfConverter {
 			
 		} else {
 			
-			assert(false) : baseTypeInfo.getClass();
-			
-//			Resource superTypeResource = jenaModel.createResource(uriBuilder.buildBuiltInOntologyUri(baseTypeInfo.getName()));			
-//			Property property = getHasXXXProperty(baseTypeInfo.getValueKind(), jenaModel);
-//			
-//			convertPropertyRestrictions(property, typeResource, superTypeResource, true, 1, 1, jenaModel);			
+			assert(baseTypeInfo instanceof BemEnumerationTypeInfo) : "Expected BemEnumerationTypeInfo: " + baseTypeInfo.getClass();
+			Resource superTypeResource = jenaModel.createResource(uriBuilder.buildBuiltInOntologyUri(baseTypeInfo.getName()));			
+			Property property = getProperty_hasXXX(baseTypeInfo.getValueKind(), jenaModel);
+			convertPropertyRestrictions(property, typeResource, superTypeResource, true, 1, 1, jenaModel);		
 			
 		}
 		

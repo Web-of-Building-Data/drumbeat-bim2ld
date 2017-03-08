@@ -65,21 +65,8 @@ public class Bem2RdfSchemaExporter {
 
 	private void exportOntologyHeader() {
 		
-		// define owl:
-		jenaModel.setNsPrefix(RdfVocabulary.OWL.BASE_PREFIX, OWL.getURI());
+		jenaModel.setNsPrefixes(converter.getUriBuilder().getNamespacePrefixMap());
 
-		// define rdf:
-		jenaModel.setNsPrefix(RdfVocabulary.RDF.BASE_PREFIX, RDF.getURI());
-
-		// define rdfs:
-		jenaModel.setNsPrefix(RdfVocabulary.RDFS.BASE_PREFIX, RDFS.getURI());
-
-		// define xsd:
-		jenaModel.setNsPrefix(RdfVocabulary.XSD.BASE_PREFIX, XSD.getURI());
-		
-		jenaModel.setNsPrefix(uriBuilder.getBuiltInOntologyNamespacePrefix(), uriBuilder.getBuiltInOntologyNamespaceUri());
-		jenaModel.setNsPrefix(uriBuilder.getOntologyNamespacePrefix(), uriBuilder.getOntologyNamespaceUri());
-		
 //
 //		TODO: Uncomment the following part
 //		

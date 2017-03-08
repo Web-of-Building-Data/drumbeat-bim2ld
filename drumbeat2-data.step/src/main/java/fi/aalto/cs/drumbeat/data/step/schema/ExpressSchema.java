@@ -3,6 +3,8 @@ package fi.aalto.cs.drumbeat.data.step.schema;
 import java.util.Arrays;
 
 import fi.aalto.cs.drumbeat.data.bem.BemTypeAlreadyExistsException;
+import fi.aalto.cs.drumbeat.data.bem.schema.BemLogicalEnum;
+import fi.aalto.cs.drumbeat.data.bem.schema.BemLogicalTypeInfo;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemPrimitiveTypeInfo;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchema;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemValueKindEnum;
@@ -21,16 +23,16 @@ public class ExpressSchema extends BemSchema {
 	public final BemPrimitiveTypeInfo STRING = new BemPrimitiveTypeInfo(this, StepVocabulary.StepTypes.STRING, BemValueKindEnum.STRING);
 	
 //	public final BemPrimitiveTypeInfo BOOLEAN = new BemPrimitiveTypeInfo(this, StepVocabulary.StepTypes.BOOLEAN, BemValueKindEnum.BOOLEAN);	
-	public final ExpressLogicalTypeInfo BOOLEAN = new ExpressLogicalTypeInfo(
+	public final BemLogicalTypeInfo BOOLEAN = new BemLogicalTypeInfo(
 			this,
 			StepVocabulary.StepTypes.BOOLEAN,
-			Arrays.asList(StepVocabulary.StepValues.TRUE, StepVocabulary.StepValues.FALSE));
+			Arrays.asList(BemLogicalEnum.FALSE, BemLogicalEnum.TRUE));
 	
 	
-	public final ExpressLogicalTypeInfo LOGICAL = new ExpressLogicalTypeInfo(
+	public final BemLogicalTypeInfo LOGICAL = new BemLogicalTypeInfo(
 			this,
 			StepVocabulary.StepTypes.LOGICAL,
-			Arrays.asList(StepVocabulary.StepValues.TRUE, StepVocabulary.StepValues.FALSE, StepVocabulary.StepValues.UNKNOWN));
+			Arrays.asList(BemLogicalEnum.FALSE, BemLogicalEnum.TRUE, BemLogicalEnum.UNKNOWN));
 	
 	public ExpressSchema() {
 		this(null);

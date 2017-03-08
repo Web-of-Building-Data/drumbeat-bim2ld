@@ -1,12 +1,19 @@
 package fi.aalto.cs.drumbeat.convert.bem2rdf;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.lang3.text.StrSubstitutor;
+import org.apache.jena.vocabulary.OWL;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
+import org.apache.jena.vocabulary.XSD;
 
 import fi.aalto.cs.drumbeat.data.bem.schema.BemAttributeInfo;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchema;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemTypeInfo;
+import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
 
 public class Bem2RdfUriBuilder {
 	
@@ -64,6 +71,35 @@ public class Bem2RdfUriBuilder {
 
 		return uriBuilder;
 	}
+	
+	public Map<String, String> getNamespacePrefixMap() {
+		
+		Map<String, String> prefixMap = new TreeMap<>(); 
+		
+		// define owl:
+		prefixMap.put(RdfVocabulary.OWL.BASE_PREFIX, OWL.getURI());
+
+		// define rdf:
+		prefixMap.put(RdfVocabulary.RDF.BASE_PREFIX, RDF.getURI());
+
+		// define rdfs:
+		prefixMap.put(RdfVocabulary.RDFS.BASE_PREFIX, RDFS.getURI());
+
+		// define xsd:
+		prefixMap.put(RdfVocabulary.XSD.BASE_PREFIX, XSD.getURI());
+		
+		if (builtInOntologyNamespacePrefix != null && builtInOntologyNamespaceUri != null) {		
+			prefixMap.put(builtInOntologyNamespacePrefix, builtInOntologyNamespaceUri);
+		}
+		
+		if (ontologyNamespacePrefix != null && ontologyNamespaceUri != null) {		
+			prefixMap.put(ontologyNamespacePrefix, ontologyNamespaceUri);
+		}
+		
+		return prefixMap;
+		
+	}
+	
 	
 	/**
 	 * @return the builtInOntologyNamespacePrefix

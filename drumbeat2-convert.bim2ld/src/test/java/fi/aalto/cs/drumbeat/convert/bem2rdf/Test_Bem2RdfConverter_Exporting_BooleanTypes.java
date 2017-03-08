@@ -9,25 +9,21 @@ import org.junit.Test;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemPrimitiveValue;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.vocabulary.OWL2;
 import org.apache.jena.vocabulary.XSD;
 
 public class Test_Bem2RdfConverter_Exporting_BooleanTypes {
 	
 	private static final String TEST_SCHEMA_VERSION = "BemTest"; 
+	private Model jenaModel;
 	
 	private BemSchema bemSchema;
-	private Model jenaModel;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		Bem2RdfTestHelper.init();
+		Bem2RdfTestHelper.init();		
 	}
 	
 
@@ -47,6 +43,14 @@ public class Test_Bem2RdfConverter_Exporting_BooleanTypes {
 		Bem2RdfConverter converter = new Bem2RdfConverter(context, bemSchema);
 		Resource xsdDataType = converter.getBaseTypeForBooleans();
 		assertEquals(OWL2.NamedIndividual, xsdDataType);
+		
+		BemPrimitiveValue trueValue = new BemPrimitiveValue(BemLogicalEnum.TRUE, BemValueKindEnum.LOGICAL);
+		
+		RDFNode node = converter.convertPrimitiveValue(trueValue, jenaModel);		
+		assertNotNull(node);
+		assertTrue(node.isURIResource());
+		assertEquals(Bem2RdfVocabulary.EXPRESS.getBaseUri() + "true", node.asResource().getURI());
+		
 	}
 
 	@Test

@@ -9,12 +9,10 @@ import org.junit.Test;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Statement;
-import org.apache.jena.rdf.model.StmtIterator;
 
-import fi.aalto.cs.drumbeat.convert.bem2rdf.RdfAsserter.ModelAsserter;
 import fi.aalto.cs.drumbeat.data.bem.BemException;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchema;
+import fi.aalto.cs.drumbeat.rdf.data.RdfChecksumException;
 
 public class Test_Bem2RdfSchemaExporter_Exporting_ExpressSchema {
 	
@@ -51,7 +49,7 @@ public class Test_Bem2RdfSchemaExporter_Exporting_ExpressSchema {
 		schemaExporter = new Bem2RdfSchemaExporter(bemSchema, context, jenaModel);
 	}
 	
-	private void compareWithExpectedResult(Model actualModel) throws IOException {
+	private void compareWithExpectedResult(Model actualModel) throws IOException, RdfChecksumException {
 		
 		boolean readExpectedModel = true;
 		boolean writeActualModel = true;
@@ -66,8 +64,8 @@ public class Test_Bem2RdfSchemaExporter_Exporting_ExpressSchema {
 		
 		if (readExpectedModel) {
 			Model expectedModel = Bem2RdfTestHelper.readModel(expectedModelFilePath);
-			ModelAsserter asserter = new ModelAsserter();
-			asserter.assertEquals(expectedModel, actualModel);
+			RdfAsserter rdfAsserter = new RdfAsserter(r -> r.isAnon());
+			rdfAsserter.assertEquals(expectedModel, actualModel);
 		} else {
 			throw new NotImplementedException(
 					String.format("Reminder: Compare manually files %s and %s", expectedModelFilePath, actualModelFilePath));
@@ -75,7 +73,7 @@ public class Test_Bem2RdfSchemaExporter_Exporting_ExpressSchema {
 	}
 	
 	@Test
-	public void test_export_ExpressSchema() throws IOException, BemException {
+	public void test_export_ExpressSchema() throws IOException, BemException, RdfChecksumException {
 		
 		Model model = schemaExporter.export();
 		compareWithExpectedResult(model);		
