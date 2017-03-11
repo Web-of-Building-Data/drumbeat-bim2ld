@@ -32,10 +32,13 @@
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.google.collections/google-collections -->
+		<!-- <dependency> <groupId>com.google.collections</groupId> <artifactId>google-collections</artifactId> 
+			<version>${google-collections.version}</version> </dependency> -->
+
 		<dependency>
-			<groupId>com.google.collections</groupId>
-			<artifactId>google-collections</artifactId>
-			<version>${google-collections.version}</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
 		</dependency>
 
 		<!-- Apache Log4j -->
@@ -52,6 +55,7 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<build>
