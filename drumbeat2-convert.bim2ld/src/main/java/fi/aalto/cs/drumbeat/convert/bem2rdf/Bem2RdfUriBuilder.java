@@ -10,6 +10,9 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.XSD;
 
+import fi.aalto.cs.drumbeat.convert.bem2rdf.Bem2RdfConversionContext;
+import fi.aalto.cs.drumbeat.convert.bem2rdf.Bem2RdfConverterConfigurationException;
+import fi.aalto.cs.drumbeat.data.bem.dataset.BemDataset;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemAttributeInfo;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchema;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemTypeInfo;
@@ -18,58 +21,84 @@ import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
 public class Bem2RdfUriBuilder {
 	
 	public static final String TEXT_FORMAT_VARIABLE_ONTOLOGY_NAME = "Ontology.Name";
-	public static final String TEXT_FORMAT_VARIABLE_LANGUAGE_NAME = "Language.Name";
+	public static final String TEXT_FORMAT_VARIABLE_ONTOLOGY_LANGUAGE = "Ontology.Language";
+	public static final String TEXT_FORMAT_VARIABLE_DATASET_NAME = "Dataset.Name";
+	public static final String TEXT_FORMAT_VARIABLE_DATASET_LANGUAGE = "Dataset.Language";	
 	
 	private String builtInOntologyNamespacePrefix;
 	private String builtInOntologyNamespaceUri;	
 	private String ontologyNamespacePrefix;	
 	private String ontologyNamespaceUri;	
+	private String datasetNamespacePrefix;
 	private String datasetNamespaceUri;
+	private String datasetBlankNodeNamespacePrefix;
+	private String datasetBlankNodeNamespaceUri;
 
 	public Bem2RdfUriBuilder() {
 	}
 	
-	public static Bem2RdfUriBuilder createUriBuilder(Bem2RdfConversionContext context, BemSchema bemSchema) throws Bem2RdfConverterConfigurationException {
+	public static Bem2RdfUriBuilder createUriBuilder(
+			Bem2RdfConversionContext context,
+			String ontologyName,
+			String ontologyLanguage,
+			String datasetName,
+			String datasetLanguage) throws Bem2RdfConverterConfigurationException
+	{
+		
 		Bem2RdfUriBuilder uriBuilder = new Bem2RdfUriBuilder();
 		
 		HashMap<String, String> variableMap = new HashMap<>();
-		if (bemSchema.getName() != null) {
-			variableMap.put(TEXT_FORMAT_VARIABLE_ONTOLOGY_NAME, bemSchema.getName());
+		if (ontologyName != null) {
+			variableMap.put(TEXT_FORMAT_VARIABLE_ONTOLOGY_NAME, ontologyName);
 		}
 		
-		if (bemSchema.getLanguage() != null) {
-			variableMap.put(TEXT_FORMAT_VARIABLE_LANGUAGE_NAME, bemSchema.getLanguage());			
+		if (ontologyLanguage != null) {
+			variableMap.put(TEXT_FORMAT_VARIABLE_ONTOLOGY_LANGUAGE, ontologyLanguage);			
 		}
 		
-		try {
-			String ontologyNamespacePrefix = StrSubstitutor.replace(context.getOntologyNamespacePrefixFormat(), variableMap);		
-			uriBuilder.setOntologyNamespacePrefix(ontologyNamespacePrefix);
-		} catch (Exception e) {
-			throw new Bem2RdfConverterConfigurationException("Invalid ongology namepsace URI format: " + context.getOntologyNamespacePrefixFormat(), e);
+		if (datasetName != null) {
+			variableMap.put(TEXT_FORMAT_VARIABLE_DATASET_NAME, datasetName);
 		}
 		
-		try {
-			String builtInOntologyNamespacePrefix = StrSubstitutor.replace(context.getBuiltInOntologyNamespacePrefixFormat(), variableMap);		
-			uriBuilder.setBuiltInOntologyNamespacePrefix(builtInOntologyNamespacePrefix);
-		} catch (Exception e) {
-			throw new Bem2RdfConverterConfigurationException("Invalid builtin ontology namepsace URI format: " + context.getBuiltInOntologyNamespacePrefixFormat(), e);
+		if (datasetLanguage != null) {
+			variableMap.put(TEXT_FORMAT_VARIABLE_DATASET_LANGUAGE, datasetLanguage);			
 		}
+		
+		uriBuilder.setBuiltInOntologyNamespacePrefix(getSubtitutedString(context.getBuiltInOntologyNamespacePrefixFormat(), variableMap));
+		uriBuilder.setBuiltInOntologyNamespaceUri(getSubtitutedString(context.getBuiltInOntologyNamespaceUriFormat(), variableMap));
+		
+		uriBuilder.setOntologyNamespacePrefix(getSubtitutedString(context.getOntologyNamespacePrefixFormat(), variableMap));
+		uriBuilder.setOntologyNamespaceUri(getSubtitutedString(context.getOntologyNamespaceUriFormat(), variableMap));
+		
+		uriBuilder.setDatasetNamespacePrefix(getSubtitutedString(context.getDatasetNamespacePrefixFormat(), variableMap));
+		uriBuilder.setDatasetNamespaceUri(getSubtitutedString(context.getDatasetNamespaceUriFormat(), variableMap));
+		
+		uriBuilder.setDatasetBlankNodeNamespacePrefix(getSubtitutedString(context.getDatasetBlankNodeNamespacePrefixFormat(), variableMap));
+		uriBuilder.setDatasetBlankNodeNamespaceUri(getSubtitutedString(context.getDatasetBlankNodeNamespaceUriFormat(), variableMap));
 
-		try {
-			String ontologyNamespaceUri = StrSubstitutor.replace(context.getOntologyNamespaceUriFormat(), variableMap);		
-			uriBuilder.setOntologyNamespaceUri(ontologyNamespaceUri);
-		} catch (Exception e) {
-			throw new Bem2RdfConverterConfigurationException("Invalid ongology namepsace URI format: " + context.getOntologyNamespaceUriFormat(), e);
-		}
+		return uriBuilder;		
 		
-		try {
-			String builtInOntologyNamespaceUri = StrSubstitutor.replace(context.getBuiltInOntologyNamespaceUriFormat(), variableMap);		
-			uriBuilder.setBuiltInOntologyNamespaceUri(builtInOntologyNamespaceUri);
-		} catch (Exception e) {
-			throw new Bem2RdfConverterConfigurationException("Invalid builtin ontology namepsace URI format: " + context.getBuiltInOntologyNamespaceUriFormat(), e);
+	}
+	
+	
+	public static Bem2RdfUriBuilder createUriBuilder(Bem2RdfConversionContext context, BemSchema bemSchema) throws Bem2RdfConverterConfigurationException {
+		return createUriBuilder(context, bemSchema.getName(), bemSchema.getLanguage(), null, null);
+	}
+	
+	public static Bem2RdfUriBuilder createUriBuilder(Bem2RdfConversionContext context, BemDataset bemDataset) throws Bem2RdfConverterConfigurationException {
+		return createUriBuilder(context, bemDataset.getSchema().getName(), bemDataset.getSchema().getLanguage(), bemDataset.getName(), bemDataset.getLanguage());
+	}
+	
+	private static String getSubtitutedString(String format, Map<String, String> variableMap) throws Bem2RdfConverterConfigurationException {
+		if (format != null) {
+			try {
+				return StrSubstitutor.replace(format, variableMap);		
+			} catch (Exception e) {
+				throw new Bem2RdfConverterConfigurationException("Invalid namespace prefix or URI format: " + format, e);
+			}
+		} else {
+			return null;
 		}
-
-		return uriBuilder;
 	}
 	
 	public Map<String, String> getNamespacePrefixMap() {
@@ -94,6 +123,10 @@ public class Bem2RdfUriBuilder {
 		
 		if (ontologyNamespacePrefix != null && ontologyNamespaceUri != null) {		
 			prefixMap.put(ontologyNamespacePrefix, ontologyNamespaceUri);
+		}
+		
+		if (datasetNamespacePrefix != null && datasetNamespaceUri != null) {
+			prefixMap.put(datasetNamespacePrefix, datasetNamespaceUri);
 		}
 		
 		return prefixMap;
@@ -157,6 +190,21 @@ public class Bem2RdfUriBuilder {
 	public void setOntologyNamespaceUri(String ontologyNamespaceUri) {
 		this.ontologyNamespaceUri = ontologyNamespaceUri;
 	}
+	
+	/**
+	 * @return the datasetNamespacePrefix
+	 */
+	public String getDatasetNamespacePrefix() {
+		return datasetNamespacePrefix;
+	}
+
+	/**
+	 * @param datasetNamespacePrefix the datasetNamespacePrefix to set
+	 */
+	public void setDatasetNamespacePrefix(String datasetNamespacePrefix) {
+		this.datasetNamespacePrefix = datasetNamespacePrefix;
+	}
+	
 
 	/**
 	 * @return the datasetNamespaceUri
@@ -171,6 +219,35 @@ public class Bem2RdfUriBuilder {
 	public void setDatasetNamespaceUri(String datasetNamespaceUri) {
 		this.datasetNamespaceUri = datasetNamespaceUri;
 	}
+	
+	/**
+	 * @return the datasetBlankNodeNamespacePrefix
+	 */
+	public String getDatasetBlankNodeNamespacePrefix() {
+		return datasetBlankNodeNamespacePrefix;
+	}
+
+	/**
+	 * @param datasetBlankNodeNamespacePrefix the datasetBlankNodeNamespacePrefix to set
+	 */
+	public void setDatasetBlankNodeNamespacePrefix(String datasetBlankNodeNamespacePrefix) {
+		this.datasetBlankNodeNamespacePrefix = datasetBlankNodeNamespacePrefix;
+	}
+	
+	/**
+	 * @return the datasetBlankNodeNamespaceUri
+	 */
+	public String getDatasetBlankNodeNamespaceUri() {
+		return datasetBlankNodeNamespaceUri;
+	}
+
+	/**
+	 * @param datasetBlankNodeNamespaceUri the datasetBlankNodeNamespaceUri to set
+	 */
+	public void setDatasetBlankNodeNamespaceUri(String datasetBlankNodeNamespaceUri) {
+		this.datasetBlankNodeNamespaceUri = datasetBlankNodeNamespaceUri;
+	}
+	
 	
 	public String buildBuiltInOntologyUri(String localName) {
 		if (builtInOntologyNamespaceUri == null) {
@@ -217,6 +294,19 @@ public class Bem2RdfUriBuilder {
 		}		
 	}
 	
+	public String buildDatasetUri(String localName) {
+		if (datasetNamespaceUri == null) {
+			throw new IllegalArgumentException("Undefined datasetNamespaceUri");
+		}
+		return ontologyNamespaceUri + localName;	
+	}
+	
+	public String buildDatasetBlankNodeUri(String localName) {
+		if (datasetBlankNodeNamespaceUri == null) {
+			throw new IllegalArgumentException("Undefined datasetBlankNodeNamespaceUri");
+		}
+		return ontologyNamespaceUri + localName;	
+	}
 	
 
 }

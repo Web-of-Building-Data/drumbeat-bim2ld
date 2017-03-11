@@ -1,4 +1,4 @@
-package fi.aalto.cs.drumbeat.convert.bem2rdf;
+package fi.aalto.cs.drumbeat.convert.bem2rdf.impl;
 
 import fi.aalto.cs.drumbeat.data.bem.schema.BemCollectionKindEnum;
 
@@ -44,6 +44,9 @@ public class Bem2RdfVocabulary {
 		public static final String startIndex = "startIndex";
 //		public static final String value = "value";
 		
+		public static final String TRUE = "TRUE";
+		public static final String FALSE = "FALSE";
+		
 		public static String getCollectionClass(BemCollectionKindEnum collectionKind) {
 			if (collectionKind == BemCollectionKindEnum.List) {
 				return List;				
@@ -56,6 +59,13 @@ public class Bem2RdfVocabulary {
 			}	
 			
 		}		
+	}
+	
+	public static class Dataset {
+		
+		public static final String GUID_NODE_ENTITY_URI_FORMAT = "GUID_%s";
+		public static final String BLANK_NODE_ENTITY_URI_FORMAT = "BLANK_%s";
+		
 	}
 
 }

@@ -6,4 +6,9 @@ public class BemEnumerationValue extends BemSimpleValue {
 		super(value);
 	}
 	
+	@Override
+	public String getValue() {
+		return (String)super.getValue();
+	}
+	
 }

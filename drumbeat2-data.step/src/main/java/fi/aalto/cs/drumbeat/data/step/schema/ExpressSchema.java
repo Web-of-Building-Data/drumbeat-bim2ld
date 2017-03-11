@@ -39,9 +39,7 @@ public class ExpressSchema extends BemSchema {
 	}
 	
 	public ExpressSchema(String name) {
-		super(name);
-		
-		setLanguage(StepVocabulary.ExpressFormat.EXPRESS);
+		super(name, StepVocabulary.ExpressFormat.EXPRESS);
 		
 		BINARY.setBuiltInType(true);
 		DATETIME.setBuiltInType(true);

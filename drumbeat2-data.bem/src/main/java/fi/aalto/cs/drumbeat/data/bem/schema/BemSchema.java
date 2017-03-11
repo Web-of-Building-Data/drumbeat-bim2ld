@@ -18,17 +18,18 @@ public class BemSchema {
 	private String name;
 	private String language;
 	private BemSchema header;
-	private Map<String, BemTypeInfo> allTypeInfoDictionary;
-	private Map<String, BemEntityTypeInfo> entityTypeInfoDictionary;
+	private final Map<String, BemTypeInfo> allTypeInfoDictionary;
+	private final Map<String, BemEntityTypeInfo> entityTypeInfoDictionary;
 	
 	public BemSchema() {
 		allTypeInfoDictionary = new HashMap<>();
 		entityTypeInfoDictionary = new HashMap<>();
 	}
 	
-	public BemSchema(String name) {
+	public BemSchema(String name, String language) {
 		this();
 		this.name = name;
+		this.language = language;
 	}
 	
 	/**

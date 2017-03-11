@@ -1,47 +1,26 @@
 package fi.aalto.cs.drumbeat.convert.bem2rdf;
 
-import static org.junit.Assert.*;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
-import org.apache.log4j.xml.DOMConfigurator;
-import org.junit.BeforeClass;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.Statement;
-import org.apache.jena.rdf.model.StmtIterator;
-import org.apache.jena.vocabulary.OWL;
-import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.RDFS;
-import org.apache.jena.vocabulary.XSD;
 
-import fi.aalto.cs.drumbeat.common.collections.Pair;
-import fi.aalto.cs.drumbeat.common.config.document.ConfigurationDocument;
 import fi.aalto.cs.drumbeat.common.file.FileManager;
-import fi.aalto.cs.drumbeat.data.bem.BemException;
-import fi.aalto.cs.drumbeat.data.bem.dataset.BemDataset;
-import fi.aalto.cs.drumbeat.data.bem.parsers.BemParserException;
 import fi.aalto.cs.drumbeat.data.bem.parsers.util.BemParserUtil;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchema;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchemaPool;
 import fi.aalto.cs.drumbeat.data.ifc.parsers.IfcSchemaParser;
-import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
+import fi.aalto.cs.drumbeat.rdf.OwlProfileList;
 
 public class Bem2RdfTestHelper {
-	
-	public static final String TEST_SCHEMA_VERSION = "IFC4_ADD1";
 	
 	public static final String TEST_RESOURCES_PATH ="src/test/resources/"; 
 	
@@ -57,8 +36,10 @@ public class Bem2RdfTestHelper {
 	
 	public static final String TEST_TARGET_RESOURCES_PATH = TEST_RESOURCES_PATH + "target/";
 	
-	public static final String BUILT_IN_ONTOLOGY_NAMESPACE_PREFIX_FORMAT = "${Language.Name}";
-	public static final String BUILT_IN_ONTOLOGY_NAMESPACE_URI_FORMAT = "http://drumbeat.cs.hut.fi/owl/${Language.Name}#";
+	public static final String TEST_SCHEMA_NAME = "TestSchema";
+
+	public static final String BUILT_IN_ONTOLOGY_NAMESPACE_PREFIX_FORMAT = "${Ontology.Language}";
+	public static final String BUILT_IN_ONTOLOGY_NAMESPACE_URI_FORMAT = "http://drumbeat.cs.hut.fi/owl/${Ontology.Language}#";
 	
 
 	public static final String ONTOLOGY_NAMESPACE_PREFIX_FORMAT = "${Ontology.Name}";
@@ -70,7 +51,6 @@ public class Bem2RdfTestHelper {
 	public static final String MODEL_BLANK_NODE_NAMESPACE_URI_FORMAT = MODEL_NAMESPACE_URI_FORMAT + "B/";
 	
 	private static boolean initialized = false;
-	private static BemDataset testBemDataset;
 	
 	public static void init() throws Exception {
 		if (!initialized) {
@@ -100,20 +80,31 @@ public class Bem2RdfTestHelper {
 	  return ste[methodCallShift + 2].getMethodName();
 	}
 	
-	public static String getTestFilePath(Object object, int methodCallShift, boolean isExpected, String extension) {
+	public static String getTestFilePath(Object callingObject, int callingMethodCallShift, boolean isExpected, String extension) {
 		return String.format("%s%s/%s/%s.%s",
 				TEST_TARGET_RESOURCES_PATH,
 				isExpected ? "expected" : "actual",
-				object.getClass().getSimpleName(),
-				getMethodName(methodCallShift + 1),
+				callingObject.getClass().getSimpleName(),
+				getMethodName(callingMethodCallShift + 1),
 				extension);
 	}
 	
+	public static String getExpectedTestFilePath(Object callingObject, int callingMethodCallShift, String extension) {
+		return getTestFilePath(callingObject, callingMethodCallShift + 1, true, extension);
+	}
+	
+	public static String getActualTestFilePath(Object callingObject, int callingMethodCallShift, String extension) {
+		return getTestFilePath(callingObject, callingMethodCallShift + 1, false, extension);
+	}
+
 	public static Model readModel(String filePath) throws IOException {
 		FileInputStream in = new FileInputStream(filePath);
 		Model model = ModelFactory.createDefaultModel();
-		RDFDataMgr.read(model, in, Lang.TURTLE);
-		in.close();
+		try {
+			RDFDataMgr.read(model, in, Lang.TURTLE);
+		} finally {
+			in.close();
+		}
 		return model;
 	}
 	
@@ -123,100 +114,45 @@ public class Bem2RdfTestHelper {
 		out.close();
 	}	
 	
-	public static void setNsPrefixes(Model jenaModel, Bem2RdfConverter converter) {
-		// define owl:
-		jenaModel.setNsPrefix(RdfVocabulary.OWL.BASE_PREFIX, OWL.getURI());
-
-		// define rdf:
-		jenaModel.setNsPrefix(RdfVocabulary.RDF.BASE_PREFIX, RDF.getURI());
-
-		// define rdfs:
-		jenaModel.setNsPrefix(RdfVocabulary.RDFS.BASE_PREFIX, RDFS.getURI());
-
-		// define xsd:
-		jenaModel.setNsPrefix(RdfVocabulary.XSD.BASE_PREFIX, XSD.getURI());
-
-//		// define expr:
-//		jenaModel.setNsPrefix(Bem2RdfVocabulary.EXPRESS.BASE_PREFIX,
-//				Bem2RdfVocabulary.EXPRESS.getBaseUri());
-//
-//		// define ifc:
-//		if (converter != null) {
-//			jenaModel.setNsPrefix(Bem2RdfVocabulary.IFC.BASE_PREFIX,
-//					converter.getBemOntologyNamespaceUri());
-//		}
-	}
-
-	public static BemSchema getTestBemSchema() {
-		return BemSchemaPool.getSchema(TEST_SCHEMA_VERSION);
+	public static BemSchema createTestBemSchema() {
+		return BemSchemaPool.getSchema(TEST_SCHEMA_NAME);
 	}
 	
-	public static BemDataset getTestBemDataset() throws BemParserException, IOException {
+	public static void startTest(Object callingObject, int callingMethodCallShift) {
+		System.out.printf("%n[%s::%s()]%n",
+				callingObject.getClass().getSimpleName(),
+				getMethodName(callingMethodCallShift + 1));		
+	}
+	
+	public static void compareWithExpectedResult(
+			Object callingObject, 
+			int callingMethodCallShift,
+			Model actualModel,
+			boolean readExpectedModel,
+			boolean writeActualModel,
+			OwlProfileList targetOwlProfiles) throws Exception {
 		
-//		if (testBemDataset == null) {
-//			testBemDataset = BemParserUtil.parseDataset(TEST_IFC_MODEL_FILE_PATH);
-//		}
-//		return testBemDataset;
+		String actualModelFilePath = Bem2RdfTestHelper.getTestFilePath(callingObject, callingMethodCallShift + 1, false, "txt");
+		String expectedModelFilePath = Bem2RdfTestHelper.getTestFilePath(callingObject, callingMethodCallShift + 1, true, "txt");
 		
-		return null;
+		if (writeActualModel) {
+			System.out.println("Writing Jena model: " + actualModelFilePath);
+			Bem2RdfTestHelper.writeModel(actualModel, actualModelFilePath);
+			Bem2RdfOwlValidator.validateOwl(actualModelFilePath, targetOwlProfiles);
+		}
+		
+		
+		if (readExpectedModel) {
+			Model expectedModel = Bem2RdfTestHelper.readModel(expectedModelFilePath);
+			RdfAsserter rdfAsserter = new RdfAsserter(r -> r.isAnon());
+			rdfAsserter.assertEquals(expectedModel, actualModel);
+		} else {
+			String reminderMessage = String.format("Reminder: Compare manually files '%s' and '%s'", expectedModelFilePath, actualModelFilePath);
+			System.out.println(reminderMessage);
+//			throw new NotImplementedException(reminderMessage);
+		}
 		
 	}
 	
-	
-	
-	
-//	public void assertEquals(Resource r1, Resource r2) {
-//		
-//		StmtIterator it1 = r1.listProperties();		
-//		StmtIterator it2 = r2.listProperties();
-//		
-//		List<Pair<Property, RDFNode>> l1 = toPropertyList(it1);
-//		List<Pair<Property, RDFNode>> l2 = toPropertyList(it2);
-//		
-//		assertEquals(l1.size(), l2.size());		
-//	}
-//	
-//	public static List<Pair<Property, RDFNode>> toPropertyList(StmtIterator it) {
-//		
-//		ArrayList<Pair<Property, RDFNode>> list = new ArrayList<Pair<Property, RDFNode>>(); 
-//
-//		while (it.hasNext()) {
-//			Statement s = it.nextStatement();
-//			list.add(new Pair<Property, RDFNode>(s.getPredicate(), s.getObject()));
-//		}
-//		
-//		list.sort(DrumbeatTestHelper::compare);
-//		return list;
-//	}
-//	
-//	public static int compare(Pair<Property, RDFNode> p1, Pair<Property, RDFNode> p2) {
-//		int result;
-//		if ((result = compare(p1.getKey(), p2.getKey())) != 0) {
-//			return result;
-//		}
-//		
-//		return compare(p1.getValue(), p2.getValue());
-//	}
-//	
-//	public static int compare(RDFNode o1, RDFNode o2) {
-//		int t1 = getRdfNodeType(o1);
-//		int t2 = getRdfNodeType(o2);
-//		
-//		int result;
-//		if ((result = Integer.compare(t1, t2)) != 0) {
-//			return result;
-//		}
-//		
-//		return o1.toString().compareTo(o2.toString());
-//	}
-//	
-//	public static int getRdfNodeType(RDFNode o) {
-//		if (o.isURIResource()) {
-//			return 0;
-//		} else if (o.isAnon()) {
-//			return 1;
-//		} else {
-//			return 2;
-//		}
-//	}
+
 }

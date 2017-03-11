@@ -14,9 +14,11 @@ public class Bem2RdfConversionContext {
 	private String ontologyNamespacePrefixFormat;
 	private String ontologyNamespaceUriFormat;
 	
-	private String datasetPrefix;
+	private String datasetNamespacePrefixFormat;
 	private String datasetNamespaceUriFormat;	
 	
+	private String datasetBlankNodeNamespacePrefixFormat;
+	private String datasetBlankNodeNamespaceUriFormat;	
 
 	public Bem2RdfConversionContext() {
 		this(null, null);
@@ -101,17 +103,17 @@ public class Bem2RdfConversionContext {
 	}
 
 	/**
-	 * @return the datasetPrefix
+	 * @return the datasetNamespacePrefixFormat
 	 */
-	public String getDatasetPrefix() {
-		return datasetPrefix;
+	public String getDatasetNamespacePrefixFormat() {
+		return datasetNamespacePrefixFormat;
 	}
 
 	/**
-	 * @param datasetPrefix the datasetPrefix to set
+	 * @param datasetNamespacePrefixFormat the datasetNamespacePrefixFormat to set
 	 */
-	public void setDatasetPrefix(String datasetPrefix) {
-		this.datasetPrefix = datasetPrefix;
+	public void setDatasetNamespacePrefixFormat(String datasetNamespacePrefixFormat) {
+		this.datasetNamespacePrefixFormat = datasetNamespacePrefixFormat;
 	}
 
 	/**
@@ -126,6 +128,34 @@ public class Bem2RdfConversionContext {
 	 */
 	public void setDatasetNamespaceUriFormat(String datasetNamespaceUriFormat) {
 		this.datasetNamespaceUriFormat = datasetNamespaceUriFormat;
+	}
+	
+	/**
+	 * @return the datasetBlankNodeNamespacePrefixFormat
+	 */
+	public String getDatasetBlankNodeNamespacePrefixFormat() {
+		return datasetBlankNodeNamespacePrefixFormat;
+	}
+
+	/**
+	 * @param datasetBlankNodeNamespacePrefixFormat the datasetBlankNodeNamespacePrefixFormat to set
+	 */
+	public void setDatasetBlankNodeNamespacePrefixFormat(String datasetBlankNodeNamespacePrefixFormat) {
+		this.datasetBlankNodeNamespacePrefixFormat = datasetBlankNodeNamespacePrefixFormat;
+	}
+
+	/**
+	 * @return the datasetBlankNodeNamespaceUriFormat
+	 */
+	public String getDatasetBlankNodeNamespaceUriFormat() {
+		return datasetBlankNodeNamespaceUriFormat;
+	}
+
+	/**
+	 * @param datasetBlankNodeNamespaceUriFormat the datasetBlankNodeNamespaceUriFormat to set
+	 */
+	public void setDatasetBlankNodeNamespaceUriFormat(String datasetBlankNodeNamespaceUriFormat) {
+		this.datasetBlankNodeNamespaceUriFormat = datasetBlankNodeNamespaceUriFormat;
 	}
 	
 	

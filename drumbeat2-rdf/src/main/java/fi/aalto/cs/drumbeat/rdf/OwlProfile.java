@@ -143,7 +143,19 @@ public class OwlProfile {
 					}
 				}
 
+			} if (owlProfileId == OwlProfileEnum.OWL2_DL) {
+				
+				if (property.equals(OWL.oneOf)) {
+					if (object instanceof RDFList) {
+						RDFList list = (RDFList)object;
+						return (list.getHead().isURIResource());
+					} else {
+						return object.isURIResource();
+					}
+				}
 			}
+			
+			
 		} else { // OWL 1
 
 			if (owlProfileId == OwlProfileEnum.OWL1_Lite) {

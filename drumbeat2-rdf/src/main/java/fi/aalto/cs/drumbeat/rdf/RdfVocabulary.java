@@ -1,6 +1,5 @@
 package fi.aalto.cs.drumbeat.rdf;
 
-import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFFormat;
 
 import org.apache.jena.rdf.model.Model;
@@ -10,17 +9,19 @@ import org.apache.jena.rdf.model.RDFList;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 
-import fi.aalto.cs.drumbeat.common.string.StringUtils;
-
 public class RdfVocabulary {
 	
 	public static final Model DEFAULT_MODEL = ModelFactory.createDefaultModel();
 	
-	public final static Resource DUMP_URI_1 = DEFAULT_MODEL.createResource("http://example.org/uri1");
-	public final static Resource DUMP_URI_2 = DEFAULT_MODEL.createResource("http://example.org/uri2");
-	public final static Resource DUMP_URI_3 = DEFAULT_MODEL.createResource("http://example.org/uri3");
-	public final static RDFList DUMP_URI_LIST = DEFAULT_MODEL.createList(new RDFNode[]{DUMP_URI_1, DUMP_URI_2, DUMP_URI_3});
+	public final static Resource ANY_URI_1 = DEFAULT_MODEL.createResource("http://example.org/uri1");
+	public final static Resource ANY_URI_2 = DEFAULT_MODEL.createResource("http://example.org/uri2");
+	public final static Resource ANY_URI_3 = DEFAULT_MODEL.createResource("http://example.org/uri3");
+	public final static RDFList ANY_URI_LIST = DEFAULT_MODEL.createList(new RDFNode[]{ANY_URI_1, ANY_URI_2, ANY_URI_3});
 	
+	public final static RDFNode ANY_LITERAL_1 = DEFAULT_MODEL.createLiteral("s1");
+	public final static RDFNode ANY_LITERAL_2 = DEFAULT_MODEL.createLiteral("s2");
+	public final static RDFNode ANY_LITERAL_3 = DEFAULT_MODEL.createLiteral("s3");
+	public final static RDFNode ANY_LITERAL_LIST = DEFAULT_MODEL.createList(new RDFNode[]{ANY_LITERAL_1, ANY_LITERAL_2, ANY_LITERAL_3});
 	
 	public static class OWL {
 		public static final String BASE_PREFIX = "owl";
@@ -42,6 +43,7 @@ public class RdfVocabulary {
 
 	public static class XSD {
 		public static final String BASE_PREFIX = "xsd";
+		public static final String BASE_URI = "http://www.w3.org/2001/XMLSchema#";
 		public static final Property maxExclusive = DEFAULT_MODEL.createProperty(org.apache.jena.vocabulary.XSD.getURI() + "maxExclusive");
 		public static final Property minExclusive = DEFAULT_MODEL.createProperty(org.apache.jena.vocabulary.XSD.getURI() + "minExclusive");		
 	}	

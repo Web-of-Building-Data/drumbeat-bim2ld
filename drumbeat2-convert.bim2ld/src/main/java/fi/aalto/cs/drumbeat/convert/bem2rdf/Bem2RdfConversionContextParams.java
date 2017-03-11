@@ -4,8 +4,6 @@ import static fi.aalto.cs.drumbeat.common.params.StringParam.*;
 
 import java.util.Arrays;
 
-import org.apache.commons.lang3.NotImplementedException;
-
 import fi.aalto.cs.drumbeat.common.params.*;
 
 public class Bem2RdfConversionContextParams extends SimpleTypeParams {
@@ -16,7 +14,7 @@ public class Bem2RdfConversionContextParams extends SimpleTypeParams {
 	public static final String PARAM_IGNORE_NON_BUILT_IN_TYPES = "IgnoreNonBuiltInTypes";
 	
 	public static final String PARAM_EXPORT_PROPERTY_DOMAIN_AND_RANGES_TO = "ExportPropertyDomainsAndRangesTo";
-	public static final String PARAM_CONVERT_BOOLEANS_TO = "ConvertBooleansTo";
+	public static final String PARAM_CONVERT_LOGICALS_TO = "ConvertLogicalsTo";
 	public static final String PARAM_CONVERT_DOUBLES_TO = "ConvertDoublesTo";
 	public static final String PARAM_CONVERT_ENUMS_TO = "ConvertEnumsTo";
 	public static final String PARAM_EXPORT_DEBUG_INFO = "ExportDebugInfo";
@@ -107,7 +105,7 @@ public class Bem2RdfConversionContextParams extends SimpleTypeParams {
 		
 		addParam(
 				new StringParam(
-					PARAM_CONVERT_BOOLEANS_TO,
+					PARAM_CONVERT_LOGICALS_TO,
 					null,
 					null,
 					Arrays.asList(
@@ -139,15 +137,15 @@ public class Bem2RdfConversionContextParams extends SimpleTypeParams {
 					null,
 					null,
 					Arrays.asList(
-//							VALUE_AUTO_MOST_SUPPORTED,
-//							VALUE_AUTO_MOST_EFFICIENT,
+							VALUE_AUTO_MOST_SUPPORTED,
+							VALUE_AUTO_MOST_EFFICIENT,
 							VALUE_XSD_DECIMAL,
 							VALUE_XSD_DOUBLE,
 							VALUE_OWL_REAL,
 							VALUE_XSD_STRING),
 					Arrays.asList(
-//							VALUE_AUTO_MOST_SUPPORTED_DESCRIPTION + VALUE_DEFAULT_DESCRIPTION,
-//							VALUE_AUTO_MOST_EFFICIENT_DESCRIPTION,
+							VALUE_AUTO_MOST_SUPPORTED_DESCRIPTION + VALUE_DEFAULT_DESCRIPTION,
+							VALUE_AUTO_MOST_EFFICIENT_DESCRIPTION,
 							VALUE_XSD_DECIMAL + VALUE_DEFAULT_DESCRIPTION,
 							VALUE_XSD_DOUBLE + " (most efficient, but not supported in OWL 2 EL/QL)",
 							VALUE_OWL_REAL,
@@ -229,9 +227,9 @@ public class Bem2RdfConversionContextParams extends SimpleTypeParams {
 		}
 	}
 
-	public String convertBooleansTo() throws Bem2RdfConverterConfigurationException {
+	public String convertLogicalsTo() throws Bem2RdfConverterConfigurationException {
 		try {
-			return (String)getParamValue(PARAM_CONVERT_BOOLEANS_TO);
+			return (String)getParamValue(PARAM_CONVERT_LOGICALS_TO);
 		} catch (DrbParamNotFoundException e) {
 			throw new Bem2RdfConverterConfigurationException(e);
 		}
@@ -261,15 +259,15 @@ public class Bem2RdfConversionContextParams extends SimpleTypeParams {
 		}		
 	}
 
-	public boolean convertSetAttributesAsMultipleProperties() throws Bem2RdfConverterConfigurationException {
-		String convertCollectionsTo = convertCollectionsTo();
-		switch (convertCollectionsTo) {
-		case VALUE_DRUMMOND_LIST:
-			return true;
-		case VALUE_OLO_SIMILAR_LIST:
-			return false;
-		default:
-			throw new NotImplementedException("Unknown collection type");
-		}		
-	}
+//	public boolean convertSetAttributesAsMultipleProperties() throws Bem2RdfConverterConfigurationException {
+//		String convertCollectionsTo = convertCollectionsTo();
+//		switch (convertCollectionsTo) {
+//		case VALUE_DRUMMOND_LIST:
+//			return true;
+//		case VALUE_OLO_SIMILAR_LIST:
+//			return false;
+//		default:
+//			throw new NotImplementedException("Unknown collection type");
+//		}		
+//	}
 }

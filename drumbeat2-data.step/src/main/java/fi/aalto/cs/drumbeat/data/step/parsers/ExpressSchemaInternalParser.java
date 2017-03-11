@@ -565,6 +565,7 @@ class ExpressSchemaInternalParser {
 			} else {
 				assert (attributeValueTypeInfo instanceof BemDefinedTypeInfo ||
 						attributeValueTypeInfo instanceof BemEnumerationTypeInfo ||
+						attributeValueTypeInfo instanceof BemLogicalTypeInfo ||
 						attributeValueTypeInfo instanceof BemPrimitiveTypeInfo) :
 					attributeValueTypeInfo.getClass();
 				
