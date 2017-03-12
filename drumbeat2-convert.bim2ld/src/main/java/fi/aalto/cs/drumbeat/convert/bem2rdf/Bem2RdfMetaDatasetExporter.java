@@ -12,7 +12,7 @@
 //import fi.aalto.cs.drumbeat.data.bem.schema.*;
 //import fi.aalto.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfExporterBase;
 //import fi.aalto.cs.drumbeat.rdf.OwlProfileList;
-//import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
+//import fi.aalto.cs.drumbeat.rdf.OwlVocabulary;
 //
 //
 //public class Bem2RdfMetaDatasetExporter extends Ifc2RdfExporterBase {
@@ -53,12 +53,12 @@
 //		//
 //		//adapter.startExport();		
 //		
-//		jenaModel.setNsPrefix(RdfVocabulary.OWL.BASE_PREFIX, OWL.getURI());
-//		jenaModel.setNsPrefix(RdfVocabulary.RDF.BASE_PREFIX, RDF.getURI());
-//		jenaModel.setNsPrefix(RdfVocabulary.RDFS.BASE_PREFIX, RDFS.getURI());
-//		jenaModel.setNsPrefix(RdfVocabulary.XSD.BASE_PREFIX, XSD.getURI());	
-//		jenaModel.setNsPrefix(RdfVocabulary.VOID.BASE_PREFIX, RdfVocabulary.VOID.BASE_URI);
-//		jenaModel.setNsPrefix(RdfVocabulary.DCTERMS.BASE_PREFIX, RdfVocabulary.DCTERMS.BASE_URI);
+//		jenaModel.setNsPrefix(OwlVocabulary.OWL.BASE_PREFIX, OWL.getURI());
+//		jenaModel.setNsPrefix(OwlVocabulary.RDF.BASE_PREFIX, RDF.getURI());
+//		jenaModel.setNsPrefix(OwlVocabulary.RDFS.BASE_PREFIX, RDFS.getURI());
+//		jenaModel.setNsPrefix(OwlVocabulary.XSD.BASE_PREFIX, XSD.getURI());	
+//		jenaModel.setNsPrefix(OwlVocabulary.VOID.BASE_PREFIX, OwlVocabulary.VOID.BASE_URI);
+//		jenaModel.setNsPrefix(OwlVocabulary.DCTERMS.BASE_PREFIX, OwlVocabulary.DCTERMS.BASE_URI);
 //		
 //		jenaModel.setNsPrefix(Bem2RdfVocabulary.EXPRESS.BASE_PREFIX, Bem2RdfVocabulary.EXPRESS.getBaseUri());		
 //		jenaModel.setNsPrefix(Bem2RdfVocabulary.STEP.BASE_PREFIX,Bem2RdfVocabulary.STEP.getBaseUri());
@@ -71,7 +71,7 @@
 //		jenaModel.setNsPrefix(getModelNamespacePrefix(), getModelNamespaceUri());
 //		//adapter.exportEmptyLine();
 //
-//		jenaModel.add(dataSetResource, RDF.type, RdfVocabulary.VOID.DataSet);
+//		jenaModel.add(dataSetResource, RDF.type, OwlVocabulary.VOID.DataSet);
 //
 //		String conversionParamsString = context.getConversionParams().toString();
 ////				.replaceFirst("\\[", "[\r\n\t\t\t ")
@@ -80,28 +80,28 @@
 //		conversionParamsString = String.format("OWL profile: %s.\r\n\t\tConversion options: %s",
 //				owlProfileList.getOwlProfileIds(),
 //				conversionParamsString); 
-//		jenaModel.add(dataSetResource, RdfVocabulary.DCTERMS.description, jenaModel.createTypedLiteral(conversionParamsString));		
+//		jenaModel.add(dataSetResource, OwlVocabulary.DCTERMS.description, jenaModel.createTypedLiteral(conversionParamsString));		
 //
 //		IfcStepFileDescription stepFileDescription = metaModel.getFileDescription();
 //		stepFileDescription.getDescriptions().forEach(x ->
-//			jenaModel.add(dataSetResource, RdfVocabulary.DCTERMS.description, jenaModel.createTypedLiteral(x))
+//			jenaModel.add(dataSetResource, OwlVocabulary.DCTERMS.description, jenaModel.createTypedLiteral(x))
 //		);
 //		
 //		IfcStepFileName stepFileName = metaModel.getFileName();		
-//		jenaModel.add(dataSetResource, RdfVocabulary.DCTERMS.title, jenaModel.createTypedLiteral(stepFileName.getName()));		
+//		jenaModel.add(dataSetResource, OwlVocabulary.DCTERMS.title, jenaModel.createTypedLiteral(stepFileName.getName()));		
 //
 //		stepFileName.getAuthors().forEach(x ->
-//			jenaModel.add(dataSetResource, RdfVocabulary.DCTERMS.creator, jenaModel.createTypedLiteral(x))
+//			jenaModel.add(dataSetResource, OwlVocabulary.DCTERMS.creator, jenaModel.createTypedLiteral(x))
 //		);
 //		
 //		stepFileName.getOrganizations().forEach(x ->
-//			jenaModel.add(dataSetResource, RdfVocabulary.DCTERMS.publisher, jenaModel.createTypedLiteral(x))
+//			jenaModel.add(dataSetResource, OwlVocabulary.DCTERMS.publisher, jenaModel.createTypedLiteral(x))
 //		);
 //		
-//		jenaModel.add(dataSetResource, RdfVocabulary.DCTERMS.created, jenaModel.createTypedLiteral(stepFileName.getTimeStamp()));	
+//		jenaModel.add(dataSetResource, OwlVocabulary.DCTERMS.created, jenaModel.createTypedLiteral(stepFileName.getTimeStamp()));	
 //		
 //		
-//		jenaModel.add(dataSetResource, RdfVocabulary.DCTERMS.hasVersion, jenaModel.createTypedLiteral(stepFileName.getPreprocessorVersion(), XSD.date.toString()));
+//		jenaModel.add(dataSetResource, OwlVocabulary.DCTERMS.hasVersion, jenaModel.createTypedLiteral(stepFileName.getPreprocessorVersion(), XSD.date.toString()));
 //		
 //		Resource fileDescriptionResource = jenaModel.createResource();
 //		Resource fileNameResource = jenaModel.createResource();

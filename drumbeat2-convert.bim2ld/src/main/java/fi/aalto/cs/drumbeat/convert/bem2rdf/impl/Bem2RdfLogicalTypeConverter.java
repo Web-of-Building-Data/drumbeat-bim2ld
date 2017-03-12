@@ -8,7 +8,7 @@ import org.apache.jena.vocabulary.*;
 import fi.aalto.cs.drumbeat.common.params.StringParam;
 import fi.aalto.cs.drumbeat.convert.bem2rdf.*;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
-import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
+import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
 
 public class Bem2RdfLogicalTypeConverter{
 	
@@ -62,7 +62,7 @@ public class Bem2RdfLogicalTypeConverter{
 			
 			final boolean enumerationIsSupported = 
 					manager.targetOwlProfileList.supportsStatement(OWL.oneOf, 
-							baseTypeForLogical.equals(OWL2.NamedIndividual) ? RdfVocabulary.ANY_URI_LIST : RdfVocabulary.ANY_LITERAL_LIST);	
+							baseTypeForLogical.equals(OWL2.NamedIndividual) ? OwlVocabulary.DumpData.ANY_URI_LIST : OwlVocabulary.DumpData.ANY_LITERAL_LIST);	
 					
 			if (enumerationIsSupported) {
 				

@@ -2,25 +2,29 @@ package fi.aalto.cs.drumbeat.convert.bem2rdf.impl;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.semanticweb.owlapi.profiles.violations.UseOfUndeclaredDataProperty;
 
 import fi.aalto.cs.drumbeat.convert.bem2rdf.*;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemLogicalValue;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemLogicalEnum;
 import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
-import fi.aalto.cs.drumbeat.rdf.OwlProfileEnum;
-import fi.aalto.cs.drumbeat.rdf.OwlProfileList;
-import fi.aalto.cs.drumbeat.rdf.RdfVocabulary.XSD;
+import fi.aalto.cs.drumbeat.owl.OwlProfileEnum;
+import fi.aalto.cs.drumbeat.owl.OwlProfileList;
+import fi.aalto.cs.drumbeat.owl.OwlVocabulary.XSD;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
 
-public class Test_Bem2RdfConverter_Exporting_LogicalTypes {
+public class Test_Bem2RdfConverter_Exporting_LogicalTypes extends Test_Base {
 	
 	public static final boolean COMPARE_WITH_EXPECTED_DATASETS = true;
+	public static final boolean WRITE_ACTUAL_DATASETS = true;
 	
 	private Model jenaModel;
 	private Bem2RdfConversionContext context;
@@ -29,90 +33,90 @@ public class Test_Bem2RdfConverter_Exporting_LogicalTypes {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		Bem2RdfTestHelper.init();		
+		init();		
 	}
 	
 
 	@Before
 	public void setUp() throws Exception {		
-		bemSchema = new ExpressSchema(Bem2RdfTestHelper.TEST_SCHEMA_NAME);
+		bemSchema = new ExpressSchema(TEST_SCHEMA_NAME);
 		jenaModel = ModelFactory.createDefaultModel();
 		
 		context = new Bem2RdfConversionContext();
-		context.setBuiltInOntologyNamespacePrefixFormat(Bem2RdfTestHelper.BUILT_IN_ONTOLOGY_NAMESPACE_PREFIX_FORMAT);
-		context.setBuiltInOntologyNamespaceUriFormat(Bem2RdfTestHelper.BUILT_IN_ONTOLOGY_NAMESPACE_URI_FORMAT);
-		context.setOntologyNamespacePrefixFormat(Bem2RdfTestHelper.ONTOLOGY_NAMESPACE_PREFIX_FORMAT);
-		context.setOntologyNamespaceUriFormat(Bem2RdfTestHelper.ONTOLOGY_NAMESPACE_URI_FORMAT);
+		context.setBuiltInOntologyNamespacePrefixFormat(BUILT_IN_ONTOLOGY_NAMESPACE_PREFIX_FORMAT);
+		context.setBuiltInOntologyNamespaceUriFormat(BUILT_IN_ONTOLOGY_NAMESPACE_URI_FORMAT);
+		context.setOntologyNamespacePrefixFormat(ONTOLOGY_NAMESPACE_PREFIX_FORMAT);
+		context.setOntologyNamespaceUriFormat(ONTOLOGY_NAMESPACE_URI_FORMAT);
 	}
 	
 	@Test
 	public void test_exportingLogical_As_NamedIndividual_OWL2_Full() throws Exception {
-		test_exportLogical(Bem2RdfConversionContextParams.VALUE_NAMED_INDIVIDUAL, OwlProfileEnum.OWL2_Full);
+		exportLogical(Bem2RdfConversionContextParams.VALUE_NAMED_INDIVIDUAL, OwlProfileEnum.OWL2_Full);
 	}
 
 	@Test
 	public void test_exportingLogical_As_NamedIndividual_OWL2_DL() throws Exception {
-		test_exportLogical(Bem2RdfConversionContextParams.VALUE_NAMED_INDIVIDUAL, OwlProfileEnum.OWL2_DL);
+		exportLogical(Bem2RdfConversionContextParams.VALUE_NAMED_INDIVIDUAL, OwlProfileEnum.OWL2_DL);
 	}
 
 	@Test
 	public void test_exportingLogical_As_NamedIndividual_OWL2_RL() throws Exception {
-		test_exportLogical(Bem2RdfConversionContextParams.VALUE_NAMED_INDIVIDUAL, OwlProfileEnum.OWL2_RL);
+		exportLogical(Bem2RdfConversionContextParams.VALUE_NAMED_INDIVIDUAL, OwlProfileEnum.OWL2_RL);
 	}
 
 	@Test
 	public void test_exportingLogical_As_NamedIndividual_OWL2_EL() throws Exception {
-		test_exportLogical(Bem2RdfConversionContextParams.VALUE_NAMED_INDIVIDUAL, OwlProfileEnum.OWL2_EL);
+		exportLogical(Bem2RdfConversionContextParams.VALUE_NAMED_INDIVIDUAL, OwlProfileEnum.OWL2_EL);
 	}
 
 	@Test
 	public void test_exportingLogical_As_XsdBoolean_OWL2_Full() throws Exception {
-		test_exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_BOOLEAN, OwlProfileEnum.OWL2_Full);
+		exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_BOOLEAN, OwlProfileEnum.OWL2_Full);
 	}
 
 	@Test
 	public void test_exportingLogical_As_XsdBoolean_OWL2_DL() throws Exception {
-		test_exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_BOOLEAN, OwlProfileEnum.OWL2_DL);
+		exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_BOOLEAN, OwlProfileEnum.OWL2_DL);
 	}
 
 	@Test
 	public void test_exportingLogical_As_XsdBoolean_OWL2_RL() throws Exception {
-		test_exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_BOOLEAN, OwlProfileEnum.OWL2_RL);
+		exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_BOOLEAN, OwlProfileEnum.OWL2_RL);
 	}
 
 	@Test
 	public void test_exportingLogical_As_XsdBoolean_OWL2_EL() throws Exception {
-		test_exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_BOOLEAN, OwlProfileEnum.OWL2_EL);
+		exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_BOOLEAN, OwlProfileEnum.OWL2_EL);
 	}
 
 	@Test
 	public void test_exportingLogical_As_XsdString_OWL2_Full() throws Exception {
-		test_exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_STRING, OwlProfileEnum.OWL2_Full);
+		exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_STRING, OwlProfileEnum.OWL2_Full);
 	}
 
 	@Test
 	public void test_exportingLogical_As_XsdString_OWL2_DL() throws Exception {
-		test_exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_STRING, OwlProfileEnum.OWL2_DL);
+		exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_STRING, OwlProfileEnum.OWL2_DL);
 	}
 
 	@Test
 	public void test_exportingLogical_As_XsdString_OWL2_RL() throws Exception {
-		test_exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_STRING, OwlProfileEnum.OWL2_RL);
+		exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_STRING, OwlProfileEnum.OWL2_RL);
 	}
 
 	@Test
 	public void test_exportingLogical_As_XsdString_OWL2_EL() throws Exception {
-		test_exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_STRING, OwlProfileEnum.OWL2_EL);
+		exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_STRING, OwlProfileEnum.OWL2_EL);
 	}
 
-	private void test_exportLogical(String convertLogicalTo, OwlProfileEnum... owlProfiles) throws Exception {
-		Bem2RdfTestHelper.startTest(this, 1);
+	private void exportLogical(String convertLogicalTo, OwlProfileEnum owlProfile) throws Exception {
+		startTest(1);
 		
 		context.getConversionParams().setParamValue(
 				Bem2RdfConversionContextParams.PARAM_CONVERT_LOGICALS_TO,
 				convertLogicalTo);
 		
-		context.setTargetOwlProfileList(new OwlProfileList(owlProfiles));
+		context.setTargetOwlProfileList(new OwlProfileList(owlProfile));
 		
 		Bem2RdfConverterManager converter = new Bem2RdfConverterManager(context, bemSchema);
 		
@@ -121,12 +125,15 @@ public class Test_Bem2RdfConverter_Exporting_LogicalTypes {
 		converter.convertTypeInfo(jenaModel, bemSchema.BOOLEAN, true);
 		converter.convertTypeInfo(jenaModel, bemSchema.LOGICAL, true);
 		
-		Bem2RdfTestHelper.compareWithExpectedResult(this, 1, jenaModel, COMPARE_WITH_EXPECTED_DATASETS, true, context.getTargetOwlProfileList());
+		StringBuffer modelStringBuffer = writeAndCompareModel(1, jenaModel, WRITE_ACTUAL_DATASETS, COMPARE_WITH_EXPECTED_DATASETS);
+		if (modelStringBuffer != null) {
+			TestHelper.validateOwl(modelStringBuffer, owlProfile, Arrays.asList(UseOfUndeclaredDataProperty.class));
+		}
 		
-		test_exportingLogicalValues(converter, convertLogicalTo);
+		exportLogicalValues(converter, convertLogicalTo);
 	}
 	
-	private void test_exportingLogicalValues(Bem2RdfConverterManager converter, String convertLogicalTo) {
+	private void exportLogicalValues(Bem2RdfConverterManager converter, String convertLogicalTo) {
 		for (BemLogicalEnum logicalValue : BemLogicalEnum.values()) {			
 			RDFNode logicalNode = converter.convertSimpleValue(jenaModel, new BemLogicalValue(logicalValue), bemSchema.LOGICAL);
 			switch (convertLogicalTo) {

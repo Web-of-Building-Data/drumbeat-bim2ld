@@ -11,7 +11,7 @@ import fi.aalto.cs.drumbeat.common.params.StringParam;
 import fi.aalto.cs.drumbeat.convert.bem2rdf.*;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemPrimitiveValue;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
-import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
+import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
 
 public class Bem2RdfPrimitiveTypeConverter{
 	
@@ -36,13 +36,13 @@ public class Bem2RdfPrimitiveTypeConverter{
 			baseTypeForDoubles = XSD.xdouble;
 			break;
 		case Bem2RdfConversionContextParams.VALUE_OWL_REAL:
-			baseTypeForDoubles = RdfVocabulary.OWL.real;
+			baseTypeForDoubles = OwlVocabulary.OWL.real;
 			break;
 		case Bem2RdfConversionContextParams.VALUE_XSD_STRING:
 			baseTypeForDoubles = XSD.xstring;
 			break;
 		case Bem2RdfConversionContextParams.VALUE_AUTO_MOST_EFFICIENT:
-			List<Resource> preferredTypes = Arrays.asList(XSD.xdouble, RdfVocabulary.OWL.real, XSD.decimal);
+			List<Resource> preferredTypes = Arrays.asList(XSD.xdouble, OwlVocabulary.OWL.real, XSD.decimal);
 			baseTypeForDoubles = manager.context.getTargetOwlProfileList().getFirstSupportedDatatype(preferredTypes);						
 			break;
 		default:
@@ -64,7 +64,7 @@ public class Bem2RdfPrimitiveTypeConverter{
 			
 	//		jenaModel.add(property, RDF.type, OWL.DatatypeProperty);
 	//		if (targetOwlProfileList.supportsRdfProperty(OWL.FunctionalProperty, null)) {
-	//			jenaModel.add(property, RDF.type, RdfVocabulary.OWL.FunctionalDataProperty);
+	//			jenaModel.add(property, RDF.type, OwlVocabulary.OWL.FunctionalDataProperty);
 	//		}
 			
 			Property property_hasValue = jenaModel.createProperty(

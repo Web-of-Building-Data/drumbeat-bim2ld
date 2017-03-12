@@ -10,7 +10,7 @@ import fi.aalto.cs.drumbeat.convert.bem2rdf.Bem2RdfConverterConfigurationExcepti
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemEntity;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemValue;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
-import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
+import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
 
 public class Bem2RdfEntityTypeConverter {
 
@@ -53,7 +53,7 @@ public class Bem2RdfEntityTypeConverter {
 		List<BemEntityTypeInfo> disjointClasses = null;
 
 		final boolean supportsDisjointUnionOf = manager.targetOwlProfileList.supportsStatement(OWL2.disjointUnionOf,
-				RdfVocabulary.ANY_URI_LIST);
+				OwlVocabulary.DumpData.ANY_URI_LIST);
 
 		if (typeInfo.isAbstractSuperType() && supportsDisjointUnionOf) {
 			List<BemEntityTypeInfo> allSubtypeInfos = typeInfo.getSubTypeInfos();
@@ -84,7 +84,7 @@ public class Bem2RdfEntityTypeConverter {
 					int indexOfCurrentType = allSubtypeInfos.indexOf(typeInfo);
 
 					final boolean supportDisjointWithList = manager.targetOwlProfileList
-							.supportsStatement(OWL.disjointWith, RdfVocabulary.ANY_URI_LIST);
+							.supportsStatement(OWL.disjointWith, OwlVocabulary.DumpData.ANY_URI_LIST);
 
 					if (allSubtypeInfos.size() > 2 && supportDisjointWithList) {
 						//
@@ -98,7 +98,7 @@ public class Bem2RdfEntityTypeConverter {
 
 					} else {
 						final boolean supportDisjointWithSingleClass = manager.targetOwlProfileList
-								.supportsStatement(OWL.disjointWith, RdfVocabulary.ANY_URI_1);
+								.supportsStatement(OWL.disjointWith, OwlVocabulary.DumpData.ANY_URI_1);
 						// manager.context.getOwlVersion() <
 						// OwlProfile.OWL_VERSION_2_0
 
@@ -224,7 +224,7 @@ public class Bem2RdfEntityTypeConverter {
 		List<BemUniqueKeyInfo> uniqueKeyInfos = typeInfo.getUniqueKeyInfos();
 
 		final boolean supportHasKey = manager.targetOwlProfileList.supportsStatement(OWL2.hasKey,
-				RdfVocabulary.ANY_URI_LIST);
+				OwlVocabulary.DumpData.ANY_URI_LIST);
 
 		if (uniqueKeyInfos != null && supportHasKey) {
 			for (BemUniqueKeyInfo uniqueKeyInfo : uniqueKeyInfos) {

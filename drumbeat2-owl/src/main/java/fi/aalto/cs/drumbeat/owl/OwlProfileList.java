@@ -1,4 +1,4 @@
-package fi.aalto.cs.drumbeat.rdf;
+package fi.aalto.cs.drumbeat.owl;
 
 import java.util.ArrayList;
 import java.util.Collection;

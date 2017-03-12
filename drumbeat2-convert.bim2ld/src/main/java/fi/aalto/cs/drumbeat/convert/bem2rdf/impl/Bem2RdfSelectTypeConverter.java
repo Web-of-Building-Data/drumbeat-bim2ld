@@ -6,7 +6,7 @@ import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.*;
 
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
-import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
+import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
 
 public class Bem2RdfSelectTypeConverter {
 	
@@ -37,7 +37,7 @@ public class Bem2RdfSelectTypeConverter {
 			}
 	
 			final boolean unionIsSupported = manager.targetOwlProfileList.supportsStatement(
-					OWL.unionOf, RdfVocabulary.ANY_URI_LIST);
+					OWL.unionOf, OwlVocabulary.DumpData.ANY_URI_LIST);
 	
 			if (unionIsSupported && subTypeResources.size() > 1) {
 				RDFList rdfList = jenaModel.createList(subTypeResources.iterator());

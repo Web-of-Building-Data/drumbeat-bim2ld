@@ -1,4 +1,4 @@
-package fi.aalto.cs.drumbeat.rdf;
+package fi.aalto.cs.drumbeat.owl;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +13,7 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.XSD;
 
-public class OwlProfile {
+public class OwlProfile implements Comparable<OwlProfile> {
 
 	public static final float OWL_VERSION_1_0 = 1.0f;
 	public static final float OWL_VERSION_2_0 = 2.0f;
@@ -230,8 +230,8 @@ public class OwlProfile {
 
 		} else if (property.equals(OWL2.disjointUnionOf)
 				|| property.equals(OWL2.withRestrictions)
-				|| property.equals(RdfVocabulary.XSD.maxExclusive)
-				|| property.equals(RdfVocabulary.XSD.minExclusive)) {
+				|| property.equals(OwlVocabulary.XSD.maxExclusive)
+				|| property.equals(OwlVocabulary.XSD.minExclusive)) {
 			//
 			// owl:disjointUnionOf are new features of OWL 2, but it is not supported by OWL 2 EL, QL and RL
 			// See: http://www.w3.org/2007/OWL/wiki/New_Features_and_Rationale.
@@ -274,8 +274,8 @@ public class OwlProfile {
 					// supportedDatatypes.add(RDF.XMLLiteral);
 					supportedDatatypes.add(RDFS.Literal);
 					supportedDatatypes.add(RDFS.Literal);
-					supportedDatatypes.add(RdfVocabulary.OWL.real);
-					supportedDatatypes.add(RdfVocabulary.OWL.rational);
+					supportedDatatypes.add(OwlVocabulary.OWL.real);
+					supportedDatatypes.add(OwlVocabulary.OWL.rational);
 					supportedDatatypes.add(XSD.decimal);
 					supportedDatatypes.add(XSD.integer);
 					supportedDatatypes.add(XSD.nonNegativeInteger);
@@ -329,8 +329,8 @@ public class OwlProfile {
 					// supportedDatatypes.add(XSD.dateTimeStamp);
 
 					if (owlProfileId != OwlProfileEnum.OWL2_RL) {
-						supportedDatatypes.add(RdfVocabulary.OWL.real);
-						supportedDatatypes.add(RdfVocabulary.OWL.rational);
+						supportedDatatypes.add(OwlVocabulary.OWL.real);
+						supportedDatatypes.add(OwlVocabulary.OWL.rational);
 					}
 
 				}
@@ -386,6 +386,11 @@ public class OwlProfile {
 
 		return supportedDatatypes;
 
+	}
+
+	@Override
+	public int compareTo(OwlProfile o) {
+		return owlProfileId.compareTo(o.owlProfileId);
 	}
 
 }

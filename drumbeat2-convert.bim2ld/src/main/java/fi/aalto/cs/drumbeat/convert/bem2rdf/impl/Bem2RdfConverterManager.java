@@ -14,8 +14,8 @@ import fi.aalto.cs.drumbeat.data.bem.dataset.BemSimpleValue;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemTypedSimpleValue;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemValue;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
-import fi.aalto.cs.drumbeat.rdf.OwlProfileList;
-import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
+import fi.aalto.cs.drumbeat.owl.OwlProfileList;
+import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,8 +73,8 @@ public class Bem2RdfConverterManager {
 		return uriBuilder;
 	}
 	
-	public void exportBuiltInTypes(Model jenaModel) {
-		builtInOntologyConverter.exportExpressOntology(jenaModel);
+	public void exportPermanentBuiltInDefinitions(Model jenaModel) {
+		builtInOntologyConverter.exportPermanentBuiltInDefinitions(jenaModel);
 	}
 	
 	public Resource convertTypeInfo(Model jenaModel, BemTypeInfo typeInfo, boolean includeDetails) {
@@ -330,7 +330,7 @@ public class Bem2RdfConverterManager {
 
 		if (max != null && max == 1 && targetOwlProfileList.supportsStatement(RDF.type, OWL.FunctionalProperty)) {			
 			// TODO: detect when FunctionalDataProperty is supported
-			property.addProperty(RDF.type, isObjectProperty ? OWL.FunctionalProperty : RdfVocabulary.OWL.FunctionalDataProperty);
+			property.addProperty(RDF.type, isObjectProperty ? OWL.FunctionalProperty : OwlVocabulary.OWL.FunctionalDataProperty);
 		}
 
 		

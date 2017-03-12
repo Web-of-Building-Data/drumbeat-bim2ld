@@ -1,4 +1,4 @@
-package fi.aalto.cs.drumbeat.rdf;
+package fi.aalto.cs.drumbeat.owl;
 
 import static org.junit.Assert.*;
 
@@ -16,9 +16,8 @@ import org.apache.jena.vocabulary.OWL2;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.XSD;
 
-import fi.aalto.cs.drumbeat.rdf.OwlProfile;
-import fi.aalto.cs.drumbeat.rdf.OwlProfileEnum;
-import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
+import fi.aalto.cs.drumbeat.owl.OwlProfile;
+import fi.aalto.cs.drumbeat.owl.OwlProfileEnum;
 
 public class Test_OwlProfile_supportsStatement {
 	
@@ -68,7 +67,7 @@ public class Test_OwlProfile_supportsStatement {
 		assertTrue(owlProfile.supportDataType(XSD.xdouble));
 		assertTrue(owlProfile.supportDataType(XSD.xboolean));
 		
-		assertFalse(owlProfile.supportDataType(RdfVocabulary.OWL.real));	
+		assertFalse(owlProfile.supportDataType(OwlVocabulary.OWL.real));	
 	}
 
 	@Test
@@ -93,7 +92,7 @@ public class Test_OwlProfile_supportsStatement {
 		assertTrue(owlProfile.supportDataType(XSD.xdouble));
 		assertTrue(owlProfile.supportDataType(XSD.xboolean));
 		
-		assertFalse(owlProfile.supportDataType(RdfVocabulary.OWL.real));		
+		assertFalse(owlProfile.supportDataType(OwlVocabulary.OWL.real));		
 	}
 	
 	@Test
@@ -117,7 +116,7 @@ public class Test_OwlProfile_supportsStatement {
 		assertTrue(owlProfile.supportDataType(XSD.xdouble));
 		assertTrue(owlProfile.supportDataType(XSD.xboolean));
 		
-		assertFalse(owlProfile.supportDataType(RdfVocabulary.OWL.real));
+		assertFalse(owlProfile.supportDataType(OwlVocabulary.OWL.real));
 	}
 	
 	@Test
@@ -141,8 +140,8 @@ public class Test_OwlProfile_supportsStatement {
 		assertTrue(owlProfile.supportDataType(XSD.decimal));
 		assertTrue(owlProfile.supportDataType(XSD.dateTime));
 
-		assertTrue(owlProfile.supportDataType(RdfVocabulary.OWL.real));
-		assertTrue(owlProfile.supportDataType(RdfVocabulary.OWL.rational));
+		assertTrue(owlProfile.supportDataType(OwlVocabulary.OWL.real));
+		assertTrue(owlProfile.supportDataType(OwlVocabulary.OWL.rational));
 
 		assertFalse(owlProfile.supportDataType(XSD.xdouble));
 		assertFalse(owlProfile.supportDataType(XSD.xboolean));
@@ -169,8 +168,8 @@ public class Test_OwlProfile_supportsStatement {
 		assertTrue(owlProfile.supportDataType(XSD.decimal));
 		assertTrue(owlProfile.supportDataType(XSD.dateTime));
 
-		assertTrue(owlProfile.supportDataType(RdfVocabulary.OWL.real));
-		assertTrue(owlProfile.supportDataType(RdfVocabulary.OWL.rational));
+		assertTrue(owlProfile.supportDataType(OwlVocabulary.OWL.real));
+		assertTrue(owlProfile.supportDataType(OwlVocabulary.OWL.rational));
 
 		assertFalse(owlProfile.supportDataType(XSD.xdouble));
 		assertFalse(owlProfile.supportDataType(XSD.xboolean));
@@ -197,8 +196,8 @@ public class Test_OwlProfile_supportsStatement {
 		assertTrue(owlProfile.supportDataType(XSD.decimal));
 		assertTrue(owlProfile.supportDataType(XSD.dateTime));
 
-		assertFalse(owlProfile.supportDataType(RdfVocabulary.OWL.real));
-		assertFalse(owlProfile.supportDataType(RdfVocabulary.OWL.rational));
+		assertFalse(owlProfile.supportDataType(OwlVocabulary.OWL.real));
+		assertFalse(owlProfile.supportDataType(OwlVocabulary.OWL.rational));
 
 		assertTrue(owlProfile.supportDataType(XSD.xdouble));
 		assertTrue(owlProfile.supportDataType(XSD.xboolean));
@@ -226,7 +225,7 @@ public class Test_OwlProfile_supportsStatement {
 
 		assertTrue(owlProfile.supportDataType(XSD.xdouble));
 		assertTrue(owlProfile.supportDataType(XSD.xboolean));
-		assertTrue(owlProfile.supportDataType(RdfVocabulary.OWL.real));
+		assertTrue(owlProfile.supportDataType(OwlVocabulary.OWL.real));
 	}
 	
 }

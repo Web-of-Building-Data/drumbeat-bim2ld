@@ -20,9 +20,9 @@ import fi.aalto.cs.drumbeat.common.params.StringParam;
 import fi.aalto.cs.drumbeat.data.bem.BemException;
 import fi.aalto.cs.drumbeat.data.bem.dataset.*;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
+import fi.aalto.cs.drumbeat.owl.OwlProfileList;
+import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
 import fi.aalto.cs.drumbeat.convert.bem2rdf.*;
-import fi.aalto.cs.drumbeat.rdf.OwlProfileList;
-import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
 
 
 /**
@@ -432,7 +432,7 @@ public abstract class Ifc2RdfExporterBase {
 //		
 ////		assert(enumValueNodes.size() > 1) : String.format("Type %s has only 1 enum value", typeInfo);
 //		
-//		final boolean enumerationIsSupported = owlProfileList.supportsStatement(OWL.oneOf, RdfVocabulary.DUMP_URI_LIST);	
+//		final boolean enumerationIsSupported = owlProfileList.supportsStatement(OWL.oneOf, OwlVocabulary.DUMP_URI_LIST);	
 //				
 //		if (enumerationIsSupported) {
 //			
@@ -518,13 +518,13 @@ public abstract class Ifc2RdfExporterBase {
 //				baseTypeForDoubles = XSD.xdouble;
 //				break;
 //			case Bem2RdfConversionContextParams.VALUE_OWL_REAL:
-//				baseTypeForDoubles = RdfVocabulary.OWL.real;
+//				baseTypeForDoubles = OwlVocabulary.OWL.real;
 //				break;
 //			case Bem2RdfConversionContextParams.VALUE_XSD_STRING:
 //				baseTypeForDoubles = XSD.xstring;
 //				break;
 //			case Bem2RdfConversionContextParams.VALUE_AUTO_MOST_EFFICIENT:
-//				List<Resource> preferredTypes = Arrays.asList(XSD.xdouble, RdfVocabulary.OWL.real, XSD.decimal);
+//				List<Resource> preferredTypes = Arrays.asList(XSD.xdouble, OwlVocabulary.OWL.real, XSD.decimal);
 //				baseTypeForDoubles = context.getOwlProfileList().getFirstSupportedDatatype(preferredTypes);						
 //				break;
 //			default:
@@ -546,7 +546,7 @@ public abstract class Ifc2RdfExporterBase {
 //		
 ////		jenaModel.add(property, RDF.type, OWL.DatatypeProperty);
 ////		if (owlProfileList.supportsRdfProperty(OWL.FunctionalProperty, null)) {
-////			jenaModel.add(property, RDF.type, RdfVocabulary.OWL.FunctionalDataProperty);
+////			jenaModel.add(property, RDF.type, OwlVocabulary.OWL.FunctionalDataProperty);
 ////		}
 //		jenaModel.add(property, RDFS.subPropertyOf, Bem2RdfVocabulary.EXPRESS.hasValue);
 ////		jenaModel.add(property, RDFS.domain, typeResource);
@@ -578,7 +578,7 @@ public abstract class Ifc2RdfExporterBase {
 //			enumValueNodes.add(createUriResource(formatExpressOntologyName(value.toString())));
 //		}
 //
-//		final boolean enumerationIsSupported = owlProfileList.supportsStatement(OWL.oneOf, RdfVocabulary.DUMP_URI_LIST);
+//		final boolean enumerationIsSupported = owlProfileList.supportsStatement(OWL.oneOf, OwlVocabulary.DUMP_URI_LIST);
 //
 //		if (enumerationIsSupported) {
 //			RDFList rdfList = createList(enumValueNodes);
@@ -671,7 +671,7 @@ public abstract class Ifc2RdfExporterBase {
 //		}
 //
 //		final boolean unionIsSupported = owlProfileList.supportsStatement(
-//				OWL.unionOf, RdfVocabulary.DUMP_URI_LIST);
+//				OWL.unionOf, OwlVocabulary.DUMP_URI_LIST);
 //
 //		if (unionIsSupported && subTypeResources.size() > 1) {
 //			RDFList rdfList = createList(subTypeResources);
@@ -700,7 +700,7 @@ public abstract class Ifc2RdfExporterBase {
 //		 //
 //		 List<BemEntityTypeInfo> disjointClasses = null;
 //		
-//		 final boolean supportsDisjointUnionOf = owlProfileList.supportsStatement(OWL2.disjointUnionOf, RdfVocabulary.DUMP_URI_LIST);
+//		 final boolean supportsDisjointUnionOf = owlProfileList.supportsStatement(OWL2.disjointUnionOf, OwlVocabulary.DUMP_URI_LIST);
 //		
 //		 if (typeInfo.isAbstractSuperType() && supportsDisjointUnionOf) {
 //			 List<BemEntityTypeInfo> allSubtypeInfos = typeInfo.getSubTypeInfos();
@@ -729,7 +729,7 @@ public abstract class Ifc2RdfExporterBase {
 //	
 //					int indexOfCurrentType = allSubtypeInfos.indexOf(typeInfo);
 //					
-//					final boolean supportDisjointWithList = owlProfileList.supportsStatement(OWL.disjointWith, RdfVocabulary.DUMP_URI_LIST); 
+//					final boolean supportDisjointWithList = owlProfileList.supportsStatement(OWL.disjointWith, OwlVocabulary.DUMP_URI_LIST); 
 //	
 //					if (allSubtypeInfos.size() > 2 && supportDisjointWithList) {
 //						//
@@ -742,7 +742,7 @@ public abstract class Ifc2RdfExporterBase {
 //						disjointClasses = allSubtypeInfos;
 //	
 //					} else {
-//						final boolean supportDisjointWithSingleClass = owlProfileList.supportsStatement(OWL.disjointWith, RdfVocabulary.DUMP_URI_1); 
+//						final boolean supportDisjointWithSingleClass = owlProfileList.supportsStatement(OWL.disjointWith, OwlVocabulary.DUMP_URI_1); 
 //						// context.getOwlVersion() < OwlProfile.OWL_VERSION_2_0
 //						
 //						if (supportDisjointWithSingleClass) {
@@ -777,7 +777,7 @@ public abstract class Ifc2RdfExporterBase {
 //		//
 //		List<BemUniqueKeyInfo> uniqueKeyInfos = typeInfo.getUniqueKeyInfos();
 //		
-//		final boolean supportHasKey = owlProfileList.supportsStatement(OWL2.hasKey, RdfVocabulary.DUMP_URI_LIST); 
+//		final boolean supportHasKey = owlProfileList.supportsStatement(OWL2.hasKey, OwlVocabulary.DUMP_URI_LIST); 
 //		
 //		if (uniqueKeyInfos != null && supportHasKey) {
 //			for (BemUniqueKeyInfo uniqueKeyInfo : uniqueKeyInfos) {
@@ -853,7 +853,7 @@ public abstract class Ifc2RdfExporterBase {
 //
 //		if (max != null && max == 1 && owlProfileList.supportsStatement(RDF.type, OWL.FunctionalProperty)) {			
 //			// TODO: detect when FunctionalDataProperty is supported
-//			property.addProperty(RDF.type, isObjectProperty ? OWL.FunctionalProperty : RdfVocabulary.OWL.FunctionalDataProperty);
+//			property.addProperty(RDF.type, isObjectProperty ? OWL.FunctionalProperty : OwlVocabulary.OWL.FunctionalDataProperty);
 //		}
 //
 //		

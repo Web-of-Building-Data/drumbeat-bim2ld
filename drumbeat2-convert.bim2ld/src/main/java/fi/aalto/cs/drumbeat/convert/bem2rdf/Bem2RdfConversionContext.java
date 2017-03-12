@@ -1,7 +1,7 @@
 package fi.aalto.cs.drumbeat.convert.bem2rdf;
 
-import fi.aalto.cs.drumbeat.rdf.OwlProfileEnum;
-import fi.aalto.cs.drumbeat.rdf.OwlProfileList;
+import fi.aalto.cs.drumbeat.owl.OwlProfileEnum;
+import fi.aalto.cs.drumbeat.owl.OwlProfileList;
 
 public class Bem2RdfConversionContext {
 	

@@ -34,7 +34,7 @@ public class Bem2RdfSchemaExporter {
 		boolean exportNonBuiltInTypes = !context.getConversionParams().ignoreNonBuiltInTypes();
 
 		if (exportBuiltInTypes) {
-			converterManager.exportBuiltInTypes(jenaModel);
+			converterManager.exportPermanentBuiltInDefinitions(jenaModel);
 		}
 			
 		for (BemTypeInfo typeInfo : schema.getAllTypeInfos()) {

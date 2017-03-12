@@ -16,7 +16,7 @@ import fi.aalto.cs.drumbeat.data.bem.dataset.BemDataset;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemAttributeInfo;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchema;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemTypeInfo;
-import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
+import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
 
 public class Bem2RdfUriBuilder {
 	
@@ -106,16 +106,16 @@ public class Bem2RdfUriBuilder {
 		Map<String, String> prefixMap = new TreeMap<>(); 
 		
 		// define owl:
-		prefixMap.put(RdfVocabulary.OWL.BASE_PREFIX, OWL.getURI());
+		prefixMap.put(OwlVocabulary.OWL.BASE_PREFIX, OWL.getURI());
 
 		// define rdf:
-		prefixMap.put(RdfVocabulary.RDF.BASE_PREFIX, RDF.getURI());
+		prefixMap.put(OwlVocabulary.RDF.BASE_PREFIX, RDF.getURI());
 
 		// define rdfs:
-		prefixMap.put(RdfVocabulary.RDFS.BASE_PREFIX, RDFS.getURI());
+		prefixMap.put(OwlVocabulary.RDFS.BASE_PREFIX, RDFS.getURI());
 
 		// define xsd:
-		prefixMap.put(RdfVocabulary.XSD.BASE_PREFIX, XSD.getURI());
+		prefixMap.put(OwlVocabulary.XSD.BASE_PREFIX, XSD.getURI());
 		
 		if (builtInOntologyNamespacePrefix != null && builtInOntologyNamespaceUri != null) {		
 			prefixMap.put(builtInOntologyNamespacePrefix, builtInOntologyNamespaceUri);

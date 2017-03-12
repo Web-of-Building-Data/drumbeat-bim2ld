@@ -1,4 +1,4 @@
-package fi.aalto.cs.drumbeat.convert.bem2rdf.impl;
+package fi.aalto.cs.drumbeat.convert.bem2rdf;
 
 public class RdfAsserterException extends Exception {
 

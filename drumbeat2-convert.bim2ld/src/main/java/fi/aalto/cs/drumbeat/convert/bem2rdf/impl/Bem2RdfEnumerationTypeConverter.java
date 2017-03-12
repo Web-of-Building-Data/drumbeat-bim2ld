@@ -8,7 +8,7 @@ import org.apache.jena.vocabulary.*;
 import fi.aalto.cs.drumbeat.common.params.StringParam;
 import fi.aalto.cs.drumbeat.convert.bem2rdf.*;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
-import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
+import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
 
 public class Bem2RdfEnumerationTypeConverter {
 
@@ -61,7 +61,7 @@ public class Bem2RdfEnumerationTypeConverter {
 			
 	//		assert(enumValueNodes.size() > 1) : String.format("Type %s has only 1 enum value", typeInfo);
 			
-			final boolean enumerationIsSupported = manager.targetOwlProfileList.supportsStatement(OWL.oneOf, RdfVocabulary.ANY_URI_LIST);	
+			final boolean enumerationIsSupported = manager.targetOwlProfileList.supportsStatement(OWL.oneOf, OwlVocabulary.DumpData.ANY_URI_LIST);	
 					
 			if (enumerationIsSupported) {
 				

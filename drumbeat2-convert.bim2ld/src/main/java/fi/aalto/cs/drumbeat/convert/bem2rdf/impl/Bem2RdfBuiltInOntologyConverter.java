@@ -13,7 +13,7 @@ public class Bem2RdfBuiltInOntologyConverter {
 		this.manager = manager;
 	}
 	
-	public void exportExpressOntology(Model jenaModel) {
+	public void exportPermanentBuiltInDefinitions(Model jenaModel) {
 
 
 		// TODO: Generate literal and logical types automatically (not manually
@@ -33,21 +33,11 @@ public class Bem2RdfBuiltInOntologyConverter {
 		jenaModel.add(jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Entity)),
 				RDF.type,
 				OWL.Class);
+		
+//		switch (manager.contextParams.convertCollectionsTo()) {
+//			
+//		}
 
-		// jenaModel.add(Ifc2RdfVocabulary.EXPRESS.LOGICAL, RDF.type,
-		// OWL.Class);
-		// jenaModel.add(Ifc2RdfVocabulary.EXPRESS.BOOLEAN, RDF.type,
-		// OWL.Class);
-		// jenaModel.add(Ifc2RdfVocabulary.EXPRESS.BOOLEAN, RDFS.subClassOf,
-		// Ifc2RdfVocabulary.EXPRESS.LOGICAL);
-		// jenaModel.add(Ifc2RdfVocabulary.EXPRESS.TRUE, RDF.type,
-		// Ifc2RdfVocabulary.EXPRESS.BOOLEAN);
-		// jenaModel.add(Ifc2RdfVocabulary.EXPRESS.FALSE, RDF.type,
-		// Ifc2RdfVocabulary.EXPRESS.BOOLEAN);
-		// jenaModel.add(Ifc2RdfVocabulary.EXPRESS.UNKNOWN, RDF.type,
-		// Ifc2RdfVocabulary.EXPRESS.LOGICAL);
-		//
-		//
 //		jenaModel
 //				.add(Ifc2RdfVocabulary.EXPRESS.Collection, RDF.type, OWL.Class);
 
@@ -117,7 +107,7 @@ public class Bem2RdfBuiltInOntologyConverter {
 		// OWL.DatatypeProperty);
 		// if (declareFunctionalProperties) {
 		// jenaModel.add(Ifc2RdfVocabulary.EXPRESS.size, RDF.type,
-		// RdfVocabulary.OWL.FunctionalDataProperty);
+		// OwlVocabulary.OWL.FunctionalDataProperty);
 		// }
 		// jenaModel.add(Ifc2RdfVocabulary.EXPRESS.size, RDFS.domain,
 		// Ifc2RdfVocabulary.EXPRESS.Collection);
@@ -128,7 +118,7 @@ public class Bem2RdfBuiltInOntologyConverter {
 		// OWL.DatatypeProperty);
 		// if (declareFunctionalProperties) {
 		// jenaModel.add(Ifc2RdfVocabulary.EXPRESS.startIndex, RDF.type,
-		// RdfVocabulary.OWL.FunctionalDataProperty);
+		// OwlVocabulary.OWL.FunctionalDataProperty);
 		// }
 		// jenaModel.add(Ifc2RdfVocabulary.EXPRESS.startIndex, RDFS.domain,
 		// Ifc2RdfVocabulary.EXPRESS.Collection);
@@ -139,7 +129,7 @@ public class Bem2RdfBuiltInOntologyConverter {
 		// OWL.DatatypeProperty);
 		// if (declareFunctionalProperties) {
 		// jenaModel.add(Ifc2RdfVocabulary.EXPRESS.endIndex, RDF.type,
-		// RdfVocabulary.OWL.FunctionalDataProperty);
+		// OwlVocabulary.OWL.FunctionalDataProperty);
 		// }
 		// jenaModel.add(Ifc2RdfVocabulary.EXPRESS.endIndex, RDFS.domain,
 		// Ifc2RdfVocabulary.EXPRESS.Collection);
@@ -177,7 +167,7 @@ public class Bem2RdfBuiltInOntologyConverter {
 		// OWL.DatatypeProperty);
 		// if (declareFunctionalProperties) {
 		// jenaModel.add(Ifc2RdfVocabulary.EXPRESS.index, RDF.type,
-		// RdfVocabulary.OWL.FunctionalDataProperty);
+		// OwlVocabulary.OWL.FunctionalDataProperty);
 		// }
 		// jenaModel.add(Ifc2RdfVocabulary.EXPRESS.index, RDFS.domain,
 		// Ifc2RdfVocabulary.EXPRESS.Slot);

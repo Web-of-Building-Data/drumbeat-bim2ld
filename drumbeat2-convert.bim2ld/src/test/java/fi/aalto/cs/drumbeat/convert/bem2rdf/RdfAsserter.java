@@ -12,7 +12,6 @@ import fi.aalto.cs.drumbeat.rdf.data.msg.RdfMsgContainer;
 import fi.aalto.cs.drumbeat.rdf.data.msg.RdfMsgContainerBuilder;
 import fi.aalto.cs.drumbeat.rdf.data.msg.RdfMsgContainerPrinter;
 import fi.aalto.cs.drumbeat.common.collections.Pair;
-import fi.aalto.cs.drumbeat.convert.bem2rdf.impl.RdfAsserterException;
 import fi.aalto.cs.drumbeat.rdf.data.RdfChecksumException;
 import fi.aalto.cs.drumbeat.rdf.data.RdfComparatorPool;
 
@@ -29,7 +28,7 @@ public class RdfAsserter {
 	}
 	
 	public void assertEquals(String modelPath1, Model model2) throws RdfAsserterException, IOException {
-		Model model1 = Bem2RdfTestHelper.readModel(modelPath1);
+		Model model1 = TestHelper.readModel(modelPath1);
 		internalAssertEquals(model1, model2, true);
 	}	
 
