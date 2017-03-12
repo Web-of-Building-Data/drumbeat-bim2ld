@@ -141,6 +141,16 @@ public class OwlProfile implements Comparable<OwlProfile> {
 						//
 						return false;
 					}
+				} else if (property.equals(OWL.minCardinality) || // ObjectMinCardinality, // DataMinCardinality
+					property.equals(OWL.cardinality))  // ObjectExactCardinality, // DataExactCardinality
+				{
+					// 
+					// See: https://www.w3.org/TR/owl2-profiles/#OWL_2_RL
+					//
+					return false;
+				} else if (property.equals(OWL.maxCardinality)) { // ObjectMaxCardinality, // DataMaxCardinality
+					int cardinality = object.asLiteral().getInt();
+					return cardinality == 0 || cardinality == 1;
 				}
 
 			} if (owlProfileId == OwlProfileEnum.OWL2_DL) {
