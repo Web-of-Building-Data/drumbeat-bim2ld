@@ -173,7 +173,8 @@ public class RdfMsgContainer implements Iterable<RdfMsg>, Comparable<RdfMsgConta
 			checksum = msg.getChecksum();
 			if (multiTreeMsgs.put(checksum, msg)) {
 				logger.warn(String.format("More than one MSG has the same checksum: " + multiTreeMsgs.get(checksum).toArray()));
-			}			
+			}
+			break;
 		default:
 			throw new IllegalArgumentException("Invalid MSG type: " + msg.getType());
 		}
