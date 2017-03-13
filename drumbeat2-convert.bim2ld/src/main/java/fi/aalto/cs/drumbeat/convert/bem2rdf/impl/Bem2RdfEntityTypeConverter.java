@@ -243,12 +243,12 @@ class Bem2RdfEntityTypeConverter {
 	}	
 	
 	private void convertEntityTypeUniqueKeys(Model jenaModel, Resource typeResource, BemEntityTypeInfo typeInfo) {
-		List<BemUniqueKeyInfo> uniqueKeyInfos = typeInfo.getUniqueKeyInfos();
+		List<BemUniqueKeyInfo> uniqueKeyInfos = typeInfo.getUniqueKeyInfos(false);
 
 		final boolean supportHasKey = manager.targetOwlProfileList.supportsStatement(OWL2.hasKey,
 				OwlVocabulary.DumpData.ANY_URI_LIST);
 
-		if (uniqueKeyInfos != null && supportHasKey) {
+		if (uniqueKeyInfos != null && !uniqueKeyInfos.isEmpty() && supportHasKey) {
 			for (BemUniqueKeyInfo uniqueKeyInfo : uniqueKeyInfos) {
 				List<Resource> attributeResources = new ArrayList<>();
 				for (BemAttributeInfo attributeInfo : uniqueKeyInfo.getAttributeInfos()) {

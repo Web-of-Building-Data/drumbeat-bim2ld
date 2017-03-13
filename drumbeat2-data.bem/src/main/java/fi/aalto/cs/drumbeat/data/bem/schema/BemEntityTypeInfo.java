@@ -54,7 +54,7 @@ public class BemEntityTypeInfo extends BemComplexTypeInfo {
 	 * @return
 	 */
 	public List<BemAttributeInfo> getAttributeInfos(boolean includeInherited) {
-		if (!includeInherited) {
+		if (!includeInherited || superTypeInfo == null) {
 			return attributeInfos;
 		}
 		
@@ -171,12 +171,22 @@ public class BemEntityTypeInfo extends BemComplexTypeInfo {
 			return inverseAttributeInfo;
 		}
 		return null;
-	}	
-	
-	
-	public List<BemUniqueKeyInfo> getUniqueKeyInfos() {
-		return uniqueKeyInfos;		
 	}
+	
+	public List<BemUniqueKeyInfo> getUniqueKeyInfos(boolean includeInherited) {
+		if (!includeInherited || superTypeInfo == null) {
+			return uniqueKeyInfos != null ? uniqueKeyInfos : new ArrayList<>();
+		}
+		
+		// includeInherited = true
+		List<BemUniqueKeyInfo> inheritedUniqueKeyInfos = new ArrayList<>();
+		inheritedUniqueKeyInfos.addAll(superTypeInfo.getUniqueKeyInfos(includeInherited));
+		if (uniqueKeyInfos != null) {
+			inheritedUniqueKeyInfos.addAll(uniqueKeyInfos);
+		}
+		return inheritedUniqueKeyInfos;
+	}
+	
 
 	public void addUniqueKey(BemUniqueKeyInfo uniqueKeyInfo) {
 		if (uniqueKeyInfos == null) {

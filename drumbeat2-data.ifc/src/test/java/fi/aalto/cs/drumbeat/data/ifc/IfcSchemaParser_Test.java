@@ -2,6 +2,7 @@ package fi.aalto.cs.drumbeat.data.ifc;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -62,6 +63,14 @@ public class IfcSchemaParser_Test {
 		assertNotNull(type_IfcProject);
 		assertEquals("IfcProject", type_IfcProject.getName());
 		assertEquals(BemEntityTypeInfo.class, type_IfcProject.getClass());
+		
+		List<BemUniqueKeyInfo> ownUniqueKeyInfoList = type_IfcProject.getUniqueKeyInfos(false);
+		assertTrue(ownUniqueKeyInfoList == null || ownUniqueKeyInfoList.isEmpty());		
+		
+		List<BemUniqueKeyInfo> inheritedUniqueKeyInfoList = type_IfcProject.getUniqueKeyInfos(true);
+		assertNotNull(inheritedUniqueKeyInfoList);		
+		assertEquals(1, inheritedUniqueKeyInfoList.size());		
+		
 		
 		BemTypeInfo type_IfcProject2 = schema.getTypeInfo("IFCPROJECT");
 		assertEquals(type_IfcProject, type_IfcProject2);
