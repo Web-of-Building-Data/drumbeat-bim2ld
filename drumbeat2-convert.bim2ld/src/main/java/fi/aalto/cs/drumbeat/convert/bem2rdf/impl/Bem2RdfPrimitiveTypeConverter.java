@@ -3,7 +3,6 @@ package fi.aalto.cs.drumbeat.convert.bem2rdf.impl;
 import java.math.BigDecimal;
 import java.util.*;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.*;
 
@@ -74,11 +73,11 @@ class Bem2RdfPrimitiveTypeConverter {
 					RDFS.subPropertyOf, property_hasValue);
 	//		jenaModel.add(property, RDFS.domain, typeResource);
 	
-			Resource baseDataType = getBaseTypeForPrimitiveValues(typeInfo);
+			Resource baseDataType = getBaseTypeForPrimitiveValues(typeInfo.getValueKind());
 	//		jenaModel.add(property, RDFS.range, baseDataType);
 			
 			// TODO: check if it is needed to export domains and ranges
-			manager.convertPropertyRestrictions(property_hasXXX, typeResource, baseDataType, false, 1, 1, jenaModel, true, true);
+			manager.convertPropertyRestrictions(jenaModel, property_hasXXX, typeResource, baseDataType, false, 1, 1, true, true);
 	
 	//		if (targetOwlProfileList.supportsRdfProperty(OWL.allValuesFrom, null)) {		
 	//			
@@ -90,8 +89,7 @@ class Bem2RdfPrimitiveTypeConverter {
 		
 		return typeResource;
 		
-	}	
-	
+	}
 	
 	
 	/**
@@ -101,9 +99,8 @@ class Bem2RdfPrimitiveTypeConverter {
 	 * @throws IllegalArgumentException
 	 *  
 	 */
-	public Resource getBaseTypeForPrimitiveValues(BemPrimitiveTypeInfo typeInfo) {
+	public Resource getBaseTypeForPrimitiveValues(BemValueKindEnum valueKind) {
 		
-		BemValueKindEnum valueKind = typeInfo.getValueKind();
 		if (valueKind == BemValueKindEnum.BINARY) {
 //			return XSD.nonNegativeInteger;
 			return XSD.hexBinary;			
@@ -116,7 +113,7 @@ class Bem2RdfPrimitiveTypeConverter {
 		} else if (valueKind == BemValueKindEnum.STRING) {
 			return XSD.xstring;
 		} else {
-			throw new IllegalArgumentException(String.format("Unknown primitive type '%s'", typeInfo.getName()));
+			throw new IllegalArgumentException(String.format("Not a primitive value kind '%s'", valueKind));
 		}
 		
 	}
@@ -131,82 +128,16 @@ class Bem2RdfPrimitiveTypeConverter {
 		
 	}
 	
-//	private Resource convertBooleanValue(Boolean value, BemTypeInfo typeInfo, Model jenaModel) {
-//		
-//		Resource baseType = getBaseTypeForBooleans();
-//		if (baseType.equals(OWL2.NamedIndividual)) {
-//			
-//			return jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(value.toString()));
-//			
-//		} else {
-//			
-//			Resource resource = jenaModel.createResource();				
-//			resource.addProperty(RDF.type, jenaModel.createResource(manager.uriBuilder.buildTypeUri(typeInfo)));				
-//			
-//			Property property = getProperty_hasXXX(BemValueKindEnum.LOGICAL, jenaModel);
-//			
-//			RDFNode valueNode;
-//			if (value == BemLogicalEnum.TRUE) {
-//				valueNode = jenaModel.createTypedLiteral("true", baseType.getURI());					
-//			} else if (value == BemLogicalEnum.FALSE) {
-//				valueNode = jenaModel.createTypedLiteral("false", baseType.getURI());					
-//			} else {
-//				valueNode = jenaModel.createTypedLiteral("unknown");					
-//			}				
-//						
-//			resource.addProperty(property, valueNode);
-//			
-//			return resource;
-//		}
-//		
-//	}
-//	
-//
-//	public RDFNode convertPrimitiveValue(BemPrimitiveValue value, BemPrimitiveTypeInfo typeInfo, Model jenaModel) {
-//		
-//		BemValueKindEnum valueKind = value.getValueKind();
-//		
-//		if (valueKind == BemValueKindEnum.LOGICAL) {
-//			return convertBooleanValue((BemLogicalEnum)value.getValue(), typeInfo, jenaModel);
-//		}
-//		
-//		return null;
-//	}
-	
-	
 	
 	public Resource convertPrimitiveValue(Model jenaModel, Object primitiveValue, BemTypeInfo typeInfo, Resource parentResource, long childNodeCount) {
 		
 		assert(typeInfo instanceof BemPrimitiveTypeInfo || typeInfo instanceof BemDefinedTypeInfo);
 		
-		RDFNode valueNode;
-		BemValueKindEnum valueKind = typeInfo.getValueKind();
-		
-		if (valueKind == BemValueKindEnum.STRING) {
-			valueNode = jenaModel.createTypedLiteral((String)primitiveValue);
-		} else if (valueKind == BemValueKindEnum.REAL || valueKind == BemValueKindEnum.NUMBER) {
-			Resource decimalTypeResource = getBaseTypeForDoubles();
-			Object decimalValue = XSD.decimal.equals(decimalTypeResource) ?
-					BigDecimal.valueOf((double)primitiveValue) : (Double)primitiveValue;
-			valueNode = jenaModel.createTypedLiteral(decimalValue, decimalTypeResource.getURI());				
-		} else if (valueKind == BemValueKindEnum.INTEGER) {				
-			valueNode = jenaModel.createTypedLiteral((long)primitiveValue);
-		} else if (valueKind == BemValueKindEnum.LOGICAL) {
-			assert(false) : primitiveValue + ", type: " + typeInfo;
-//			valueNode = converter.convertBooleanValue(typeInfo, (BemLogicalEnum)value, jenaModel);
-			throw new NotImplementedException("");
-		} else {
-			assert (valueKind == BemValueKindEnum.DATETIME) : "Expected: valueType == BemValueKindEnum.DATETIME. Actual: valueType = " + valueKind + ", " + typeInfo;
-			valueNode = jenaModel.createTypedLiteral((Calendar)primitiveValue);				
-		}
-		
-		Property hasXXXProperty = manager.getProperty_hasXXX(jenaModel, valueKind);
+		RDFNode valueNode = convertLiteral(jenaModel, primitiveValue, typeInfo.getValueKind());		
+		Property hasXXXProperty = manager.getProperty_hasXXX(jenaModel, typeInfo.getValueKind());
 
 		Resource resource;
 		if (manager.nameAllBlankNodes) {
-			//String rawNodeName = String.format("%s_%s", hasXXXProperty.getLocalName(), value);
-//			String encodedNodeName = EncoderTypeEnum.encode(EncoderTypeEnum.SafeUrl, rawNodeName);			
-
 			String rawNodeName = manager.uriBuilder.buildDatasetBlankNodeUri(String.format("%s_%s", parentResource.getLocalName(), childNodeCount));
 			resource = jenaModel.createResource(rawNodeName);
 		} else {
@@ -220,7 +151,19 @@ class Bem2RdfPrimitiveTypeConverter {
 		return resource;
 		
 	}
-		
 	
+	
+	public Literal convertLiteral(Model jenaModel, Object value, BemValueKindEnum valueKind) {
+		
+		String dataTypeUri = getBaseTypeForPrimitiveValues(valueKind).getURI();
+		
+		if (XSD.decimal.getURI().equals(dataTypeUri)) {
+			// this must be done to avoid error when Jena rounds xsd:decimal as xsd:integer
+			value = BigDecimal.valueOf((double)value);
+		}
+		
+		return jenaModel.createTypedLiteral(value, dataTypeUri);
+		
+	}
 	
 }

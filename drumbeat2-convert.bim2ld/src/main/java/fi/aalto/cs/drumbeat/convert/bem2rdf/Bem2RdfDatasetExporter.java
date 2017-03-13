@@ -36,6 +36,7 @@ public class Bem2RdfDatasetExporter {
 	
 	public Model export() throws IOException, BemException {
 		
+		converterManager.exportNsPrefixes(jenaModel);
 		converterManager.exportOntologyHeader(jenaModel);
 		
 		for (BemEntity entity : dataset.getAllEntities()) {		

@@ -15,12 +15,10 @@ import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
 class Bem2RdfEntityTypeConverter {
 
 	private final Bem2RdfConverterManager manager;
-	private final boolean nameAllBlankNodes;
 	private final boolean useLongAttributeName;
 
 	public Bem2RdfEntityTypeConverter(Bem2RdfConverterManager manager) throws Bem2RdfConverterConfigurationException {
 		this.manager = manager;
-		this.nameAllBlankNodes = manager.contextParams.nameAllBlankNodes();
 		this.useLongAttributeName = manager.contextParams.useLongAttributeName();
 	}
 
@@ -191,8 +189,16 @@ class Bem2RdfEntityTypeConverter {
 
 					int min = attributeInfo.isOptional() ? 0 : 1;
 					int max = 1;
-					manager.convertPropertyRestrictions(attributeProperty, typeResource, collectionTypeResource, true,
-							min, max, jenaModel, exportDomainsAndRanges, exportDomainsAndRanges);
+					manager.convertPropertyRestrictions(
+							jenaModel,
+							attributeProperty,
+							typeResource,
+							collectionTypeResource,
+							true,
+							min,
+							max,
+							exportDomainsAndRanges,
+							exportDomainsAndRanges);
 	
 				} else {
 					Resource itemTypeResource = jenaModel.createResource(
@@ -200,8 +206,16 @@ class Bem2RdfEntityTypeConverter {
 					int min = attributeInfo.isOptional() ? 0
 							: collectionAttributeTypeInfo.getCardinality().getMinCardinality();
 					int max = collectionAttributeTypeInfo.getCardinality().getMaxCardinality();
-					manager.convertPropertyRestrictions(attributeProperty, typeResource, itemTypeResource, true, min,
-							max, jenaModel, exportDomainsAndRanges, exportDomainsAndRanges);
+					manager.convertPropertyRestrictions(
+							jenaModel,
+							attributeProperty,
+							typeResource,
+							itemTypeResource,
+							true,
+							min,
+							max,
+							exportDomainsAndRanges,
+							exportDomainsAndRanges);
 				}
 	
 			} else {
@@ -210,8 +224,16 @@ class Bem2RdfEntityTypeConverter {
 						.createResource(manager.uriBuilder.buildTypeUri(attributeTypeInfo));
 				int min = attributeInfo.isOptional() ? 0 : 1;
 				int max = 1;
-				manager.convertPropertyRestrictions(attributeProperty, typeResource, itemTypeResource, true, min, max,
-						jenaModel, exportDomainsAndRanges, exportDomainsAndRanges);
+				manager.convertPropertyRestrictions(
+						jenaModel,
+						attributeProperty,
+						typeResource,
+						itemTypeResource,
+						true,
+						min,
+						max,
+						exportDomainsAndRanges,
+						exportDomainsAndRanges);
 	
 			}
 			
@@ -238,29 +260,27 @@ class Bem2RdfEntityTypeConverter {
 		}
 	}
 	
-	private Resource createEntityValueResource(BemEntity entity, Model jenaModel) {
-		if (entity.hasName()) {
-			String localName = String.format(Bem2RdfVocabulary.Dataset.GUID_NODE_ENTITY_URI_FORMAT, entity.getName()); 
-			return jenaModel.createResource(manager.uriBuilder.buildDatasetUri(localName));
-		} else {
-			String localName = String.format(Bem2RdfVocabulary.Dataset.BLANK_NODE_ENTITY_URI_FORMAT, entity.getLocalId());
-			if (nameAllBlankNodes) {
-				return jenaModel.createResource(manager.uriBuilder.buildDatasetBlankNodeUri(localName));				
-			} else {
-				return jenaModel.createResource(new AnonId(localName));				
-			}
-		}
-	}
-	
-	
-
 	public Resource convertEntityValue(Model jenaModel, BemEntity entity, boolean includeAttributes) {
 		
-		Resource entityResource = createEntityValueResource(entity, jenaModel);
+		Resource entityResource;
 		
+		if (entity.hasName()) {
+			String localName = String.format(Bem2RdfVocabulary.Dataset.GUID_NODE_ENTITY_URI_FORMAT, entity.getName()); 
+			entityResource = jenaModel.createResource(manager.uriBuilder.buildDatasetUri(localName));
+		} else {
+			String localName = String.format(Bem2RdfVocabulary.Dataset.BLANK_NODE_ENTITY_URI_FORMAT, entity.getLocalId());
+			if (manager.nameAllBlankNodes) {
+				entityResource = jenaModel.createResource(manager.uriBuilder.buildDatasetBlankNodeUri(localName));				
+			} else {
+				entityResource = jenaModel.createResource(new AnonId(localName));				
+			}
+		}
+		
+		assert(!manager.nameAllBlankNodes || entityResource.isURIResource());
+
 		if (includeAttributes) {
 			
-			System.out.println("Exporting entity: " + entity);
+//			System.out.println("Exporting entity: " + entity);
 
 			long childNodeCount = 1L;
 			
@@ -274,7 +294,7 @@ class Bem2RdfEntityTypeConverter {
 				
 				BemValue attributeValue = entry.getValue();
 
-				System.out.println("\tExporting property value: " + attributeInfo + " (" + attributeInfo.getValueTypeInfo() + ")");
+//				System.out.println("\tExporting property value: " + attributeInfo + " (" + attributeInfo.getValueTypeInfo() + ")");
 				
 				RDFNode attributeNode = manager.convertValue(
 						jenaModel, attributeValue, attributeInfo.getValueTypeInfo(), entityResource, childNodeCount++, false);

@@ -22,7 +22,7 @@ public class Bem2RdfVocabulary {
 
 		public static final String endIndex = "endIndex";
 		public static final String index = "index";
-		public static final String isOrdered = "isOrdered";
+//		public static final String isOrdered = "isOrdered";
 		public static final String item = "item";
 		public static final String itemType = "itemType";
 		public static final String hasBinary = "hasBinary";

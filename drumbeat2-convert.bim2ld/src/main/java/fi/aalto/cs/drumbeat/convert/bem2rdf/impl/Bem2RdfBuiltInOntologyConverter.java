@@ -3,7 +3,6 @@ package fi.aalto.cs.drumbeat.convert.bem2rdf.impl;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.RDFS;
 
 class Bem2RdfBuiltInOntologyConverter {
 
@@ -15,13 +14,10 @@ class Bem2RdfBuiltInOntologyConverter {
 	
 	public void exportPermanentBuiltInDefinitions(Model jenaModel) {
 		
-		manager.collectionTypeConverter.exportPermanentBuiltInDefinitions(jenaModel);
+		final boolean declareFunctionalProperty = manager.targetOwlProfileList.supportsStatement(RDF.type, OWL.FunctionalProperty);
 		
-		
+		manager.collectionTypeConverter.exportPermanentBuiltInDefinitions(jenaModel);		
 
-		// TODO: Generate literal and logical types automatically (not manually
-		// as below)
-		
 		jenaModel.add(
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Enum)),
 				RDF.type,
@@ -42,7 +38,12 @@ class Bem2RdfBuiltInOntologyConverter {
 				RDF.type,
 				OWL.DatatypeProperty);
 		
-		
+		if (declareFunctionalProperty) {
+			jenaModel.add(
+					jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasValue)),
+					RDF.type,
+					OWL.FunctionalProperty);
+		}
 
 //		jenaModel.add(
 //				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.EntityProperty)),

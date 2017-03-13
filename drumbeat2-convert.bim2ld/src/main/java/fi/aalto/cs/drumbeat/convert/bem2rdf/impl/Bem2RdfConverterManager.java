@@ -52,7 +52,7 @@ public class Bem2RdfConverterManager {
 		
 		contextParams = context.getConversionParams();
 		targetOwlProfileList = context.getTargetOwlProfileList();
-		nameAllBlankNodes = contextParams.nameAllBlankNodes();
+		nameAllBlankNodes = contextParams.nameAllBlankNodes() || !targetOwlProfileList.supportsAnonymousIndividual();
 		
 		builtInOntologyConverter = new Bem2RdfBuiltInOntologyConverter(this);
 //		collectionTypeConverter = new Bem2RdfCollectionTypeConverter(this);
@@ -137,10 +137,6 @@ public class Bem2RdfConverterManager {
 		throw new IllegalArgumentException("Unexpected type: " + typeInfo);
 	}
 	
-	public Resource convertEntityValue(Model jenaModel, BemEntity entity) {
-		return entityTypeConverter.convertEntityValue(jenaModel, entity, true);
-	}
-	
 	/**
 	 * Converts any {@link BemValue} value to {@link RDFNode}
 	 * @param value
@@ -178,7 +174,8 @@ public class Bem2RdfConverterManager {
 			if (value instanceof BemEntity) {			
 				return entityTypeConverter.convertEntityValue(jenaModel, (BemEntity)value, includeEntityAttributes);
 			} else if (value instanceof BemTypedSimpleValue) {
-				return convertTypedSimpleValue(jenaModel, (BemTypedSimpleValue)value, parentResource, childNodeCount);
+				//return convertTypedSimpleValue(jenaModel, (BemTypedSimpleValue)value, parentResource, childNodeCount);
+				return convertValue(jenaModel, ((BemTypedSimpleValue)value).getValue(), ((BemTypedSimpleValue)value).getType(), parentResource, 0, false);
 			} else if (value instanceof BemCollectionValue<?>) {
 				return collectionTypeConverter.convertListToResource(
 						jenaModel, (BemCollectionValue<?>)value, (BemCollectionTypeInfo)typeInfo, parentResource, childNodeCount);
@@ -194,27 +191,12 @@ public class Bem2RdfConverterManager {
 		
 	}
 	
-	public RDFNode convertSimpleValue(Model jenaModel, BemSimpleValue value, BemTypeInfo typeInfo) {
-		return convertValue(jenaModel, value, typeInfo, null, 0, false);
+	public Resource convertEntityValue(Model jenaModel, BemEntity entity) {
+		return entityTypeConverter.convertEntityValue(jenaModel, entity, true);
 	}
 	
-	
-	public Resource convertTypedSimpleValue(Model jenaModel, BemTypedSimpleValue value, Resource parentResource, long childNodeCount) {
-		String nodeName = String.format("%s_%s", value.getType(), value.getValue());
-		Resource entityResource;
-		if (nameAllBlankNodes) {
-			entityResource = jenaModel.createResource(uriBuilder.buildDatasetBlankNodeUri(nodeName));				
-		} else {
-			entityResource = jenaModel.createResource(new AnonId(nodeName));				
-		}
-		
-		entityResource.addProperty(RDF.type, jenaModel.createResource(uriBuilder.buildTypeUri(value.getType())));
-		BemSimpleValue simpleValue = value.getValue();
-		RDFNode simpleValueNode = convertValue(jenaModel, simpleValue, value.getType(), entityResource, 0, false);
-		entityResource.addProperty(
-				jenaModel.createProperty(uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasValue)),
-				simpleValueNode);
-		return entityResource;
+	public RDFNode convertSimpleValue(Model jenaModel, BemSimpleValue value, BemTypeInfo typeInfo) {
+		return convertValue(jenaModel, value, typeInfo, null, 0, false);
 	}
 	
 	
@@ -233,20 +215,6 @@ public class Bem2RdfConverterManager {
 		}
 		return property_hasXXX;
 	}
-	
-	
-//	public List<RDFNode> convertValueToNode(BemValue value, BemTypeInfo typeInfo, Resource entityResource, long childNodeCount) {
-//		if (value instanceof BemSingleValue) {
-//			List<RDFNode> nodes = new ArrayList<>();
-//			nodes.add(convertSingleValueToNode((BemSingleValue)value, typeInfo, entityResource, childNodeCount));
-//			return nodes;
-//		} else {
-//			assert(typeInfo instanceof BemCollectionTypeInfo);
-//			return convertListToResource((BemCollectionValue<?>) value, (BemCollectionTypeInfo)typeInfo, entityResource, childNodeCount);		
-//		}
-//	}
-//	
-	
 	
 	
 
@@ -337,13 +305,13 @@ public class Bem2RdfConverterManager {
 	//*****************************************
 	
 	void convertPropertyRestrictions(
+			Model jenaModel,
 			Property property,
 			Resource domain,
 			Resource range,
 			boolean isObjectProperty,
 			Integer min,
 			Integer max,
-			Model jenaModel,
 			boolean exportRdfsDomain,
 			boolean exportRdfsRange) {
 		
@@ -377,8 +345,15 @@ public class Bem2RdfConverterManager {
 				exportPropertyRestriction(domain, property, OWL.allValuesFrom, range, jenaModel);
 			}
 			
-			RDFNode minNode = min != null ? jenaModel.createTypedLiteral(min) : null;
-			RDFNode maxNode = max != null && max != Integer.MAX_VALUE ? jenaModel.createTypedLiteral(max) : null;
+			RDFNode minNode = null;
+			if (min != null) {
+				minNode = primitiveTypeConverter.convertLiteral(jenaModel, min, BemValueKindEnum.INTEGER);
+			}
+			
+			RDFNode maxNode = null;
+			if (max != null && max != Integer.MAX_VALUE) {
+				maxNode = primitiveTypeConverter.convertLiteral(jenaModel, max, BemValueKindEnum.INTEGER);
+			}
 			
 			if (minNode != null) {
 				if (minNode.equals(maxNode) && targetOwlProfileList.supportsStatement(OWL.cardinality, minNode)) {

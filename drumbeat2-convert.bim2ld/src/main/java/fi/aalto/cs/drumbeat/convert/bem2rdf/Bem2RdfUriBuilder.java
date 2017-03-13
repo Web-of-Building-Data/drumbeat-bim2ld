@@ -129,6 +129,10 @@ public class Bem2RdfUriBuilder {
 			prefixMap.put(datasetNamespacePrefix, datasetNamespaceUri);
 		}
 		
+		if (datasetBlankNodeNamespacePrefix != null && datasetBlankNodeNamespaceUri != null) {
+			prefixMap.put(datasetBlankNodeNamespacePrefix, datasetBlankNodeNamespaceUri);
+		}
+
 		return prefixMap;
 		
 	}
@@ -298,14 +302,14 @@ public class Bem2RdfUriBuilder {
 		if (datasetNamespaceUri == null) {
 			throw new IllegalArgumentException("Undefined datasetNamespaceUri");
 		}
-		return ontologyNamespaceUri + localName;	
+		return datasetNamespaceUri + localName;	
 	}
 	
 	public String buildDatasetBlankNodeUri(String localName) {
 		if (datasetBlankNodeNamespaceUri == null) {
 			throw new IllegalArgumentException("Undefined datasetBlankNodeNamespaceUri");
 		}
-		return ontologyNamespaceUri + localName;	
+		return datasetBlankNodeNamespaceUri + localName;	
 	}
 	
 

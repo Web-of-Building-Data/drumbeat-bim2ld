@@ -60,14 +60,14 @@ public class Test_OwlProfile_supportsStatement {
 		
 		assertTrue(owlProfile.supportsStatement(RDF.type, null));
 		
-		assertTrue(owlProfile.supportDataType(XSD.xstring));
-		assertTrue(owlProfile.supportDataType(XSD.integer));
-		assertTrue(owlProfile.supportDataType(XSD.decimal));
-		assertTrue(owlProfile.supportDataType(XSD.dateTime));
-		assertTrue(owlProfile.supportDataType(XSD.xdouble));
-		assertTrue(owlProfile.supportDataType(XSD.xboolean));
+		assertTrue(owlProfile.supportsDataType(XSD.xstring));
+		assertTrue(owlProfile.supportsDataType(XSD.integer));
+		assertTrue(owlProfile.supportsDataType(XSD.decimal));
+		assertTrue(owlProfile.supportsDataType(XSD.dateTime));
+		assertTrue(owlProfile.supportsDataType(XSD.xdouble));
+		assertTrue(owlProfile.supportsDataType(XSD.xboolean));
 		
-		assertFalse(owlProfile.supportDataType(OwlVocabulary.OWL.real));	
+		assertFalse(owlProfile.supportsDataType(OwlVocabulary.OWL.real));	
 	}
 
 	@Test
@@ -85,14 +85,14 @@ public class Test_OwlProfile_supportsStatement {
 		
 		assertTrue(owlProfile.supportsStatement(RDF.type, null));
 		
-		assertTrue(owlProfile.supportDataType(XSD.xstring));
-		assertTrue(owlProfile.supportDataType(XSD.integer));
-		assertTrue(owlProfile.supportDataType(XSD.decimal));
-		assertTrue(owlProfile.supportDataType(XSD.dateTime));
-		assertTrue(owlProfile.supportDataType(XSD.xdouble));
-		assertTrue(owlProfile.supportDataType(XSD.xboolean));
+		assertTrue(owlProfile.supportsDataType(XSD.xstring));
+		assertTrue(owlProfile.supportsDataType(XSD.integer));
+		assertTrue(owlProfile.supportsDataType(XSD.decimal));
+		assertTrue(owlProfile.supportsDataType(XSD.dateTime));
+		assertTrue(owlProfile.supportsDataType(XSD.xdouble));
+		assertTrue(owlProfile.supportsDataType(XSD.xboolean));
 		
-		assertFalse(owlProfile.supportDataType(OwlVocabulary.OWL.real));		
+		assertFalse(owlProfile.supportsDataType(OwlVocabulary.OWL.real));		
 	}
 	
 	@Test
@@ -109,14 +109,14 @@ public class Test_OwlProfile_supportsStatement {
 		assertTrue(owlProfile.supportsStatement(OWL.disjointWith, uri1));
 		assertFalse(owlProfile.supportsStatement(OWL.disjointWith, uriList));
 		
-		assertTrue(owlProfile.supportDataType(XSD.xstring));
-		assertTrue(owlProfile.supportDataType(XSD.integer));
-		assertTrue(owlProfile.supportDataType(XSD.decimal));
-		assertTrue(owlProfile.supportDataType(XSD.dateTime));
-		assertTrue(owlProfile.supportDataType(XSD.xdouble));
-		assertTrue(owlProfile.supportDataType(XSD.xboolean));
+		assertTrue(owlProfile.supportsDataType(XSD.xstring));
+		assertTrue(owlProfile.supportsDataType(XSD.integer));
+		assertTrue(owlProfile.supportsDataType(XSD.decimal));
+		assertTrue(owlProfile.supportsDataType(XSD.dateTime));
+		assertTrue(owlProfile.supportsDataType(XSD.xdouble));
+		assertTrue(owlProfile.supportsDataType(XSD.xboolean));
 		
-		assertFalse(owlProfile.supportDataType(OwlVocabulary.OWL.real));
+		assertFalse(owlProfile.supportsDataType(OwlVocabulary.OWL.real));
 	}
 	
 	@Test
@@ -135,16 +135,16 @@ public class Test_OwlProfile_supportsStatement {
 		assertTrue(owlProfile.supportsStatement(OWL.disjointWith, uri1));
 		assertTrue(owlProfile.supportsStatement(OWL.disjointWith, uriList));
 		
-		assertTrue(owlProfile.supportDataType(XSD.xstring));
-		assertTrue(owlProfile.supportDataType(XSD.integer));
-		assertTrue(owlProfile.supportDataType(XSD.decimal));
-		assertTrue(owlProfile.supportDataType(XSD.dateTime));
+		assertTrue(owlProfile.supportsDataType(XSD.xstring));
+		assertTrue(owlProfile.supportsDataType(XSD.integer));
+		assertTrue(owlProfile.supportsDataType(XSD.decimal));
+		assertTrue(owlProfile.supportsDataType(XSD.dateTime));
 
-		assertTrue(owlProfile.supportDataType(OwlVocabulary.OWL.real));
-		assertTrue(owlProfile.supportDataType(OwlVocabulary.OWL.rational));
+		assertTrue(owlProfile.supportsDataType(OwlVocabulary.OWL.real));
+		assertTrue(owlProfile.supportsDataType(OwlVocabulary.OWL.rational));
 
-		assertFalse(owlProfile.supportDataType(XSD.xdouble));
-		assertFalse(owlProfile.supportDataType(XSD.xboolean));
+		assertFalse(owlProfile.supportsDataType(XSD.xdouble));
+		assertFalse(owlProfile.supportsDataType(XSD.xboolean));
 	}
 	
 	@Test
@@ -163,16 +163,16 @@ public class Test_OwlProfile_supportsStatement {
 		assertTrue(owlProfile.supportsStatement(OWL.disjointWith, uri1));
 		assertTrue(owlProfile.supportsStatement(OWL.disjointWith, uriList));
 		
-		assertTrue(owlProfile.supportDataType(XSD.xstring));
-		assertTrue(owlProfile.supportDataType(XSD.integer));
-		assertTrue(owlProfile.supportDataType(XSD.decimal));
-		assertTrue(owlProfile.supportDataType(XSD.dateTime));
+		assertTrue(owlProfile.supportsDataType(XSD.xstring));
+		assertTrue(owlProfile.supportsDataType(XSD.integer));
+		assertTrue(owlProfile.supportsDataType(XSD.decimal));
+		assertTrue(owlProfile.supportsDataType(XSD.dateTime));
 
-		assertTrue(owlProfile.supportDataType(OwlVocabulary.OWL.real));
-		assertTrue(owlProfile.supportDataType(OwlVocabulary.OWL.rational));
+		assertTrue(owlProfile.supportsDataType(OwlVocabulary.OWL.real));
+		assertTrue(owlProfile.supportsDataType(OwlVocabulary.OWL.rational));
 
-		assertFalse(owlProfile.supportDataType(XSD.xdouble));
-		assertFalse(owlProfile.supportDataType(XSD.xboolean));
+		assertFalse(owlProfile.supportsDataType(XSD.xdouble));
+		assertFalse(owlProfile.supportsDataType(XSD.xboolean));
 	}
 	
 	@Test
@@ -191,16 +191,16 @@ public class Test_OwlProfile_supportsStatement {
 		assertTrue(owlProfile.supportsStatement(OWL.disjointWith, uri1));
 		assertTrue(owlProfile.supportsStatement(OWL.disjointWith, uriList));
 		
-		assertTrue(owlProfile.supportDataType(XSD.xstring));
-		assertTrue(owlProfile.supportDataType(XSD.integer));
-		assertTrue(owlProfile.supportDataType(XSD.decimal));
-		assertTrue(owlProfile.supportDataType(XSD.dateTime));
+		assertTrue(owlProfile.supportsDataType(XSD.xstring));
+		assertTrue(owlProfile.supportsDataType(XSD.integer));
+		assertTrue(owlProfile.supportsDataType(XSD.decimal));
+		assertTrue(owlProfile.supportsDataType(XSD.dateTime));
 
-		assertFalse(owlProfile.supportDataType(OwlVocabulary.OWL.real));
-		assertFalse(owlProfile.supportDataType(OwlVocabulary.OWL.rational));
+		assertFalse(owlProfile.supportsDataType(OwlVocabulary.OWL.real));
+		assertFalse(owlProfile.supportsDataType(OwlVocabulary.OWL.rational));
 
-		assertTrue(owlProfile.supportDataType(XSD.xdouble));
-		assertTrue(owlProfile.supportDataType(XSD.xboolean));
+		assertTrue(owlProfile.supportsDataType(XSD.xdouble));
+		assertTrue(owlProfile.supportsDataType(XSD.xboolean));
 	}
 
 	@Test
@@ -218,14 +218,14 @@ public class Test_OwlProfile_supportsStatement {
 		assertTrue(owlProfile.supportsStatement(OWL.disjointWith, uri1));
 		assertTrue(owlProfile.supportsStatement(OWL.disjointWith, uriList));
 		
-		assertTrue(owlProfile.supportDataType(XSD.xstring));
-		assertTrue(owlProfile.supportDataType(XSD.integer));
-		assertTrue(owlProfile.supportDataType(XSD.decimal));
-		assertTrue(owlProfile.supportDataType(XSD.dateTime));
+		assertTrue(owlProfile.supportsDataType(XSD.xstring));
+		assertTrue(owlProfile.supportsDataType(XSD.integer));
+		assertTrue(owlProfile.supportsDataType(XSD.decimal));
+		assertTrue(owlProfile.supportsDataType(XSD.dateTime));
 
-		assertTrue(owlProfile.supportDataType(XSD.xdouble));
-		assertTrue(owlProfile.supportDataType(XSD.xboolean));
-		assertTrue(owlProfile.supportDataType(OwlVocabulary.OWL.real));
+		assertTrue(owlProfile.supportsDataType(XSD.xdouble));
+		assertTrue(owlProfile.supportsDataType(XSD.xboolean));
+		assertTrue(owlProfile.supportsDataType(OwlVocabulary.OWL.real));
 	}
 	
 }

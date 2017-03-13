@@ -10,44 +10,54 @@ import fi.aalto.cs.drumbeat.rdf.data.RdfChecksumException;
 
 public class RdfPrinter {
 	
-	private RdfChecksumCalculator checksumCalculator;
-	private Map<String, String> nsPrefixMap;
+	private final RdfChecksumCalculator checksumCalculator;
+	private final Map<String, String> nsPrefixMap;
 	
 	public RdfPrinter() {
+		this(null, null);
 	}
 	
 	public RdfPrinter(Map<String, String> nsPrefixMap) {
-		this.nsPrefixMap = nsPrefixMap;		
+		this(nsPrefixMap, null);
 	}
 	
 	public RdfPrinter(Map<String, String> nsPrefixMap, RdfChecksumCalculator checksumCalculator) {
-		this(nsPrefixMap);
+		this.nsPrefixMap = nsPrefixMap;
 		this.checksumCalculator = checksumCalculator;
+	}
+	
+	public String toString(Resource resource) throws RdfChecksumException {
+		if (checksumCalculator != null) {
+			if (checksumCalculator.getNodeTypeChecker().isLocalResource(resource)) {
+				return String.format("_:%s", checksumCalculator.getChecksum(resource.asResource()).toBase64String());
+			}
+		} else {
+			// checksumCalculator == null
+			if (resource.isAnon()) {
+				return resource.asResource().getId().toString();
+			}
+		}
+		
+		String uri = ((Resource)resource).getURI();
+		if (nsPrefixMap != null) {
+			for (Entry<String, String> nsPrefixEntry : nsPrefixMap.entrySet()) {
+				if (uri.startsWith(nsPrefixEntry.getValue())) {
+					return String.format(
+							"%s:%s",
+							nsPrefixEntry.getKey(),
+							uri.substring(nsPrefixEntry.getValue().length()));
+				}
+			}
+		}
+		return String.format("<%s>", uri);		
 	}
 	
 	public String toString(RDFNode node) throws RdfChecksumException {
 		if (node.isLiteral()) {
-			return node.asLiteral().toString();
-		} else if (checksumCalculator != null) {
-			if (checksumCalculator.getNodeTypeChecker().isLocalResource(node)) {
-				return String.format("_:%s", checksumCalculator.getChecksum(node.asResource()).toBase64String());
-			}
+			return String.format("\"%s\"", node.asLiteral().getLexicalForm());
 		} else {
-			// checksumCalculator == null
-			if (node.isAnon()) {
-				return node.asResource().getId().toString();
-			}
+			return toString(node.asResource());
 		}
-		
-		String uri = ((Resource)node).getURI();
-		if (nsPrefixMap != null) {
-			for (Entry<String, String> nsPrefixEntry : nsPrefixMap.entrySet()) {
-				if (uri.startsWith(nsPrefixEntry.getValue())) {
-					return nsPrefixEntry.getKey() + uri.substring(nsPrefixEntry.getValue().length());
-				}
-			}
-		}
-		return String.format("<%s>", uri);
 	}
 	
 	public String toString(Statement statement) throws RdfChecksumException {

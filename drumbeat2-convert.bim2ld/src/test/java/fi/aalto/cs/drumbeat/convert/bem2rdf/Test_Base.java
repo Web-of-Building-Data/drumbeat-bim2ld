@@ -1,6 +1,5 @@
 package fi.aalto.cs.drumbeat.convert.bem2rdf;
 
-import java.io.StringWriter;
 import java.util.List;
 
 import org.apache.jena.rdf.model.Model;
@@ -17,7 +16,7 @@ import fi.aalto.cs.drumbeat.data.ifc.parsers.IfcSchemaParser;
 public class Test_Base {
 
 	public static final boolean ALL_TESTS_WRITE_ACTUAL_DATASETS = true;
-	public static final boolean ALL_TESTS_COMPARE_WITH_EXPECTED_DATASETS = false;
+	public static final boolean ALL_TESTS_COMPARE_WITH_EXPECTED_DATASETS = true;
 
 	public static final String TEST_RESOURCES_FOLDER_PATH ="src/test/resources/"; 
 	public static final String TEST_CONFIG_FOLDER_PATH = TEST_RESOURCES_FOLDER_PATH + "config/"; 
@@ -43,10 +42,11 @@ public class Test_Base {
 	public static final String ONTOLOGY_NAMESPACE_PREFIX_FORMAT = "${Ontology.Name}";
 	public static final String ONTOLOGY_NAMESPACE_URI_FORMAT = "http://drumbeat.cs.hut.fi/owl/${Ontology.Name}#";
 	
-	public static final String MODEL_NAMESPACE_PREFIX = "model";
-	public static final String MODEL_NAMESPACE_URI_FORMAT = "http://architectural.drb.cs.hut.fi/collection1/model1/";
+	public static final String DATASET_NAMESPACE_PREFIX = "model";
+	public static final String DATASET_NAMESPACE_URI_FORMAT = "http://architectural.drb.cs.hut.fi/collection1/model1/";
 	
-	public static final String MODEL_BLANK_NODE_NAMESPACE_URI_FORMAT = MODEL_NAMESPACE_URI_FORMAT + "B/";
+	public static final String DATASET_BLANK_NODE_NAMESPACE_PREFIX_FORMAT = "model_b";
+	public static final String DATASET_BLANK_NODE_NAMESPACE_URI_FORMAT = DATASET_NAMESPACE_URI_FORMAT + "B/";
 	
 	private static boolean initialized = false;
 	
@@ -71,13 +71,17 @@ public class Test_Base {
 		}
 	}
 	
-	private String getTestFilePath(int callingMethodCallShift, boolean isExpected, String extension) {
+	public static String getTestFilePath(boolean isExpected, String className, String methodName, String extension) {
 		return String.format("%s%s/%s/%s.%s",
 				TEST_TARGET_RESOURCES_PATH,
 				isExpected ? "expected" : "actual",
-				getClass().getSimpleName(),
-				MetaClassUtils.getCallingMethodName(callingMethodCallShift + 1),
+				className,
+				methodName,
 				extension);
+	}
+
+	private String getTestFilePath(int callingMethodCallShift, boolean isExpected, String extension) {
+		return getTestFilePath(isExpected, getClass().getSimpleName(), MetaClassUtils.getCallingMethodName(callingMethodCallShift + 1), extension);
 	}
 	
 	protected String getExpectedTestFilePath(int callingMethodCallShift, String extension) {
@@ -98,11 +102,12 @@ public class Test_Base {
 				MetaClassUtils.getCallingMethodName(callingMethodCallShift + 1));		
 	}
 	
-	protected StringBuffer writeAndCompareModel(
+	protected byte[] writeAndCompareModel(
 			int callingMethodCallShift,
 			Model actualModel,
 			boolean writeActualModel,
-			boolean compareWithExpectedModel) throws Exception
+			boolean compareWithExpectedModel,
+			boolean createBuffer) throws Exception
 	{
 		
 		writeActualModel &= ALL_TESTS_WRITE_ACTUAL_DATASETS;
@@ -111,18 +116,17 @@ public class Test_Base {
 		String actualModelFilePath = getActualTestFilePath(callingMethodCallShift + 1, "txt");
 		String expectedModelFilePath = getExpectedTestFilePath(callingMethodCallShift + 1, "txt");
 		
-		
-		StringWriter actualModelWriter = writeActualModel ? new StringWriter() : null;
+		byte[] buffer = null;
 		
 		if (writeActualModel) {
 			System.out.println("Writing Jena model: " + actualModelFilePath);
-			TestHelper.writeJenaModel(actualModel, actualModelFilePath, actualModelWriter);
+			buffer = TestHelper.writeJenaModel(actualModel, actualModelFilePath, createBuffer);
 		}
 		
 		
 		if (compareWithExpectedModel) {
 			Model expectedModel = TestHelper.readJenaModel(expectedModelFilePath);
-			RdfAsserter rdfAsserter = new RdfAsserter(r -> r.isAnon());
+			RdfAsserter rdfAsserter = new RdfAsserter(r -> r.isAnon() || r.getURI().startsWith(DATASET_BLANK_NODE_NAMESPACE_URI_FORMAT));
 			rdfAsserter.assertEquals(expectedModel, actualModel);
 		} else {
 			String reminderMessage = String.format("Reminder: To compare files '%s' and '%s'", expectedModelFilePath, actualModelFilePath);
@@ -130,7 +134,7 @@ public class Test_Base {
 //			throw new NotImplementedException(reminderMessage);
 		}
 		
-		return actualModelWriter != null ? actualModelWriter.getBuffer() : null;
+		return buffer;
 	}
 	
 

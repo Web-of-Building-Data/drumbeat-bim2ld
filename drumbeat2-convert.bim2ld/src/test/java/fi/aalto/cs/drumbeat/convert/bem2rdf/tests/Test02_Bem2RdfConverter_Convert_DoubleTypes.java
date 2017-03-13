@@ -133,9 +133,11 @@ public class Test02_Bem2RdfConverter_Convert_DoubleTypes extends Test_Base {
 		Resource realTypeResource = converter.convertTypeInfo(jenaModel, bemSchema.REAL, true);
 		converter.convertTypeInfo(jenaModel, bemSchema.NUMBER, true);
 		
-		StringBuffer modelStringBuffer = writeAndCompareModel(1, jenaModel, WRITE_ACTUAL_DATASETS, COMPARE_WITH_EXPECTED_DATASETS);
-		if (modelStringBuffer != null) {
-			TestHelper.validateOwl(modelStringBuffer, owlProfileId, Arrays.asList(UseOfUndeclaredDataProperty.class), THROW_OWL_VIOLATIONS);
+		boolean validateOwl = true;		
+		byte[] ontologyBuffer = writeAndCompareModel(1, jenaModel, WRITE_ACTUAL_DATASETS, COMPARE_WITH_EXPECTED_DATASETS, validateOwl);
+		if (validateOwl) {
+			assertNotNull(ontologyBuffer);
+			TestHelper.validateOwl(ontologyBuffer, owlProfileId, Arrays.asList(UseOfUndeclaredDataProperty.class), THROW_OWL_VIOLATIONS);
 		}
 		
 		exportingDoubleValues(converter, convertDoubleTo, realTypeResource);

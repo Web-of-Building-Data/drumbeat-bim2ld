@@ -2,8 +2,12 @@ package fi.aalto.cs.drumbeat.convert.bem2rdf.tests;
 
 import static fi.aalto.cs.drumbeat.convert.bem2rdf.Bem2RdfConversionContextParams.*;
 
+
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
@@ -16,7 +20,7 @@ import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
 import fi.aalto.cs.drumbeat.owl.OwlProfileEnum;
 import fi.aalto.cs.drumbeat.owl.OwlProfileList;
 
-public class Test03_Bem2RdfSchemaExporter_Exporting_BuiltIn_ExpressSchema extends Test_Base {
+public class Test06_Bem2RdfSchemaExporter_Exporting_BuiltIn_ExpressSchema extends Test_Base {
 	
 	public static final boolean WRITE_ACTUAL_DATASETS = true;
 	public static final boolean COMPARE_WITH_EXPECTED_DATASETS = true;
@@ -100,9 +104,11 @@ public class Test03_Bem2RdfSchemaExporter_Exporting_BuiltIn_ExpressSchema extend
 		Bem2RdfSchemaExporter schemaExporter = new Bem2RdfSchemaExporter(bemSchema, context, jenaModel);
 		jenaModel = schemaExporter.export();
 		
-		StringBuffer modelStringBuffer = writeAndCompareModel(1, jenaModel, WRITE_ACTUAL_DATASETS, COMPARE_WITH_EXPECTED_DATASETS);
-		if (modelStringBuffer != null) {
-			TestHelper.validateOwl(modelStringBuffer, owlProfileId, null, THROW_OWL_VIOLATIONS);
+		boolean validateOwl = true;		
+		byte[] ontologyBuffer = writeAndCompareModel(1, jenaModel, WRITE_ACTUAL_DATASETS, COMPARE_WITH_EXPECTED_DATASETS, validateOwl);
+		if (validateOwl) {
+			assertNotNull(ontologyBuffer);
+			TestHelper.validateOwl(ontologyBuffer, owlProfileId, null, THROW_OWL_VIOLATIONS);
 		}
 		
 	}	

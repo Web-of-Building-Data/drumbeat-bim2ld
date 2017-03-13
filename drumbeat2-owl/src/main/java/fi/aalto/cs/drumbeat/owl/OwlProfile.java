@@ -13,7 +13,7 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.XSD;
 
-public class OwlProfile implements Comparable<OwlProfile> {
+public class OwlProfile implements OwlProfileInfo, Comparable<OwlProfile> {
 
 	public static final float OWL_VERSION_1_0 = 1.0f;
 	public static final float OWL_VERSION_2_0 = 2.0f;
@@ -254,7 +254,7 @@ public class OwlProfile implements Comparable<OwlProfile> {
 
 	}
 
-	public boolean supportDataType(Resource type) {
+	public boolean supportsDataType(Resource type) {
 
 		return getSupportedDataTypes().contains(type);
 
@@ -401,6 +401,11 @@ public class OwlProfile implements Comparable<OwlProfile> {
 	@Override
 	public int compareTo(OwlProfile o) {
 		return owlProfileId.compareTo(o.owlProfileId);
+	}
+
+	@Override
+	public boolean supportsAnonymousIndividual() {
+		return owlProfileId != OwlProfileEnum.OWL2_EL && owlProfileId != OwlProfileEnum.OWL2_QL;
 	}
 
 }

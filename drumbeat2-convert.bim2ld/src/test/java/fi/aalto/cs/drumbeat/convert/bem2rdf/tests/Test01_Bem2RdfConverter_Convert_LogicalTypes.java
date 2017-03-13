@@ -111,14 +111,14 @@ public class Test01_Bem2RdfConverter_Convert_LogicalTypes extends Test_Base {
 		exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_STRING, OwlProfileEnum.OWL2_EL);
 	}
 
-	private void exportLogical(String convertLogicalTo, OwlProfileEnum owlProfile) throws Exception {
+	private void exportLogical(String convertLogicalTo, OwlProfileEnum owlProfileId) throws Exception {
 		startTest(1);
 		
 		context.getConversionParams().setParamValue(
 				Bem2RdfConversionContextParams.PARAM_CONVERT_LOGICALS_TO,
 				convertLogicalTo);
 		
-		context.setTargetOwlProfileList(new OwlProfileList(owlProfile));
+		context.setTargetOwlProfileList(new OwlProfileList(owlProfileId));
 		
 		Bem2RdfConverterManager converter = new Bem2RdfConverterManager(context, bemSchema);
 		
@@ -127,9 +127,11 @@ public class Test01_Bem2RdfConverter_Convert_LogicalTypes extends Test_Base {
 		converter.convertTypeInfo(jenaModel, bemSchema.BOOLEAN, true);
 		converter.convertTypeInfo(jenaModel, bemSchema.LOGICAL, true);
 		
-		StringBuffer modelStringBuffer = writeAndCompareModel(1, jenaModel, WRITE_ACTUAL_DATASETS, COMPARE_WITH_EXPECTED_DATASETS);
-		if (modelStringBuffer != null) {
-			TestHelper.validateOwl(modelStringBuffer, owlProfile, Arrays.asList(UseOfUndeclaredDataProperty.class), THROW_OWL_VIOLATIONS);
+		boolean validateOwl = true;		
+		byte[] ontologyBuffer = writeAndCompareModel(1, jenaModel, WRITE_ACTUAL_DATASETS, COMPARE_WITH_EXPECTED_DATASETS, validateOwl);
+		if (validateOwl) {
+			assertNotNull(ontologyBuffer);
+			TestHelper.validateOwl(ontologyBuffer, owlProfileId, Arrays.asList(UseOfUndeclaredDataProperty.class), THROW_OWL_VIOLATIONS);
 		}
 		
 		exportLogicalValues(converter, convertLogicalTo);

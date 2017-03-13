@@ -1,12 +1,22 @@
 package fi.aalto.cs.drumbeat.owl.owlapi;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFFormat;
+import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.profiles.*;
 
 import fi.aalto.cs.drumbeat.owl.OwlProfile;
@@ -92,6 +102,27 @@ public class OwlApiUtils {
 		}
 		return reports;
 	}
+	
+	public static OWLOntology toOntology(Model model) throws IOException, OWLOntologyCreationException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			RDFDataMgr.write(out, model, RDFFormat.NTRIPLES);
+		} finally {
+			out.close();
+		}
+		return toOntology(new ByteArrayInputStream(out.toByteArray()));
+	}
+	
+	
+	public static OWLOntology toOntology(InputStream inputStream) throws OWLOntologyCreationException, IOException {
+		OWLOntologyManager ontologyManager = OWLManager.createOWLOntologyManager();
+		try {
+			return ontologyManager.loadOntologyFromOntologyDocument(inputStream);
+		} finally {
+			inputStream.close();
+		}
+	}
+	
 	
 
 }

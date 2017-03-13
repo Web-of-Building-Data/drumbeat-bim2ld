@@ -1,7 +1,6 @@
 package fi.aalto.cs.drumbeat.convert.bem2rdf;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.*;
 import java.util.List;
@@ -12,9 +11,7 @@ import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
 //import org.apache.log4j.Logger;
-import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.profiles.OWLProfileReport;
 
 import fi.aalto.cs.drumbeat.common.file.FileManager;
@@ -22,7 +19,6 @@ import fi.aalto.cs.drumbeat.data.bem.BemException;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemDataset;
 import fi.aalto.cs.drumbeat.data.bem.parsers.util.BemParserUtil;
 import fi.aalto.cs.drumbeat.data.ifc.parsers.IfcDatasetParser;
-import fi.aalto.cs.drumbeat.data.step.dataset.StepDataset;
 import fi.aalto.cs.drumbeat.owl.OwlProfileEnum;
 import fi.aalto.cs.drumbeat.owl.owlapi.OwlApiUtils;
 
@@ -41,52 +37,51 @@ public class TestHelper {
 		return model;
 	}
 	
-	public static StringWriter writeJenaModel(Model model, String filePath, StringWriter stringWriter) throws IOException {
+	public static byte[] writeJenaModel(Model model, String filePath, boolean createBuffer) throws IOException {
 		
-		if (stringWriter != null) {
-			try {
-				RDFDataMgr.write(stringWriter, model, RDFFormat.TURTLE_PRETTY);
-			} finally {
-				stringWriter.close();
-			}
-			
-			FileWriter fileWriter = FileManager.createFileWriter(filePath);
-			
-			try {
-				fileWriter.write(stringWriter.toString());
-			} finally {
-				fileWriter.close();
-			}
-			
-			return stringWriter;
-			
-		} else {
-
-			FileOutputStream out = FileManager.createFileOutputStream(filePath);
-			try {
-				RDFDataMgr.write(out, model, RDFFormat.TURTLE_PRETTY);
-			} finally {
-				out.close();
-			}
-			
+		assert(model != null);
+		
+		if (filePath == null && !createBuffer) {
 			return null;
-			
 		}
 		
+		OutputStream out = createBuffer ? new ByteArrayOutputStream() : FileManager.createFileOutputStream(filePath);
 		
+		try {
+			RDFDataMgr.write(out, model, RDFFormat.TURTLE_PRETTY);
+		} finally {
+			out.close();
+		}
+		
+		byte[] buffer = null;
+		
+		if (createBuffer) {
+			buffer = ((ByteArrayOutputStream)out).toByteArray();
+			
+			if (filePath != null) {
+				out = FileManager.createFileOutputStream(filePath);
+				try {
+					out.write(buffer);
+				} finally {
+					out.close();
+				}
+			}
+		}
+		
+		return buffer;
 	}
 	
+	public static void validateOwl(Model jenaModel, OwlProfileEnum owlProfileId, List<Class<?>> ignorredViolationClasses, boolean throwExceptionIfViolated) throws Exception {
+		OWLOntology ontology = OwlApiUtils.toOntology(jenaModel);
+		validateOwl(ontology, owlProfileId, ignorredViolationClasses, throwExceptionIfViolated);
+	}	
 	
-	public static void validateOwl(StringBuffer inputBuffer, OwlProfileEnum owlProfileId, List<Class<?>> ignorredViolationClasses, boolean throwExceptionIfViolated) throws Exception {
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(inputBuffer.toString().getBytes());
-		validateOwl(inputStream, owlProfileId, ignorredViolationClasses, throwExceptionIfViolated);
+	public static void validateOwl(byte[] ontologyBuffer, OwlProfileEnum owlProfileId, List<Class<?>> ignorredViolationClasses, boolean throwExceptionIfViolated) throws Exception {
+		OWLOntology ontology = OwlApiUtils.toOntology(new ByteArrayInputStream(ontologyBuffer));
+		validateOwl(ontology, owlProfileId, ignorredViolationClasses, throwExceptionIfViolated);
 	}
-	
-
-	public static void validateOwl(InputStream inputStream, OwlProfileEnum owlProfileId, List<Class<?>> ignorredViolationClasses, boolean throwExceptionIfViolated) throws Exception {
 		
-		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		OWLOntology ontology = manager.loadOntologyFromOntologyDocument(inputStream);
+	public static void validateOwl(OWLOntology ontology, OwlProfileEnum owlProfileId, List<Class<?>> ignorredViolationClasses, boolean throwExceptionIfViolated) throws Exception {
 		OWLProfileReport report = OwlApiUtils.checkOntology(ontology, owlProfileId, ignorredViolationClasses);
 		
 		int numberOfViolations = report.getViolations().size(); 

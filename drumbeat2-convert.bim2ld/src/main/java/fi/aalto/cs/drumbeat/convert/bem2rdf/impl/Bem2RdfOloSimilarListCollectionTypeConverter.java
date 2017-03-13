@@ -70,98 +70,98 @@ class Bem2RdfOloSimilarListCollectionTypeConverter extends Bem2RdfCollectionType
 		
 		// property Collection.size		
 		manager.convertPropertyRestrictions(
+				jenaModel,
 				jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.size)),
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Collection)),
 				XSD.integer,
 				false,
 				1,
 				1,
-				jenaModel,
 				true,
 				true);
 		
 		// property Collection.startIndex
 		manager.convertPropertyRestrictions(
+				jenaModel,
 				jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.startIndex)),
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Collection)),
 				XSD.integer,
 				false,
 				1,
 				1,
-				jenaModel,
 				true,
 				true);
 
 		// property Collection.endIndex
 		manager.convertPropertyRestrictions(
+				jenaModel,
 				jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.endIndex)),
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Collection)),
 				XSD.integer,
 				false,
 				1,
 				1,
-				jenaModel,
 				true,
 				true);		
 		
 		// property Collection.slot
 		manager.convertPropertyRestrictions(
+				jenaModel,
 				jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.slot)),
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Collection)),
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Slot)),
 				true,
 				null,
 				null,
-				jenaModel,
 				true,
 				true);		
 		
 		// property Slot.index
 		manager.convertPropertyRestrictions(
+				jenaModel,
 				jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.index)),
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Slot)),
 				XSD.integer,
 				false,
 				1,
 				1,
-				jenaModel,
 				true,
 				true);		
 		
 		
 		// property Slot.item
 		manager.convertPropertyRestrictions(
+				jenaModel,
 				jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.item)),
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Slot)),
 				null,
 				true,
 				1,
 				1,
-				jenaModel,
 				true,
 				true);		
 
 		// property Slot.previous
 		manager.convertPropertyRestrictions(
+				jenaModel,
 				jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.previous)),
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Slot)),
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Slot)),
 				true,
 				0,
 				1,
-				jenaModel,
 				true,
 				true);
 		
 		// property Slot.next
 		manager.convertPropertyRestrictions(
+				jenaModel,
 				jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.next)),
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Slot)),
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Slot)),
 				true,
 				0,
 				1,
-				jenaModel,
 				true,
 				true);		
 			
@@ -181,13 +181,13 @@ class Bem2RdfOloSimilarListCollectionTypeConverter extends Bem2RdfCollectionType
 					jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Slot)));
 			
 			manager.convertPropertyRestrictions(
+					jenaModel,
 					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.item)),
 					slotTypeResource,
 					manager.convertTypeInfo(jenaModel, itemTypeInfo, false),
 					true,
 					null,
 					null,
-					jenaModel,
 					false,
 					false);
 		}
@@ -232,13 +232,13 @@ class Bem2RdfOloSimilarListCollectionTypeConverter extends Bem2RdfCollectionType
 					
 					Resource slotTypeResource = convertCollectionSlot(jenaModel, itemTypeInfo);
 					manager.convertPropertyRestrictions(
+							jenaModel,
 							jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.slot)),
 							collectionTypeResource,
 							slotTypeResource,
 							true,
 							null,
 							null,
-							jenaModel,
 							false,
 							false);
 					
@@ -257,13 +257,13 @@ class Bem2RdfOloSimilarListCollectionTypeConverter extends Bem2RdfCollectionType
 					
 			} else if (min != null || max != null) {
 				manager.convertPropertyRestrictions(
+						jenaModel,
 						jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.slot)),
 						collectionTypeResource,
 						jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Slot)),
 						true,
 						min,
 						max,
-						jenaModel,
 						false,
 						false);
 			}
@@ -334,18 +334,14 @@ class Bem2RdfOloSimilarListCollectionTypeConverter extends Bem2RdfCollectionType
 			nodeList.add(manager.convertValue(jenaModel, value, itemTypeInfo, listResource, count++, false));
 		}
 		
-		int length = nodeList.size();
+		int size = nodeList.size();
 		
 		
 		Resource typeResource = jenaModel.createResource(manager.uriBuilder.buildTypeUri(collectionTypeInfo)); 
 		listResource.addProperty(RDF.type, typeResource);
 		listResource.addLiteral(
 				jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.size)),
-				length);
-		listResource.addProperty(
-				jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.isOrdered)),
-				manager.uriBuilder.buildBuiltInOntologyUri(
-						collectionTypeInfo.isSorted() ? Bem2RdfVocabulary.BuiltInOntology.TRUE : Bem2RdfVocabulary.BuiltInOntology.FALSE));
+				manager.primitiveTypeConverter.convertLiteral(jenaModel, size, BemValueKindEnum.INTEGER));
 //		listResource.addProperty(Bem2RdfVocabulary.BuiltInOntology.itemType, jenaModel.createResource(manager.uriBuilder.buildOntologyUri(itemTypeInfo)));
 		
 		for (int i = 0; i < nodeList.size(); ++i) {
@@ -358,7 +354,7 @@ class Bem2RdfOloSimilarListCollectionTypeConverter extends Bem2RdfCollectionType
 			}
 			slotResource.addLiteral(
 					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.index)),
-					i + 1);
+					manager.primitiveTypeConverter.convertLiteral(jenaModel, i + 1, BemValueKindEnum.INTEGER));
 			slotResource.addProperty(
 					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.item)),
 					nodeList.get(i));

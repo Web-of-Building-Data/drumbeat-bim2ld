@@ -109,13 +109,15 @@ class Bem2RdfDrummondListCollectionTypeConverter extends Bem2RdfCollectionTypeCo
 			
 			Resource itemTypeResource = jenaModel.createResource(manager.uriBuilder.buildTypeUri(collectionTypeInfo.getItemTypeInfo()));
 			manager.convertPropertyRestrictions(
+					jenaModel,
 					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasContent)),
-					collectionTypeResource, itemTypeResource, true, 0, 1, jenaModel, false, false);
+					collectionTypeResource, itemTypeResource, true, 0, 1, false, false);
 			 
 			manager.convertPropertyRestrictions(
+					jenaModel,
 					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasNext)),
 					collectionTypeResource,
-					additionalCollectionTypeResource, true, 1, 1, jenaModel, false, false);
+					additionalCollectionTypeResource, true, 1, 1, false, false);
 			 
 			Resource emptyListTypeResource = jenaModel.createResource(manager.uriBuilder.buildTypeUri(collectionTypeInfo).replace(collectionKindName, "Empty" + collectionKindName));
 			jenaModel.add(emptyListTypeResource, RDF.type, OWL.Class);	
@@ -149,6 +151,8 @@ class Bem2RdfDrummondListCollectionTypeConverter extends Bem2RdfCollectionTypeCo
 		Resource currentListResource;
 		assert(parentResource != null);
 		if (manager.nameAllBlankNodes) {
+			assert(parentResource.isURIResource());
+			assert(parentResource.getLocalName() != null);
 			String currentResourceName = manager.uriBuilder.buildDatasetBlankNodeUri(String.format("%s_%d_%d", parentResource.getLocalName(), childNodeCount, index));
 			currentListResource = jenaModel.createResource(currentResourceName);			
 		} else {
@@ -161,6 +165,8 @@ class Bem2RdfDrummondListCollectionTypeConverter extends Bem2RdfCollectionTypeCo
 			index--;
 			Resource nextListResource = currentListResource;
 			if (manager.nameAllBlankNodes) {
+				assert(parentResource.isURIResource());
+				assert(parentResource.getLocalName() != null);
 				String currentResourceName = manager.uriBuilder.buildDatasetBlankNodeUri(String.format("%s_%d_%d", parentResource.getLocalName(), childNodeCount, index));
 				currentListResource = jenaModel.createResource(currentResourceName);			
 			} else {
@@ -176,7 +182,7 @@ class Bem2RdfDrummondListCollectionTypeConverter extends Bem2RdfCollectionTypeCo
 			RDFNode valueNode = manager.convertValue(jenaModel, value, itemTypeInfo, currentListResource, 0, false);
 			
 			currentListResource.addProperty(
-					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasValue)),
+					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasContent)),
 					valueNode);
 		}
 
