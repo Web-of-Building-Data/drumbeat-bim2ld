@@ -94,6 +94,32 @@ public class BemDataset {
 		BemEntityTypeInfo entityType = getSchema().getEntityTypeInfo(entityTypeName);
 		return getAnyEntityByType(entityType);
 	}
+	
+	public BemEntity getAnyEntityByTypeAndName(BemEntityTypeInfo entityType, String entityName) throws BemEntityNotFoundException {
+		if (entityName == null) {
+			throw new NullPointerException("entityName");
+		}
+		
+		for (BemEntity entity : entities) {
+			if (entity.isInstanceOf(entityType) && entityName.equals(entity.getName())) {
+				return entity;
+			}
+		}
+		throw new BemEntityNotFoundException("Entity with type '" + entityType + "' and name '" + name + "' not found");
+	}
+
+	public BemEntity getEntityLocalId(String localId) throws BemEntityNotFoundException {
+		if (localId == null) {
+			throw new NullPointerException("localId");
+		}
+
+		for (BemEntity entity : entities) {
+			if (localId.equals(entity.getLocalId())) {
+				return entity;
+			}
+		}
+		throw new BemEntityNotFoundException("Entity with localId '" + localId + "' not found");
+	}
 
 	public void addEntities(Collection<BemEntity> entities) {
 		this.entities.addAll(entities);	
@@ -108,3 +134,4 @@ public class BemDataset {
 	}
 
 }
+

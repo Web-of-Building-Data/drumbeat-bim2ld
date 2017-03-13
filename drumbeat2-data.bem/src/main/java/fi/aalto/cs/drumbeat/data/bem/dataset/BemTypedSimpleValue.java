@@ -8,6 +8,8 @@ public class BemTypedSimpleValue extends BemComplexValue {
 	private final BemTypeInfo type;
 	
 	public BemTypedSimpleValue(BemSimpleValue value, BemTypeInfo type) {
+		assert(type.getValueKind().isSimple());
+		
 		this.type = type;
 		this.value = value;
 	}

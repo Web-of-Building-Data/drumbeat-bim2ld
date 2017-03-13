@@ -8,6 +8,8 @@ public class BemPrimitiveValue extends BemSimpleValue {
 
 	public BemPrimitiveValue(Object value, BemValueKindEnum valueKind) {
 		super(value);
+		
+		assert(valueKind.isPrimitive()) : "ValueKind must be primitive: " + valueKind;
 		this.valueKind = valueKind;
 	}
 	

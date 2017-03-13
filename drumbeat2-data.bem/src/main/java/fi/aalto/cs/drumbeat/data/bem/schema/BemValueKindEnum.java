@@ -21,8 +21,8 @@ public enum BemValueKindEnum {
 	;
 	
 	public static final EnumSet<BemValueKindEnum> NUMBERIC	= EnumSet.of(INTEGER, REAL, NUMBER);
-	public static final EnumSet<BemValueKindEnum> PRIMITIVE	= EnumSet.of(INTEGER, REAL, NUMBER, STRING, LOGICAL, DATETIME);
-	public static final EnumSet<BemValueKindEnum> SIMPLE	= EnumSet.of(INTEGER, REAL, NUMBER, STRING, LOGICAL, DATETIME, ENUM);
+	public static final EnumSet<BemValueKindEnum> PRIMITIVE	= EnumSet.of(INTEGER, REAL, NUMBER, STRING, DATETIME);
+	public static final EnumSet<BemValueKindEnum> SIMPLE	= EnumSet.of(INTEGER, REAL, NUMBER, STRING, DATETIME, LOGICAL, ENUM);
 	public static final EnumSet<BemValueKindEnum> COMPLEX	= EnumSet.of(ENTITY, SELECT);
 	
 	public boolean isNumeric() {
@@ -39,6 +39,10 @@ public enum BemValueKindEnum {
 	
 	public boolean isComplex() {
 		return COMPLEX.contains(this);
+	}
+
+	public boolean isLogical() {
+		return this.equals(LOGICAL);
 	}
 	
 	

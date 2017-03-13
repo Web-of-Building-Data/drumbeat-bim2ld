@@ -84,6 +84,19 @@ public class IfcSchemaParser_Test {
 		BemAttributeInfo attribute_IfcProject_HasAssociations = type_IfcProject.getInverseAttributeInfo("HasAssociations");
 		assertNotNull(attribute_IfcProject_HasAssociations);
 		assertEquals("hasAssociations", attribute_IfcProject_HasAssociations.getName());
+		
+		BemTypeInfo type_IfcBoolean = schema.getTypeInfo("IfcBoolean");
+		assertNotNull(type_IfcBoolean);
+		assertEquals("IfcBoolean", type_IfcBoolean.getName());
+		assertEquals(BemDefinedTypeInfo.class, type_IfcBoolean.getClass());
+		assertEquals(BemValueKindEnum.LOGICAL, type_IfcBoolean.getValueKind());		
+		
+		BemTypeInfo type_BOOLEAN = ((BemDefinedTypeInfo)type_IfcBoolean).getWrappedTypeInfo();
+		assertNotNull(type_BOOLEAN);
+		assertEquals("BOOLEAN", type_BOOLEAN.getName());
+		assertEquals(BemLogicalTypeInfo.class, type_BOOLEAN.getClass());
+		assertEquals(BemValueKindEnum.LOGICAL, type_BOOLEAN.getValueKind());
+		
 	}
 	
 	

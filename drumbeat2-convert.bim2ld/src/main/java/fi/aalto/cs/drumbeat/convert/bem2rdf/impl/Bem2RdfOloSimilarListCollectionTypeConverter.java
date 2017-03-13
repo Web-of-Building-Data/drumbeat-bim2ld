@@ -310,9 +310,13 @@ class Bem2RdfOloSimilarListCollectionTypeConverter extends Bem2RdfCollectionType
 		
 
 	@Override
-	List<RDFNode> convertListToResource(Model jenaModel, BemCollectionValue<? extends BemValue> listValue, BemCollectionTypeInfo collectionTypeInfo,
+	Resource convertListToResource(Model jenaModel, BemCollectionValue<? extends BemValue> listValue, BemCollectionTypeInfo collectionTypeInfo,
 			Resource parentResource, long childNodeCount)
 	{
+		if (!collectionTypeInfo.isSorted()) {
+			throw new IllegalArgumentException("Collection type must be sorted:" + collectionTypeInfo);
+		}
+
 		Resource listResource;
 		if (manager.nameAllBlankNodes) {
 			assert(parentResource != null);
@@ -363,9 +367,7 @@ class Bem2RdfOloSimilarListCollectionTypeConverter extends Bem2RdfCollectionType
 					slotResource);
 		}
 		
-		List<RDFNode> nodes = new ArrayList<RDFNode>();
-		nodes.add(listResource);
-		return nodes;
+		return listResource;
 	}
 
 }

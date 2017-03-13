@@ -378,5 +378,10 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 //		return typeInfo;
 //	}
 	
+	@Override
+	public String toString() {
+		return typeInfo.getName() + "_" + localId;
+	}
+	
 	
 }

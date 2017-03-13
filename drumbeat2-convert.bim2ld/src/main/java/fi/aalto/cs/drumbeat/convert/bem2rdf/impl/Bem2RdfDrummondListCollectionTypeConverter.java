@@ -131,68 +131,57 @@ class Bem2RdfDrummondListCollectionTypeConverter extends Bem2RdfCollectionTypeCo
 	}
 	
 	@Override
-	List<RDFNode> convertListToResource(Model jenaModel, BemCollectionValue<? extends BemValue> listValue, BemCollectionTypeInfo collectionTypeInfo,
+	Resource convertListToResource(Model jenaModel, BemCollectionValue<? extends BemValue> listValue, BemCollectionTypeInfo collectionTypeInfo,
 			Resource parentResource, long childNodeCount)
 	{
-		if (collectionTypeInfo.isSorted()) {
-			
-			Resource listTypeResource = jenaModel.createResource(manager.uriBuilder.buildTypeUri(collectionTypeInfo)); 
-			Resource emptyListTypeResource = jenaModel.createResource(manager.uriBuilder.buildTypeUri(collectionTypeInfo).replace("List", "EmptyList"));
-			BemTypeInfo itemTypeInfo = collectionTypeInfo.getItemTypeInfo();			
-			
-			List<? extends BemValue> values = listValue.getSingleValues(); 
+		if (!collectionTypeInfo.isSorted()) {
+			throw new IllegalArgumentException("Collection type must be sorted:" + collectionTypeInfo);
+		}
 
-			int index = values.size();
-			
-			Resource currentListResource;
-			assert(parentResource != null);
+		Resource listTypeResource = jenaModel.createResource(manager.uriBuilder.buildTypeUri(collectionTypeInfo)); 
+		Resource emptyListTypeResource = jenaModel.createResource(manager.uriBuilder.buildTypeUri(collectionTypeInfo).replace("List", "EmptyList"));
+		BemTypeInfo itemTypeInfo = collectionTypeInfo.getItemTypeInfo();			
+		
+		List<? extends BemValue> values = listValue.getSingleValues(); 
+
+		int index = values.size();
+		
+		Resource currentListResource;
+		assert(parentResource != null);
+		if (manager.nameAllBlankNodes) {
+			String currentResourceName = manager.uriBuilder.buildDatasetBlankNodeUri(String.format("%s_%d_%d", parentResource.getLocalName(), childNodeCount, index));
+			currentListResource = jenaModel.createResource(currentResourceName);			
+		} else {
+			currentListResource = jenaModel.createResource();
+		}
+		
+		currentListResource.addProperty(RDF.type, emptyListTypeResource);
+		
+		while (index > 0) {
+			index--;
+			Resource nextListResource = currentListResource;
 			if (manager.nameAllBlankNodes) {
 				String currentResourceName = manager.uriBuilder.buildDatasetBlankNodeUri(String.format("%s_%d_%d", parentResource.getLocalName(), childNodeCount, index));
 				currentListResource = jenaModel.createResource(currentResourceName);			
 			} else {
 				currentListResource = jenaModel.createResource();
 			}
-			
-			currentListResource.addProperty(RDF.type, emptyListTypeResource);
-			
-			while (index > 0) {
-				index--;
-				Resource nextListResource = currentListResource;
-				if (manager.nameAllBlankNodes) {
-					String currentResourceName = manager.uriBuilder.buildDatasetBlankNodeUri(String.format("%s_%d_%d", parentResource.getLocalName(), childNodeCount, index));
-					currentListResource = jenaModel.createResource(currentResourceName);			
-				} else {
-					currentListResource = jenaModel.createResource();
-				}
 
-				currentListResource.addProperty(RDF.type, listTypeResource);
-				currentListResource.addProperty(
-						jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasNext)),
-						nextListResource);
-				
-				BemValue value = values.get(index);
-				RDFNode valueNode = manager.convertValue(jenaModel, value, itemTypeInfo, currentListResource, 0, false);
-				
-				currentListResource.addProperty(
-						jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasValue)),
-						valueNode);
-			}
-
-			List<RDFNode> nodes = new ArrayList<>();
-			nodes.add(currentListResource);			
-			return nodes;
+			currentListResource.addProperty(RDF.type, listTypeResource);
+			currentListResource.addProperty(
+					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasNext)),
+					nextListResource);
 			
-		} else {
-			List<RDFNode> nodes = new ArrayList<>();
+			BemValue value = values.get(index);
+			RDFNode valueNode = manager.convertValue(jenaModel, value, itemTypeInfo, currentListResource, 0, false);
 			
-			for (BemValue value : listValue.getSingleValues()) {
-				RDFNode node = manager.convertValue(jenaModel, value, collectionTypeInfo.getItemTypeInfo(), parentResource, childNodeCount, false);
-				nodes.add(node);
-			}
-			
-			return nodes;
+			currentListResource.addProperty(
+					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasValue)),
+					valueNode);
 		}
 
+		return currentListResource;			
+			
 	}
 
 

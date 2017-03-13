@@ -17,7 +17,6 @@ import fi.aalto.cs.drumbeat.data.bem.parsers.BemFormatException;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemParserException;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary;
-import fi.aalto.cs.drumbeat.data.step.dataset.StepSpecialValue;
 import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
 
 class SpfDatasetInternalSectionParser {
@@ -238,15 +237,15 @@ class SpfDatasetInternalSectionParser {
 					switch (s) {
 					case StepVocabulary.StepValues.T:
 					case StepVocabulary.StepValues.TRUE:
-						value = builder.createPrimitiveValue(BemLogicalEnum.TRUE, BemValueKindEnum.LOGICAL);
+						value = builder.createLogicalValue(BemLogicalEnum.TRUE);
 						break;
 					case StepVocabulary.StepValues.F:
 					case StepVocabulary.StepValues.FALSE:
-						value = builder.createPrimitiveValue(BemLogicalEnum.FALSE, BemValueKindEnum.LOGICAL);
+						value = builder.createLogicalValue(BemLogicalEnum.FALSE);
 						break;
 					case StepVocabulary.StepValues.U:
 					case StepVocabulary.StepValues.UNKNOWN:
-						value = builder.createPrimitiveValue(BemLogicalEnum.UNKNOWN, BemValueKindEnum.LOGICAL);
+						value = builder.createLogicalValue(BemLogicalEnum.UNKNOWN);
 						break;
 					}
 				} else {
@@ -261,12 +260,12 @@ class SpfDatasetInternalSectionParser {
 				break;
 
 			case StepVocabulary.SpfFormat.NULL_SYMBOL: // $
-				attributeValues.add(StepSpecialValue.NULL);
+				attributeValues.add(BemSpecialValue.NULL);
 				attributeStrBuilderWrapper.skip(1);
 				break;
 
 			case StepVocabulary.SpfFormat.ANY_SYMBOL: // *
-				attributeValues.add(StepSpecialValue.ANY);
+				attributeValues.add(BemSpecialValue.ANY);
 				attributeStrBuilderWrapper.skip(1);
 				break;
 

@@ -1,9 +1,6 @@
 package fi.aalto.cs.drumbeat.convert.bem2rdf.impl;
 
-import java.util.*;
-
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemCollectionValue;
@@ -26,7 +23,7 @@ public abstract class Bem2RdfCollectionTypeConverter {
 	
 	abstract Resource convertCollectionTypeInfo(Model jenaModel, BemCollectionTypeInfo typeInfo, boolean includeDetails);	
 	
-	abstract List<RDFNode> convertListToResource(Model jenaModel, BemCollectionValue<? extends BemValue> listValue, BemCollectionTypeInfo collectionTypeInfo,
+	abstract Resource convertListToResource(Model jenaModel, BemCollectionValue<? extends BemValue> listValue, BemCollectionTypeInfo collectionTypeInfo,
 			Resource parentResource, long childNodeCount);	 
 
 	//*****************************************

@@ -8,9 +8,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import fi.aalto.cs.drumbeat.data.bem.BemException;
+import fi.aalto.cs.drumbeat.data.bem.dataset.BemComplexValue;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemDataset;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemEntity;
+import fi.aalto.cs.drumbeat.data.bem.dataset.BemLogicalValue;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemPrimitiveValue;
+import fi.aalto.cs.drumbeat.data.bem.dataset.BemSimpleValue;
+import fi.aalto.cs.drumbeat.data.bem.dataset.BemTypedSimpleValue;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemValue;
 import fi.aalto.cs.drumbeat.data.bem.parsers.util.BemParserUtil;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
@@ -39,39 +43,41 @@ public class IfcDatasetParser_Test {
 		BemParserUtil.getDatasetParsers().clear();
 	}
 	
-//	@Test(expected=FileNotFoundException.class)
-//	public void test_parseNonExistingFile() throws BemException, IOException {
-//		BemParserUtil.registerSchemaParser(new IfcSchemaParser());
-//		BemParserUtil.parseSchema("../resources/IFC/IFC2X3_TC1.ex", true);
-//	}
-//
-//	@Test(expected=BemUnsupportedDataTypeException.class)
-//	public void test_parseWrongTypeFile() throws BemException, IOException {
-//		BemParserUtil.registerSchemaParser(new IfcSchemaParser());
-//		BemParserUtil.parseSchema("../resources/IFC/sample.ifc", true);
-//	}
-//
-//	@Test(expected=BemUnsupportedDataTypeException.class)
-//	public void test_parseNoParserRegistered() throws BemException, IOException {
-//		BemParserUtil.parseSchema("../resources/IFC/IFC2X3_TC1.exp", true);
-//	}
-//	
+	@Test(expected=IOException.class)
+	public void test_parseNonExistingFile() throws BemException, IOException {
+		BemParserUtil.registerDatasetParser(new IfcDatasetParser());
+		BemParserUtil.parseDataset(RESOURCES_DATASETS_FOLDER + "sample.if", true);
+	}
+
+	@Test(expected=BemException.class)
+	public void test_parseWrongTypeFile() throws BemException, IOException {
+		BemParserUtil.registerDatasetParser(new IfcDatasetParser());
+		BemParserUtil.parseDataset(RESOURCES_SCHEMAS_FOLDER + "IFC2X3_TC1.exp", true);
+	}
+
+	@Test(expected=BemException.class)
+	public void test_parseNoParserRegistered() throws BemException, IOException {
+		BemParserUtil.parseDataset(RESOURCES_DATASETS_FOLDER + "sample.ifc", true);
+	}
+	
 	@Test
 	public void test_parseSampleIfc() throws BemException, IOException {
 		StepDataset dataset = test_parse(RESOURCES_DATASETS_FOLDER + "sample.ifc");
 
 		BemEntity projectEntity = dataset.getAnyEntityByType(IfcVocabulary.IfcTypes.IFC_PROJECT);
 		assertNotNull(projectEntity);
-		assertTrue(projectEntity.getTypeInfo().getName().equals(IfcVocabulary.IfcTypes.IFC_PROJECT));
+		assertEquals(IfcVocabulary.IfcTypes.IFC_PROJECT,projectEntity.getTypeInfo().getName());
+		assertEquals("1", projectEntity.getLocalId());
 		
 		BemValue guidValue = projectEntity.getAttributeMap().getAny(IfcVocabulary.IfcAttributes.GLOBAL_ID);
 		assertNotNull(guidValue);
-		assertTrue(guidValue instanceof BemPrimitiveValue);
+		assertEquals(BemPrimitiveValue.class, guidValue.getClass());
 		assertEquals("0YvctVUKr0kugbFTf53O9L", ((BemPrimitiveValue)guidValue).getValue());
 		
 		List<BemValue> representationContextAttributes = projectEntity.getAttributeMap().getAll("RepresentationContexts");
 		assertNotNull(representationContextAttributes);
 		assertEquals(1, representationContextAttributes.size());
+		
 		BemValue representationContext = representationContextAttributes.get(0);
 		assertNotNull(representationContext);
 		assertTrue("Expected: representationContext instanceof BemEntity: " + representationContext.getClass(), representationContext instanceof BemEntity);
@@ -94,7 +100,48 @@ public class IfcDatasetParser_Test {
 		assertEquals(1, siteEntities.size());
 		
 		BemEntity siteEntity = (BemEntity)siteEntities.get(0);
-		assertEquals("Default Site", ((BemPrimitiveValue)siteEntity.getAttributeMap().getAny("name")).getValue());		
+		assertEquals("Default Site", ((BemPrimitiveValue)siteEntity.getAttributeMap().getAny("name")).getValue());
+		
+		
+		BemEntity entity_IfcPropertySet_132 = dataset.getEntityLocalId("132");
+		assertNotNull(entity_IfcPropertySet_132);
+		assertEquals("IfcPropertySet", entity_IfcPropertySet_132.getTypeInfo().getName());
+		
+		List<BemValue> entity_IfcPropertySet_132_properties = entity_IfcPropertySet_132.getAttributeMap().getAll("hasProperties");
+		assertEquals(12, entity_IfcPropertySet_132_properties.size());
+		
+		for (BemValue property : entity_IfcPropertySet_132_properties) {
+			assertEquals(BemEntity.class, property.getClass());
+			assertEquals("IfcPropertySingleValue", ((BemEntity)property).getTypeInfo().getName());
+			
+			BemValue propertyValue = ((BemEntity)property).getAttributeMap().getAny("NominalValue");
+			assertNotNull(propertyValue);
+			assertTrue(propertyValue instanceof BemComplexValue);
+			assertEquals(BemTypedSimpleValue.class, propertyValue.getClass());
+			
+			BemTypeInfo propertyValueType = ((BemTypedSimpleValue)propertyValue).getType();
+			assertEquals(BemDefinedTypeInfo.class, propertyValueType.getClass());
+			
+			BemSimpleValue propertyValueObject = ((BemTypedSimpleValue)propertyValue).getValue();
+			
+			switch (propertyValueType.getValueKind()) {
+			case STRING:
+				assertEquals(BemPrimitiveValue.class, propertyValueObject.getClass());
+				assertEquals(String.class, propertyValueObject.getValue().getClass());
+				break;
+			case REAL:
+				assertEquals(BemPrimitiveValue.class, propertyValueObject.getClass());
+				assertEquals(Double.class, propertyValueObject.getValue().getClass());
+				break;
+			case LOGICAL:
+				assertEquals(BemLogicalValue.class, propertyValueObject.getClass());
+				assertEquals(BemLogicalEnum.class, propertyValueObject.getValue().getClass());
+				break;
+			default:
+				throw new IllegalArgumentException("Unexpected type of property value: " + propertyValue);
+			}
+		}
+		
 		
 	}
 	

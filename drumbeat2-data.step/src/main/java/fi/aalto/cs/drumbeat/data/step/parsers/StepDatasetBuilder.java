@@ -2,6 +2,7 @@ package fi.aalto.cs.drumbeat.data.step.parsers;
 
 import fi.aalto.cs.drumbeat.data.bem.dataset.*;
 import fi.aalto.cs.drumbeat.data.bem.parsers.BemDatasetBuilder;
+import fi.aalto.cs.drumbeat.data.bem.schema.BemLogicalEnum;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchema;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemTypeInfo;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemValueKindEnum;
@@ -20,11 +21,17 @@ public class StepDatasetBuilder extends BemDatasetBuilder {
 	}
 
 	public BemPrimitiveValue createPrimitiveValue(Object value, BemValueKindEnum valueKind) {
+		assert(valueKind.isPrimitive()) ;
 		return new BemPrimitiveValue(value, valueKind);
 	}
 
 	public BemTypedSimpleValue createTypedSimpleValue(BemSimpleValue value, BemTypeInfo type) {
 		return new BemTypedSimpleValue(value, type);
 	}
+
+	public BemLogicalValue createLogicalValue(BemLogicalEnum value) {
+		return new BemLogicalValue(value);
+	}
+	
 	
 }

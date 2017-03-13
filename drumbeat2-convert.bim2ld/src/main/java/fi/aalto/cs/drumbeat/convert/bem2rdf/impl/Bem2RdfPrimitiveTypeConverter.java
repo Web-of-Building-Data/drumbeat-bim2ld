@@ -9,7 +9,6 @@ import org.apache.jena.vocabulary.*;
 
 import fi.aalto.cs.drumbeat.common.params.StringParam;
 import fi.aalto.cs.drumbeat.convert.bem2rdf.*;
-import fi.aalto.cs.drumbeat.data.bem.dataset.BemPrimitiveValue;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
 
@@ -193,8 +192,7 @@ class Bem2RdfPrimitiveTypeConverter {
 		} else if (valueKind == BemValueKindEnum.INTEGER) {				
 			valueNode = jenaModel.createTypedLiteral((long)primitiveValue);
 		} else if (valueKind == BemValueKindEnum.LOGICAL) {
-////			assert(typeInfo instanceof BemLogicalTypeInfo) : typeInfo;
-//			assert(value instanceof BemLogicalEnum) : value;
+			assert(false) : primitiveValue + ", type: " + typeInfo;
 //			valueNode = converter.convertBooleanValue(typeInfo, (BemLogicalEnum)value, jenaModel);
 			throw new NotImplementedException("");
 		} else {

@@ -94,7 +94,9 @@ class Bem2RdfLogicalTypeConverter{
 		return baseTypeForLogical;		
 	}	
 	
-	public RDFNode convertLogicalValue(Model jenaModel, BemLogicalEnum value, BemLogicalTypeInfo typeInfo) {
+	public RDFNode convertLogicalValue(Model jenaModel, BemLogicalEnum value, BemTypeInfo typeInfo) {
+		
+		assert(typeInfo.getValueKind().isLogical());
 		
 		if (baseTypeForLogical.equals(OWL2.NamedIndividual)) {
 			

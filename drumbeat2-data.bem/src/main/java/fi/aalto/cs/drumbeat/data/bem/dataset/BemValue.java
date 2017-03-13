@@ -9,6 +9,10 @@ public abstract class BemValue {
 	public boolean isComplexValue() {
 		return this instanceof BemComplexValue;
 	}
+	
+	public boolean isSpecialVaue() {
+		return this instanceof BemSpecialValue;
+	}
 
 	public boolean isCollectionValue() {
 		return this instanceof BemCollectionValue;
@@ -18,12 +22,4 @@ public abstract class BemValue {
 		return this instanceof BemEntity;
 	}
 
-	public BemSimpleValue asSimpleValue() {
-		return (BemSimpleValue)this;
-	}
-	
-	public BemComplexValue asComplexValue() {
-		return (BemComplexValue)this;
-	}
-	
 }

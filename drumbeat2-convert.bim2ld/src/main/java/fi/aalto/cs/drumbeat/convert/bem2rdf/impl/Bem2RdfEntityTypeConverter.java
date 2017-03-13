@@ -260,6 +260,8 @@ class Bem2RdfEntityTypeConverter {
 		
 		if (includeAttributes) {
 			
+			System.out.println("Exporting entity: " + entity);
+
 			long childNodeCount = 1L;
 			
 			BemEntityTypeInfo entityTypeInfo = entity.getTypeInfo();
@@ -271,6 +273,9 @@ class Bem2RdfEntityTypeConverter {
 				Property attributeProperty = convertEntityTypeAttribute(jenaModel, entityTypeResource, attributeInfo, false);
 				
 				BemValue attributeValue = entry.getValue();
+
+				System.out.println("\tExporting property value: " + attributeInfo + " (" + attributeInfo.getValueTypeInfo() + ")");
+				
 				RDFNode attributeNode = manager.convertValue(
 						jenaModel, attributeValue, attributeInfo.getValueTypeInfo(), entityResource, childNodeCount++, false);
 				

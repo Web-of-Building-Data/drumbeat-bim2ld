@@ -11,6 +11,7 @@ import fi.aalto.cs.drumbeat.data.bem.dataset.BemEnumerationValue;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemLogicalValue;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemPrimitiveValue;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemSimpleValue;
+import fi.aalto.cs.drumbeat.data.bem.dataset.BemSpecialValue;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemTypedSimpleValue;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemValue;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
@@ -160,26 +161,32 @@ public class Bem2RdfConverterManager {
 				
 			} else if (value instanceof BemPrimitiveValue) {
 				
+				assert(typeInfo instanceof BemPrimitiveTypeInfo || typeInfo instanceof BemDefinedTypeInfo);
+				
+//				assert(typeInfo.getValueKind() != BemValueKindEnum.LOGICAL) : value;
+				
 				return primitiveTypeConverter.convertPrimitiveValue(jenaModel, internalValue, typeInfo, parentResource, 0);
 				
 			} else if (value instanceof BemLogicalValue) {
 				
-				return logicalTypeConverter.convertLogicalValue(jenaModel, (BemLogicalEnum)internalValue, (BemLogicalTypeInfo)typeInfo);			
+				return logicalTypeConverter.convertLogicalValue(jenaModel, (BemLogicalEnum)internalValue, typeInfo);			
 				
 			}
 			
-		} else {
-			
-			assert (value instanceof BemComplexValue) : value; 
+		} else if (value instanceof BemComplexValue) {
 			
 			if (value instanceof BemEntity) {			
 				return entityTypeConverter.convertEntityValue(jenaModel, (BemEntity)value, includeEntityAttributes);
 			} else if (value instanceof BemTypedSimpleValue) {
 				return convertTypedSimpleValue(jenaModel, (BemTypedSimpleValue)value, parentResource, childNodeCount);
 			} else if (value instanceof BemCollectionValue<?>) {
-//				collectionTypeConverter.convertListToResource(
-//						jenaModel, (BemCollectionValue<?>)value, (BemCollectionTypeInfo)typeInfo, parentResource, childNodeCount);
+				return collectionTypeConverter.convertListToResource(
+						jenaModel, (BemCollectionValue<?>)value, (BemCollectionTypeInfo)typeInfo, parentResource, childNodeCount);
 			}
+			
+		} if (value instanceof BemSpecialValue) {
+			
+			return jenaModel.createResource(uriBuilder.buildBuiltInOntologyUri(((BemSpecialValue)value).getName()));
 			
 		}
 		
