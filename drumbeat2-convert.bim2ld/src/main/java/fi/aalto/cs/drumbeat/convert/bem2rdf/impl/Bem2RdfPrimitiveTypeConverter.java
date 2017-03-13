@@ -13,7 +13,7 @@ import fi.aalto.cs.drumbeat.data.bem.dataset.BemPrimitiveValue;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
 
-public class Bem2RdfPrimitiveTypeConverter{
+class Bem2RdfPrimitiveTypeConverter {
 	
 	private final Bem2RdfConverterManager manager;
 
@@ -79,7 +79,7 @@ public class Bem2RdfPrimitiveTypeConverter{
 	//		jenaModel.add(property, RDFS.range, baseDataType);
 			
 			// TODO: check if it is needed to export domains and ranges
-			manager.convertPropertyRestrictions(property_hasXXX, typeResource, baseDataType, false, 1, 1, jenaModel);
+			manager.convertPropertyRestrictions(property_hasXXX, typeResource, baseDataType, false, 1, 1, jenaModel, true, true);
 	
 	//		if (targetOwlProfileList.supportsRdfProperty(OWL.allValuesFrom, null)) {		
 	//			

@@ -28,7 +28,7 @@ public class RdfAsserter {
 	}
 	
 	public void assertEquals(String modelPath1, Model model2) throws RdfAsserterException, IOException {
-		Model model1 = TestHelper.readModel(modelPath1);
+		Model model1 = TestHelper.readJenaModel(modelPath1);
 		internalAssertEquals(model1, model2, true);
 	}	
 

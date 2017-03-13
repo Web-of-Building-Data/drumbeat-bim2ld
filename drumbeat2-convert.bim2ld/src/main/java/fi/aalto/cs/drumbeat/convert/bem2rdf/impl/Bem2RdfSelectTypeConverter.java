@@ -8,7 +8,7 @@ import org.apache.jena.vocabulary.*;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
 
-public class Bem2RdfSelectTypeConverter {
+class Bem2RdfSelectTypeConverter {
 	
 	private final Bem2RdfConverterManager manager;
 

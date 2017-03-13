@@ -54,13 +54,29 @@ public class Bem2RdfConverterManager {
 		nameAllBlankNodes = contextParams.nameAllBlankNodes();
 		
 		builtInOntologyConverter = new Bem2RdfBuiltInOntologyConverter(this);
-		collectionTypeConverter = new Bem2RdfCollectionTypeConverter(this);
+//		collectionTypeConverter = new Bem2RdfCollectionTypeConverter(this);
 		definedTypeConverter = new Bem2RdfDefinedTypeConverter(this);
 		enumerationTypeConverter = new Bem2RdfEnumerationTypeConverter(this);
 		entityTypeConverter = new Bem2RdfEntityTypeConverter(this);
 		logicalTypeConverter = new Bem2RdfLogicalTypeConverter(this);
 		primitiveTypeConverter = new Bem2RdfPrimitiveTypeConverter(this);
 		selectTypeConverter = new Bem2RdfSelectTypeConverter(this);
+		
+		String convertCollectionsTo = contextParams.convertCollectionsTo();		
+		switch (convertCollectionsTo) {
+		case Bem2RdfConversionContextParams.VALUE_DRUMMOND_LIST:
+			collectionTypeConverter = new Bem2RdfDrummondListCollectionTypeConverter(this);
+			break;
+			
+		case Bem2RdfConversionContextParams.VALUE_OLO_SIMILAR_LIST:
+			collectionTypeConverter = new Bem2RdfOloSimilarListCollectionTypeConverter(this);
+			break;
+
+		default:
+			 throw new Bem2RdfConverterConfigurationException("Unknown collection type: " + convertCollectionsTo);
+		}
+		
+
 		
 		map_Type_hasXXXProperty = new HashMap<>();
 	}
@@ -154,7 +170,7 @@ public class Bem2RdfConverterManager {
 			
 		} else {
 			
-			assert (value instanceof BemComplexValue); 
+			assert (value instanceof BemComplexValue) : value; 
 			
 			if (value instanceof BemEntity) {			
 				return entityTypeConverter.convertEntityValue(jenaModel, (BemEntity)value, includeEntityAttributes);
@@ -320,13 +336,22 @@ public class Bem2RdfConverterManager {
 			boolean isObjectProperty,
 			Integer min,
 			Integer max,
-			Model jenaModel) {
+			Model jenaModel,
+			boolean exportRdfsDomain,
+			boolean exportRdfsRange) {
 		
 		property.addProperty(RDF.type, isObjectProperty ? OWL.ObjectProperty : OWL.DatatypeProperty);
 		
+		assert(domain != null);
+		
 		// TODO: double check if domains and ranges are really needed
-		property.addProperty(RDFS.domain, domain);
-		property.addProperty(RDFS.range, range);		
+		if (!exportRdfsDomain) {
+			property.addProperty(RDFS.domain, domain);
+		}
+		
+		if (range != null && !exportRdfsRange) {
+			property.addProperty(RDFS.range, range);
+		}
 
 		if (max != null && max == 1 && targetOwlProfileList.supportsStatement(RDF.type, OWL.FunctionalProperty)) {			
 			// TODO: detect when FunctionalDataProperty is supported
@@ -341,7 +366,7 @@ public class Bem2RdfConverterManager {
 			//
 			// write constraint about property type
 			//
-			if (targetOwlProfileList.supportsStatement(OWL.allValuesFrom, null)) {
+			if (range != null && targetOwlProfileList.supportsStatement(OWL.allValuesFrom, null)) {
 				exportPropertyRestriction(domain, property, OWL.allValuesFrom, range, jenaModel);
 			}
 			
@@ -349,17 +374,13 @@ public class Bem2RdfConverterManager {
 			RDFNode maxNode = max != null && max != Integer.MAX_VALUE ? jenaModel.createTypedLiteral(max) : null;
 			
 			if (minNode != null) {
-				if (minNode.equals(maxNode)) {
-					if (targetOwlProfileList.supportsStatement(OWL.cardinality, minNode)) {
-						exportPropertyRestriction(domain, property, OWL.cardinality, minNode, jenaModel);
-						minNode = null;
-						maxNode = null;
-					}
-				} else {
-					if (targetOwlProfileList.supportsStatement(OWL.minCardinality, minNode)) {
-						exportPropertyRestriction(domain, property, OWL.minCardinality, minNode, jenaModel);
-						minNode = null;
-					}					
+				if (minNode.equals(maxNode) && targetOwlProfileList.supportsStatement(OWL.cardinality, minNode)) {
+					exportPropertyRestriction(domain, property, OWL.cardinality, minNode, jenaModel);
+					minNode = null;
+					maxNode = null;
+				} else if (targetOwlProfileList.supportsStatement(OWL.minCardinality, minNode)) {
+					exportPropertyRestriction(domain, property, OWL.minCardinality, minNode, jenaModel);
+					minNode = null;
 				}
 			}
 			

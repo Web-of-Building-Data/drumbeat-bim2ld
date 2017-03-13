@@ -5,7 +5,7 @@ import org.apache.jena.vocabulary.*;
 
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 
-public class Bem2RdfDefinedTypeConverter {
+class Bem2RdfDefinedTypeConverter {
 	
 	private final Bem2RdfConverterManager manager;
 
@@ -29,27 +29,29 @@ public class Bem2RdfDefinedTypeConverter {
 			BemTypeInfo baseTypeInfo = typeInfo.getWrappedTypeInfo();
 			assert(baseTypeInfo != null);
 			
+			Resource superTypeResource = manager.convertTypeInfo(jenaModel, baseTypeInfo, false);
+			
 			if (baseTypeInfo instanceof BemDefinedTypeInfo) {
 				
-				// subclass of another Defined class				
-				Resource superTypeResource = jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(baseTypeInfo.getName()));
+				// subclass of another Defined class		
 				jenaModel.add(typeResource, RDFS.subClassOf, superTypeResource);
 	
-			} else if (baseTypeInfo instanceof BemPrimitiveTypeInfo) {
+			} else if (baseTypeInfo instanceof BemPrimitiveTypeInfo || baseTypeInfo instanceof BemLogicalTypeInfo) {
 	
-				Resource superTypeResource = jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(baseTypeInfo.getName()));
 				jenaModel.add(typeResource, RDFS.subClassOf, superTypeResource);
 				jenaModel.add(
 						typeResource,
 						RDFS.subClassOf,
 						jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Defined)));
 				
+//			} else if (baseTypeInfo instanceof BemEnumerationTypeInfo) {
+//				
+//				Property property = manager.getProperty_hasXXX(jenaModel, baseTypeInfo.getValueKind());
+//				manager.convertPropertyRestrictions(property, typeResource, superTypeResource, true, 1, 1, jenaModel);		
+				
 			} else {
 				
-				assert(baseTypeInfo instanceof BemEnumerationTypeInfo) : "Expected BemEnumerationTypeInfo: " + baseTypeInfo.getClass();
-				Resource superTypeResource = jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(baseTypeInfo.getName()));			
-				Property property = manager.getProperty_hasXXX(jenaModel, baseTypeInfo.getValueKind());
-				manager.convertPropertyRestrictions(property, typeResource, superTypeResource, true, 1, 1, jenaModel);		
+				throw new IllegalArgumentException("Invalid defined type: " + typeInfo);
 				
 			}
 		}

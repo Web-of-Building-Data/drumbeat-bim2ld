@@ -12,7 +12,7 @@ import fi.aalto.cs.drumbeat.data.bem.dataset.BemValue;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
 
-public class Bem2RdfEntityTypeConverter {
+class Bem2RdfEntityTypeConverter {
 
 	private final Bem2RdfConverterManager manager;
 	private final boolean nameAllBlankNodes;
@@ -173,10 +173,10 @@ public class Bem2RdfEntityTypeConverter {
 	private Property convertEntityTypeAttribute(Model jenaModel, Resource typeResource, BemAttributeInfo attributeInfo, boolean includeDetails) {
 		
 		Property attributeProperty = jenaModel.createProperty(manager.uriBuilder.buildAttributeUri(attributeInfo, useLongAttributeName));
+		boolean exportDomainsAndRanges = useLongAttributeName;
 		
 		if (includeDetails) {
-			jenaModel.add(attributeProperty, RDF.type, jenaModel.createResource(manager.uriBuilder
-					.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.EntityProperty)));
+			jenaModel.add(attributeProperty, RDF.type, OWL.ObjectProperty);
 	
 			BemTypeInfo attributeTypeInfo = attributeInfo.getValueTypeInfo();
 	
@@ -185,14 +185,14 @@ public class Bem2RdfEntityTypeConverter {
 				boolean exportAsSingleCollection = collectionAttributeTypeInfo.isSorted();
 	
 				if (exportAsSingleCollection) {
-					Resource collectionTypeResource = jenaModel
-							.createResource(manager.uriBuilder.buildTypeUri(collectionAttributeTypeInfo));
+					assert(collectionAttributeTypeInfo.getCollectionKind().equals(BemCollectionKindEnum.List)) : collectionAttributeTypeInfo; 
+					Resource collectionTypeResource =
+							manager.collectionTypeConverter.convertCollectionTypeInfo(jenaModel, collectionAttributeTypeInfo, true);
+
 					int min = attributeInfo.isOptional() ? 0 : 1;
 					int max = 1;
 					manager.convertPropertyRestrictions(attributeProperty, typeResource, collectionTypeResource, true,
-							min, max, jenaModel);
-	
-					manager.collectionTypeConverter.convertCollectionTypeInfo(jenaModel, collectionAttributeTypeInfo, false);
+							min, max, jenaModel, exportDomainsAndRanges, exportDomainsAndRanges);
 	
 				} else {
 					Resource itemTypeResource = jenaModel.createResource(
@@ -201,7 +201,7 @@ public class Bem2RdfEntityTypeConverter {
 							: collectionAttributeTypeInfo.getCardinality().getMinCardinality();
 					int max = collectionAttributeTypeInfo.getCardinality().getMaxCardinality();
 					manager.convertPropertyRestrictions(attributeProperty, typeResource, itemTypeResource, true, min,
-							max, jenaModel);
+							max, jenaModel, exportDomainsAndRanges, exportDomainsAndRanges);
 				}
 	
 			} else {
@@ -211,7 +211,7 @@ public class Bem2RdfEntityTypeConverter {
 				int min = attributeInfo.isOptional() ? 0 : 1;
 				int max = 1;
 				manager.convertPropertyRestrictions(attributeProperty, typeResource, itemTypeResource, true, min, max,
-						jenaModel);
+						jenaModel, exportDomainsAndRanges, exportDomainsAndRanges);
 	
 			}
 			

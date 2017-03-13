@@ -12,9 +12,9 @@ public class Bem2RdfVocabulary {
 		public static final String Defined = "Defined";		
 		public static final String EmptyList = "EmptyList";		
 		public static final String Entity = "Entity";		
-		public static final String EntityProperty = "EntityProperty";
+//		public static final String EntityProperty = "EntityProperty";
 		public static final String Enum = "Enum";		
-		public static final String InverseEntityProperty = "InverseEntityProperty";
+//		public static final String InverseEntityProperty = "InverseEntityProperty";
 		public static final String List = "List";		
 		public static final String Select = "Select";		
 		public static final String Set = "Set";		

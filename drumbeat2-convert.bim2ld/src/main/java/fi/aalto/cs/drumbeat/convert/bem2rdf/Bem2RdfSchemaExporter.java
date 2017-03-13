@@ -40,7 +40,11 @@ public class Bem2RdfSchemaExporter {
 		for (BemTypeInfo typeInfo : schema.getAllTypeInfos()) {
 			boolean isBuiltInType = typeInfo.isBuiltInType();
 			if ((isBuiltInType && exportBuiltInTypes) || (!isBuiltInType && exportNonBuiltInTypes)) {
-				converterManager.convertTypeInfo(jenaModel, typeInfo, true);
+				if (typeInfo instanceof BemCollectionTypeInfo && !((BemCollectionTypeInfo)typeInfo).isSorted()) {
+					// skip unsorted collections
+					continue;
+				}
+				converterManager.convertTypeInfo(jenaModel, typeInfo, true);				
 			}
 		}
 			

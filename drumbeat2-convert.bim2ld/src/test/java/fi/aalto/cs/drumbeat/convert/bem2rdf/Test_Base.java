@@ -4,7 +4,10 @@ import java.io.StringWriter;
 import java.util.List;
 
 import org.apache.jena.rdf.model.Model;
+import org.apache.log4j.xml.DOMConfigurator;
+import org.junit.BeforeClass;
 
+import fi.aalto.cs.drumbeat.common.config.document.ConfigurationDocument;
 import fi.aalto.cs.drumbeat.common.meta.MetaClassUtils;
 import fi.aalto.cs.drumbeat.data.bem.parsers.util.BemParserUtil;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchema;
@@ -16,19 +19,20 @@ public class Test_Base {
 	public static final boolean ALL_TESTS_WRITE_ACTUAL_DATASETS = true;
 	public static final boolean ALL_TESTS_COMPARE_WITH_EXPECTED_DATASETS = false;
 
-	public static final String TEST_RESOURCES_PATH ="src/test/resources/"; 
+	public static final String TEST_RESOURCES_FOLDER_PATH ="src/test/resources/"; 
+	public static final String TEST_CONFIG_FOLDER_PATH = TEST_RESOURCES_FOLDER_PATH + "config/"; 
 	
 	public static final double DOUBLE_DELTA = 1e-15;
 	
-	public static final String CONFIG_FILE_PATH = "src/test/java/ifc2rdf-config.xml";
-	public static final String LOGGER_CONFIG_FILE_PATH = "src/test/java/log4j.xml";
+	public static final String CONFIG_FILE_PATH = TEST_CONFIG_FOLDER_PATH + "ifc2ld.xml";
+	public static final String LOGGER_CONFIG_FILE_PATH = TEST_CONFIG_FOLDER_PATH + "log4j.xml";
 	
-	public static final String TEST_SOURCE_RESOURCES_PATH = TEST_RESOURCES_PATH + "source/";
+	public static final String TEST_SOURCE_RESOURCES_PATH = TEST_RESOURCES_FOLDER_PATH + "source/";
 
 	public static final String TEST_IFC_SCHEMAS_FILE_PATH = TEST_SOURCE_RESOURCES_PATH + "schemas";
 	public static final String TEST_IFC_MODEL_FILE_PATH = TEST_SOURCE_RESOURCES_PATH + "models/sample.ifc";
 	
-	public static final String TEST_TARGET_RESOURCES_PATH = TEST_RESOURCES_PATH + "target/";
+	public static final String TEST_TARGET_RESOURCES_PATH = TEST_RESOURCES_FOLDER_PATH + "target/";
 	
 	public static final String TEST_SCHEMA_NAME = "TestSchema";
 
@@ -46,18 +50,23 @@ public class Test_Base {
 	
 	private static boolean initialized = false;
 	
-	public static void init() throws Exception {
+	@BeforeClass
+	public synchronized static void init() throws Exception {
 		if (!initialized) {
 			initialized = true;
-//			DOMConfigurator.configure(LOGGER_CONFIG_FILE_PATH);			
-//			ConfigurationDocument.load(CONFIG_FILE_PATH);
-//			BemParserUtil.parseSchemas(TEST_IFC_SCHEMAS_FILE_PATH);
-			
+			DOMConfigurator.configure(LOGGER_CONFIG_FILE_PATH);			
+			ConfigurationDocument.load(CONFIG_FILE_PATH);
+				
 			BemParserUtil.getSchemaParsers().clear();
 			BemParserUtil.registerSchemaParser(new IfcSchemaParser());
 			List<BemSchema> schemas = BemParserUtil.parseSchemas(TEST_IFC_SCHEMAS_FILE_PATH, null, true, true);
-			for (BemSchema schema : schemas) {
-				BemSchemaPool.add(schema);			
+			if (!schemas.isEmpty()) {
+				for (BemSchema schema : schemas) {
+					System.out.println("Adding bemSchema: " + schema.getName());
+					BemSchemaPool.add(schema);			
+				}
+			} else {
+				throw new IllegalArgumentException("No schemas found in: " + TEST_IFC_SCHEMAS_FILE_PATH);
 			}
 		}
 	}
@@ -107,12 +116,12 @@ public class Test_Base {
 		
 		if (writeActualModel) {
 			System.out.println("Writing Jena model: " + actualModelFilePath);
-			TestHelper.writeModel(actualModel, actualModelFilePath, actualModelWriter);
+			TestHelper.writeJenaModel(actualModel, actualModelFilePath, actualModelWriter);
 		}
 		
 		
 		if (compareWithExpectedModel) {
-			Model expectedModel = TestHelper.readModel(expectedModelFilePath);
+			Model expectedModel = TestHelper.readJenaModel(expectedModelFilePath);
 			RdfAsserter rdfAsserter = new RdfAsserter(r -> r.isAnon());
 			rdfAsserter.assertEquals(expectedModel, actualModel);
 		} else {

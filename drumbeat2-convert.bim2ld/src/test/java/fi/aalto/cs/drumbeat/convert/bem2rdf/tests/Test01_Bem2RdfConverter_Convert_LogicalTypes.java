@@ -1,4 +1,4 @@
-package fi.aalto.cs.drumbeat.convert.bem2rdf.impl;
+package fi.aalto.cs.drumbeat.convert.bem2rdf.tests;
 
 import static org.junit.Assert.*;
 
@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.semanticweb.owlapi.profiles.violations.UseOfUndeclaredDataProperty;
 
 import fi.aalto.cs.drumbeat.convert.bem2rdf.*;
+import fi.aalto.cs.drumbeat.convert.bem2rdf.impl.Bem2RdfConverterManager;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemLogicalValue;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemLogicalEnum;
 import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
@@ -21,10 +22,11 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
 
-public class Test_Bem2RdfConverter_Exporting_LogicalTypes extends Test_Base {
+public class Test01_Bem2RdfConverter_Convert_LogicalTypes extends Test_Base {
 	
 	public static final boolean COMPARE_WITH_EXPECTED_DATASETS = true;
 	public static final boolean WRITE_ACTUAL_DATASETS = true;
+	public static final Boolean THROW_OWL_VIOLATIONS = true;
 	
 	private Model jenaModel;
 	private Bem2RdfConversionContext context;
@@ -127,7 +129,7 @@ public class Test_Bem2RdfConverter_Exporting_LogicalTypes extends Test_Base {
 		
 		StringBuffer modelStringBuffer = writeAndCompareModel(1, jenaModel, WRITE_ACTUAL_DATASETS, COMPARE_WITH_EXPECTED_DATASETS);
 		if (modelStringBuffer != null) {
-			TestHelper.validateOwl(modelStringBuffer, owlProfile, Arrays.asList(UseOfUndeclaredDataProperty.class));
+			TestHelper.validateOwl(modelStringBuffer, owlProfile, Arrays.asList(UseOfUndeclaredDataProperty.class), THROW_OWL_VIOLATIONS);
 		}
 		
 		exportLogicalValues(converter, convertLogicalTo);

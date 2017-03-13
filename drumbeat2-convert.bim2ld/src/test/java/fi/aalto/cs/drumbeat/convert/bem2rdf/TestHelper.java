@@ -1,5 +1,8 @@
 package fi.aalto.cs.drumbeat.convert.bem2rdf;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.*;
 import java.util.List;
 
@@ -8,21 +11,26 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.profiles.OWLProfileReport;
 
 import fi.aalto.cs.drumbeat.common.file.FileManager;
+import fi.aalto.cs.drumbeat.data.bem.BemException;
+import fi.aalto.cs.drumbeat.data.bem.dataset.BemDataset;
+import fi.aalto.cs.drumbeat.data.bem.parsers.util.BemParserUtil;
+import fi.aalto.cs.drumbeat.data.ifc.parsers.IfcDatasetParser;
+import fi.aalto.cs.drumbeat.data.step.dataset.StepDataset;
 import fi.aalto.cs.drumbeat.owl.OwlProfileEnum;
 import fi.aalto.cs.drumbeat.owl.owlapi.OwlApiUtils;
 
 public class TestHelper {
 	
-	private static Logger logger = Logger.getLogger(TestHelper.class); 
+//	private static Logger logger = Logger.getLogger(TestHelper.class); 
 	
-	public static Model readModel(String filePath) throws IOException {
+	public static Model readJenaModel(String filePath) throws IOException {
 		FileInputStream in = new FileInputStream(filePath);
 		Model model = ModelFactory.createDefaultModel();
 		try {
@@ -33,7 +41,7 @@ public class TestHelper {
 		return model;
 	}
 	
-	public static StringWriter writeModel(Model model, String filePath, StringWriter stringWriter) throws IOException {
+	public static StringWriter writeJenaModel(Model model, String filePath, StringWriter stringWriter) throws IOException {
 		
 		if (stringWriter != null) {
 			try {
@@ -69,13 +77,13 @@ public class TestHelper {
 	}
 	
 	
-	public static void validateOwl(StringBuffer inputBuffer, OwlProfileEnum owlProfileId, List<Class<?>> ignorredViolationClasses) throws Exception {
+	public static void validateOwl(StringBuffer inputBuffer, OwlProfileEnum owlProfileId, List<Class<?>> ignorredViolationClasses, boolean throwExceptionIfViolated) throws Exception {
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(inputBuffer.toString().getBytes());
-		validateOwl(inputStream, owlProfileId, ignorredViolationClasses);
+		validateOwl(inputStream, owlProfileId, ignorredViolationClasses, throwExceptionIfViolated);
 	}
 	
 
-	public static void validateOwl(InputStream inputStream, OwlProfileEnum owlProfileId, List<Class<?>> ignorredViolationClasses) throws Exception {
+	public static void validateOwl(InputStream inputStream, OwlProfileEnum owlProfileId, List<Class<?>> ignorredViolationClasses, boolean throwExceptionIfViolated) throws Exception {
 		
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology ontology = manager.loadOntologyFromOntologyDocument(inputStream);
@@ -87,10 +95,13 @@ public class TestHelper {
 
 		if (numberOfViolations > 0) {
 			System.err.println(message);
-			logger.warn(message);
+//			logger.warn(message);
+			if (throwExceptionIfViolated) {
+				throw new OwlProfileViolationException(message);
+			}
 		} else {
 			System.out.println(message);
-			logger.debug(message);
+//			logger.debug(message);
 		}		
 		
 		
@@ -159,6 +170,15 @@ public class TestHelper {
 		// factory.get
 
 	}
+	
+	public static BemDataset loadDataset(String filePath) throws IOException, BemException 
+	{
+		BemParserUtil.registerDatasetParser(new IfcDatasetParser());		
+		BemDataset dataset = BemParserUtil.parseDataset(filePath, true);
+		assertNotNull(dataset);
+		return dataset;
+	}
+
 
 	
 	

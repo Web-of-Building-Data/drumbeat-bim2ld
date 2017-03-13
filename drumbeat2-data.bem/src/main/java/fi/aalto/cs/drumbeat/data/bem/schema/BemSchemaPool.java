@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import fi.aalto.cs.drumbeat.data.bem.BemSchemaNotFoundException;
+
 /**
  * Container of {@link BemSchema}s.
  * 
@@ -31,7 +33,11 @@ public class BemSchemaPool implements Serializable {
 	 * @return the {@link BemSchema} with the specified name, or <code>null</code> if the name is not found.
 	 */
 	public static BemSchema getSchema(String name) {
-		return schemas.get(name);
+		BemSchema schema = schemas.get(name);
+		if (schema != null) {
+			return schema;
+		}
+		throw new IllegalArgumentException(new BemSchemaNotFoundException(name));
 	}
 	
 	

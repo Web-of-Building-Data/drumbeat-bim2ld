@@ -10,7 +10,7 @@ import fi.aalto.cs.drumbeat.convert.bem2rdf.*;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
 
-public class Bem2RdfEnumerationTypeConverter {
+class Bem2RdfEnumerationTypeConverter {
 
 	private final Bem2RdfConverterManager manager;
 	private final Resource baseTypeForEnums;
