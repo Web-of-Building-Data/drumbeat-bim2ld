@@ -111,26 +111,27 @@ public class BemCollectionTypeInfo extends BemTypeInfo {
 
 	public static String formatCollectionTypeName(BemCollectionKindEnum collectionKind, String itemTypeInfoName, BemCardinality cardinality) {
 		
-		return String.format("%s_%s", itemTypeInfoName, collectionKind);		
+//		return String.format("%s_%s", itemTypeInfoName, collectionKind);
 		
-//		if (itemTypeInfoName != null && cardinality != null) {
-//			return String.format("%s_%s_%s_%s_%s",
-//					collectionKind,
-//					cardinality.getMinCardinality(),
-//					cardinality.getMaxCardinality() == BemCardinality.UNBOUNDED ? "UNBOUNDED" : cardinality.getMaxCardinality(),
-//					BemVocabulary.ExpressFormat.OF,
-//					itemTypeInfoName); 
-//		} else if (cardinality != null) {
-//			return String.format("%s_%s_%s",
-//					collectionKind,
-//					cardinality.getMinCardinality(),
-//					cardinality.getMaxCardinality() == BemCardinality.UNBOUNDED ? "UNBOUNDED" : cardinality.getMaxCardinality()); 
-//		} else { // itemTypeInfoName
-//			return String.format("%s_%s_%s",
-//					collectionKind,
-//					BemVocabulary.ExpressFormat.OF,
-//					itemTypeInfoName);
-//		}
+		StringBuilder typeNameBuilder = new StringBuilder(collectionKind.name());
+		
+		if (cardinality != null) {
+			int left = cardinality.isArrayIndex() ? cardinality.getMinIndex() : cardinality.getMinCardinality();
+			int right = cardinality.isArrayIndex() ? cardinality.getMaxIndex() : cardinality.getMaxCardinality();
+			
+			typeNameBuilder.append(String.format(
+					"_%s_%s",
+					left,
+					right != BemCardinality.UNBOUNDED ? right : "UNBOUNDED"));
+		}
+		
+		if (itemTypeInfoName != null) {
+			typeNameBuilder.append(String.format(
+					"_OF_%s",
+					itemTypeInfoName));			
+		}
+		
+		return typeNameBuilder.toString();
 
 	}
 

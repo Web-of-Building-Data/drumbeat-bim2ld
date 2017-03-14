@@ -198,18 +198,18 @@ class Bem2RdfOloSimilarListCollectionTypeConverter extends Bem2RdfCollectionType
 	private Resource convertCollectionTypeInfo(
 			Model jenaModel,
 			BemTypeInfo itemTypeInfo,
-			BemCollectionKindEnum collectionKind,
-			Integer min,
-			Integer max)
+			BemCollectionKindEnum collectionKind,			
+			Integer left,
+			Integer right)
 	{
-		
+		boolean isArray = collectionKind == BemCollectionKindEnum.Array;
 		
 		String collectionTypeName = String.format("%s%s",
 				itemTypeInfo != null ? itemTypeInfo.getName() + "_" : "",
 				collectionKind.name());
 		
-		if (min != null || max != null) {
-			collectionTypeName += String.format("_%s_%s", min != null ? min : "UNBOUNDED", max != null ? max : "UNBOUNDED");
+		if (left != null || right != null) {
+			collectionTypeName += String.format("_%s_%s", left != null ? left : "UNBOUNDED", right != null ? right : "UNBOUNDED");
 		}
 		
 		Resource collectionTypeResource = jenaModel.createResource(manager.uriBuilder.buildOntologyUri(collectionTypeName));
@@ -222,14 +222,21 @@ class Bem2RdfOloSimilarListCollectionTypeConverter extends Bem2RdfCollectionType
 			
 			if (itemTypeInfo != null) {
 				
-				if (min != null || max != null) {
+				if (left != null || right != null) {
 					
-					hasSomeBaseType = true;					
+					hasSomeBaseType = true;
+					
+					// create base type restricted by item type, but not cardinality 
 					Resource baseCollectionTypeResource = convertCollectionTypeInfo(jenaModel, itemTypeInfo, collectionKind, null, null);
 					collectionTypeResource.addProperty(RDFS.subClassOf, baseCollectionTypeResource);
 					
+					// create base type restricted by cardinality, but not item type
+					Resource baseCollectionTypeResource2 = convertCollectionTypeInfo(jenaModel, null, collectionKind, left, right);
+					collectionTypeResource.addProperty(RDFS.subClassOf, baseCollectionTypeResource2);
+
 				} else {
 					
+					// restrict this type by item type (cardinality is already null)
 					Resource slotTypeResource = convertCollectionSlot(jenaModel, itemTypeInfo);
 					manager.convertPropertyRestrictions(
 							jenaModel,
@@ -244,29 +251,61 @@ class Bem2RdfOloSimilarListCollectionTypeConverter extends Bem2RdfCollectionType
 					
 				}
 				
+			} else { // itemTypeInfo == null
+				
+				if (isArray) {
+					
+					if (left != null) {
+						
+						assert(right != null);
+
+						manager.convertPropertyRestrictions(
+								jenaModel,
+								jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.slot)),
+								collectionTypeResource,
+								jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Slot)),
+								true,
+								right - left + 1,
+								right - left + 1,
+								false,
+								false);
+							
+					}
+					
+				} else { // not array
+				
+					if (left != null && right != null) {
+						hasSomeBaseType = true;
+						
+						Resource baseCollectionTypeResource1 = convertCollectionTypeInfo(jenaModel, null, collectionKind, left, null);
+						collectionTypeResource.addProperty(RDFS.subClassOf, baseCollectionTypeResource1);
+						
+						Resource baseCollectionTypeResource2 = convertCollectionTypeInfo(jenaModel, null, collectionKind, null, right);
+						collectionTypeResource.addProperty(RDFS.subClassOf, baseCollectionTypeResource2);
+							
+					} else if (left != null || right != null) {
+						
+						if (itemTypeInfo == null) {
+						
+							manager.convertPropertyRestrictions(
+									jenaModel,
+									jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.slot)),
+									collectionTypeResource,
+									jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Slot)),
+									true,
+									left,
+									right,
+									false,
+									false);
+							
+						}
+					}
+					
+				}
+				
 			}
 			
-			if (min != null && max != null) {
-				hasSomeBaseType = true;
-				
-				Resource baseCollectionTypeResource1 = convertCollectionTypeInfo(jenaModel, null, collectionKind, min, null);
-				collectionTypeResource.addProperty(RDFS.subClassOf, baseCollectionTypeResource1);
-				
-				Resource baseCollectionTypeResource2 = convertCollectionTypeInfo(jenaModel, null, collectionKind, null, max);
-				collectionTypeResource.addProperty(RDFS.subClassOf, baseCollectionTypeResource2);					
-					
-			} else if (min != null || max != null) {
-				manager.convertPropertyRestrictions(
-						jenaModel,
-						jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.slot)),
-						collectionTypeResource,
-						jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Slot)),
-						true,
-						min,
-						max,
-						false,
-						false);
-			}
+
 			
 			if (!hasSomeBaseType) {
 				collectionTypeResource.addProperty(RDFS.subClassOf, 
@@ -290,13 +329,29 @@ class Bem2RdfOloSimilarListCollectionTypeConverter extends Bem2RdfCollectionType
 		
 		if (includeDetails && !collectionTypeResource.listProperties().hasNext()) {
 			
-			Resource baseCollectionTypeResource = convertCollectionTypeInfo(
-					jenaModel,
-					collectionTypeInfo.getItemTypeInfo(),
-					collectionTypeInfo.getCollectionKind(),
-					collectionTypeInfo.getCardinality().getMinCardinality(),
-					collectionTypeInfo.getCardinality().getMaxCardinality() != BemCardinality.UNBOUNDED ?
-							collectionTypeInfo.getCardinality().getMaxCardinality() : null);
+			Resource baseCollectionTypeResource;
+			
+			if (collectionTypeInfo.getCollectionKind() != BemCollectionKindEnum.Array) {
+				
+				baseCollectionTypeResource = convertCollectionTypeInfo(
+						jenaModel,
+						collectionTypeInfo.getItemTypeInfo(),
+						collectionTypeInfo.getCollectionKind(),
+						collectionTypeInfo.getCardinality().getMinCardinality(),
+						collectionTypeInfo.getCardinality().getMaxCardinality() != BemCardinality.UNBOUNDED ?
+								collectionTypeInfo.getCardinality().getMaxCardinality() : null);
+				
+			} else {
+				
+				baseCollectionTypeResource = convertCollectionTypeInfo(
+						jenaModel,
+						collectionTypeInfo.getItemTypeInfo(),
+						collectionTypeInfo.getCollectionKind(),
+						collectionTypeInfo.getCardinality().getMinIndex(),
+						collectionTypeInfo.getCardinality().getMaxIndex());
+				
+			}
+			
 			
 			if (!collectionTypeResource.equals(baseCollectionTypeResource)) {
 				jenaModel.add(collectionTypeResource, RDF.type, OWL.Class);	

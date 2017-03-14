@@ -12,6 +12,8 @@ public class BemCardinality {
 	public static final int ONE = 1;
 	public static final int UNBOUNDED = Integer.MAX_VALUE;
 	
+	public static final int LIST_MIN_INDEX = 0;
+	
 	private final int minCardinality;
 	private final int maxCardinality;
 	private final int minIndex;
@@ -28,7 +30,7 @@ public class BemCardinality {
 		} else {
 			minCardinality = left;
 			maxCardinality = right;
-			minIndex = 1;
+			minIndex = LIST_MIN_INDEX;
 			maxIndex = minIndex + maxCardinality - 1;
 		}
 	}

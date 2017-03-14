@@ -183,7 +183,7 @@ class Bem2RdfEntityTypeConverter {
 				boolean exportAsSingleCollection = collectionAttributeTypeInfo.isSorted();
 	
 				if (exportAsSingleCollection) {
-					assert(collectionAttributeTypeInfo.getCollectionKind().equals(BemCollectionKindEnum.List)) : collectionAttributeTypeInfo; 
+					assert(collectionAttributeTypeInfo.getCollectionKind().isSorted()) : collectionAttributeTypeInfo; 
 					Resource collectionTypeResource =
 							manager.collectionTypeConverter.convertCollectionTypeInfo(jenaModel, collectionAttributeTypeInfo, true);
 
