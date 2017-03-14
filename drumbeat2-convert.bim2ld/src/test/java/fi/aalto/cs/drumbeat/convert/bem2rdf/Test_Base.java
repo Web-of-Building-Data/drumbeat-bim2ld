@@ -6,6 +6,7 @@ import java.util.function.Function;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.log4j.xml.DOMConfigurator;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 
 import fi.aalto.cs.drumbeat.common.config.document.ConfigurationDocument;
@@ -132,24 +133,26 @@ public class Test_Base {
 			Function<Resource, Boolean> localResourceChecker = r -> r.isAnon() || r.getURI().startsWith(DATASET_BLANK_NODE_NAMESPACE_URI_FORMAT);
 			RdfComparatorPool comparatorPool = new RdfComparatorPool(localResourceChecker);
 			
-			RdfAsserter rdfAsserter = new RdfAsserter(comparatorPool);
-			rdfAsserter.assertEquals(expectedModel, actualModel);
+			RdfModelComparator rdfModelComparator = new RdfModelComparator(comparatorPool);
+			int result = rdfModelComparator.compare(expectedModel, actualModel);
 			
-			if (rdfAsserter.getLastAssertionDifferences() != null) {
+			if (result != 0 && rdfModelComparator.getLastAssertionDifferences() != null) {
 			
 				TestHelper.printRdfMsgContainer(
 						expectedModel,
-						rdfAsserter.getLastExpectedMsgContainer(),
+						rdfModelComparator.getLastExpectedMsgContainer(),
 						comparatorPool,
 						expectedModelFilePath.replaceAll("ttl", "ttl.msg"));
 				
 				TestHelper.printRdfMsgContainer(
 						actualModel,
-						rdfAsserter.getLastActualMsgContainer(),
+						rdfModelComparator.getLastActualMsgContainer(),
 						comparatorPool,
 						actualModelFilePath.replaceAll("ttl", "ttl.msg"));
 				
 			}
+			
+			Assert.assertEquals(0, result);
 			
 		} else {
 			String reminderMessage = String.format("Reminder: To compare files '%s' and '%s'", expectedModelFilePath, actualModelFilePath);

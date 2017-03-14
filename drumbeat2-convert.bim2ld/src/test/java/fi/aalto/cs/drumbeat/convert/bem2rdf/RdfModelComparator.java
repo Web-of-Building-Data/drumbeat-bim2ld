@@ -9,7 +9,6 @@ import java.util.function.Function;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.log4j.Logger;
-import org.junit.Assert;
 
 import fi.aalto.cs.drumbeat.rdf.data.msg.RdfMsgContainer;
 import fi.aalto.cs.drumbeat.rdf.data.msg.RdfMsgContainerBuilder;
@@ -18,64 +17,55 @@ import fi.aalto.cs.drumbeat.common.collections.Pair;
 import fi.aalto.cs.drumbeat.rdf.data.RdfChecksumException;
 import fi.aalto.cs.drumbeat.rdf.data.RdfComparatorPool;
 
-public class RdfAsserter {
+public class RdfModelComparator {
 	
-	private static final Logger logger = Logger.getLogger(RdfAsserter.class); 
+	private static final Logger logger = Logger.getLogger(RdfModelComparator.class); 
 	
 	private final RdfComparatorPool comparatorPool;
-	private RdfMsgContainer lastAssertedMsg1;
-	private RdfMsgContainer lastAssertedMsg2;
-	private Stack<Pair<Object, Object>> lastAssertionDifferences;
+	private RdfMsgContainer lastExpectedMsgContainer;
+	private RdfMsgContainer lastActualMsgContainer;
+	private Stack<Pair<Object, Object>> lastComparisonDifferences;
 	
-	public RdfAsserter(RdfComparatorPool comparatorPool) {
+	public RdfModelComparator(RdfComparatorPool comparatorPool) {
 		this.comparatorPool = comparatorPool;
 	}
 	
-	public RdfAsserter(Function<Resource, Boolean> localResourceChecker) {
+	public RdfModelComparator(Function<Resource, Boolean> localResourceChecker) {
 		this.comparatorPool = new RdfComparatorPool(localResourceChecker);
 	}
 	
-	public void assertEquals(String modelPath1, Model model2) throws RdfAsserterException, IOException {
+	public int compare(String modelPath1, Model model2) throws RdfModelComparatorException, IOException {
 		Model model1 = TestHelper.readJenaModel(modelPath1);
-		internalAssertEquals(model1, model2, true);
+		return compare(model1, model2);
 	}	
 
-	public void assertEquals(Model model1, Model model2) throws RdfAsserterException {
-		internalAssertEquals(model1, model2, true);
-	}
-	
-	public void assertNotEquals(Model model1, Model model2) throws RdfAsserterException {
-		internalAssertEquals(model1, model2, false);
-	}
-	
-	private void internalAssertEquals(Model model1, Model model2, boolean expectedEquals) throws RdfAsserterException {
+	public int compare(Model model1, Model model2) throws RdfModelComparatorException {
 		
-		lastAssertedMsg1 = null;
-		lastAssertedMsg2 = null;
-		lastAssertionDifferences = null;
+		lastExpectedMsgContainer = null;
+		lastActualMsgContainer = null;
+		lastComparisonDifferences = null;
 		
 		try {
-			lastAssertedMsg1 = RdfMsgContainerBuilder.build(model1, comparatorPool);
-			lastAssertedMsg2 = RdfMsgContainerBuilder.build(model2, comparatorPool);
+			lastExpectedMsgContainer = RdfMsgContainerBuilder.build(model1, comparatorPool);
+			lastActualMsgContainer = RdfMsgContainerBuilder.build(model2, comparatorPool);
 			
-			lastAssertionDifferences = new Stack<>();		
-			int result = lastAssertedMsg1.compareTo(lastAssertedMsg2, lastAssertionDifferences);		
-			if (expectedEquals && (result != 0)) {
+			lastComparisonDifferences = new Stack<>();		
+			int result = lastExpectedMsgContainer.compareTo(lastActualMsgContainer, lastComparisonDifferences);		
+			if (result != 0) {
 				Map<String, String> nsPrefixMap = new HashMap<>();
 				nsPrefixMap.putAll(model1.getNsPrefixMap());
 				nsPrefixMap.putAll(model2.getNsPrefixMap());
-				printDifferences(nsPrefixMap, lastAssertionDifferences);
-			} else {			
-				lastAssertionDifferences = null;
+				printDifferences(nsPrefixMap, lastComparisonDifferences);
 			}
+			return result;
 //			Assert.assertEquals(expectedEquals, result == 0);
 			
 		} catch (RdfChecksumException e) {
-			throw new RdfAsserterException(e);			
+			throw new RdfModelComparatorException(e);			
 		}
 	}
 	
-	private void printDifferences(Map<String, String> nsPrefixMap, Stack<Pair<Object, Object>> differences) throws RdfAsserterException {
+	private void printDifferences(Map<String, String> nsPrefixMap, Stack<Pair<Object, Object>> differences) throws RdfModelComparatorException {
 		RdfMsgContainerPrinter printer = new RdfMsgContainerPrinter(nsPrefixMap, comparatorPool.getChecksumCalculator());
 		try {
 			for (Pair<Object, Object> difference : differences) {
@@ -114,20 +104,20 @@ public class RdfAsserter {
 				logger.warn(message);
 			}
 		} catch (RdfChecksumException e) {
-			throw new RdfAsserterException(e);
+			throw new RdfModelComparatorException(e);
 		}
 	}
 	
 	public RdfMsgContainer getLastExpectedMsgContainer() {
-		return lastAssertedMsg1;
+		return lastExpectedMsgContainer;
 	}
 	
 	public RdfMsgContainer getLastActualMsgContainer() {
-		return lastAssertedMsg2;
+		return lastActualMsgContainer;
 	}
 	
 	public Stack<Pair<Object, Object>> getLastAssertionDifferences() {
-		return lastAssertionDifferences;
+		return lastComparisonDifferences;
 	}
 		
 }
