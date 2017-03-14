@@ -64,17 +64,17 @@ _:b1    a       IFC2X3:IfcLocalPlacement ;
                             IFC2X3:directionRatios_IfcDirection
                                     [ a             IFC2X3:REAL_List ;
                                       EXPRESS:size  3 ;
-                                      EXPRESS:slot  [ EXPRESS:index  3 ;
+                                      EXPRESS:slot  [ EXPRESS:index  2 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "1"^^xsd:decimal
                                                                      ]
                                                     ] ;
-                                      EXPRESS:slot  [ EXPRESS:index  2 ;
+                                      EXPRESS:slot  [ EXPRESS:index  1 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                      ]
                                                     ] ;
-                                      EXPRESS:slot  [ EXPRESS:index  1 ;
+                                      EXPRESS:slot  [ EXPRESS:index  0 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                      ]
@@ -85,17 +85,17 @@ _:b1    a       IFC2X3:IfcLocalPlacement ;
                                                   IFC2X3:coordinates_IfcCartesianPoint
                                                           [ a             IFC2X3:IfcLengthMeasure_List ;
                                                             EXPRESS:size  3 ;
-                                                            EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                           ]
-                                                                          ] ;
                                                             EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                             EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                            ]
                                                                           ] ;
                                                             EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
+                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                           ]
+                                                                          ] ;
+                                                            EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                             EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                            ]
@@ -107,17 +107,17 @@ _:b1    a       IFC2X3:IfcLocalPlacement ;
                             IFC2X3:directionRatios_IfcDirection
                                     [ a             IFC2X3:REAL_List ;
                                       EXPRESS:size  3 ;
-                                      EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                      EXPRESS:item   [ a                EXPRESS:REAL ;
-                                                                       EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                     ]
-                                                    ] ;
                                       EXPRESS:slot  [ EXPRESS:index  2 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                      ]
                                                     ] ;
                                       EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                      EXPRESS:item   [ a                EXPRESS:REAL ;
+                                                                       EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                     ]
+                                                    ] ;
+                                      EXPRESS:slot  [ EXPRESS:index  0 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "1"^^xsd:decimal
                                                                      ]
@@ -383,17 +383,17 @@ model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2
                                       IFC2X3:directionRatios_IfcDirection
                                               [ a             IFC2X3:REAL_List ;
                                                 EXPRESS:size  3 ;
-                                                EXPRESS:slot  [ EXPRESS:index  3 ;
+                                                EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                 EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                  EXPRESS:hasReal  "1"^^xsd:decimal
                                                                                ]
                                                               ] ;
-                                                EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                 EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                  EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                ]
                                                               ] ;
-                                                EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                 EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                  EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                ]
@@ -404,17 +404,17 @@ model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2
                                                             IFC2X3:coordinates_IfcCartesianPoint
                                                                     [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                       EXPRESS:size  3 ;
-                                                                      EXPRESS:slot  [ EXPRESS:index  3 ;
+                                                                      EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                                       EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                      ]
                                                                                     ] ;
-                                                                      EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                      EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                       EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                        EXPRESS:hasReal  0.1
                                                                                                      ]
                                                                                     ] ;
-                                                                      EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                      EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                       EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                      ]
@@ -426,17 +426,17 @@ model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2
                                       IFC2X3:directionRatios_IfcDirection
                                               [ a             IFC2X3:REAL_List ;
                                                 EXPRESS:size  3 ;
-                                                EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                                EXPRESS:item   [ a                EXPRESS:REAL ;
-                                                                                 EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                               ]
-                                                              ] ;
                                                 EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                 EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                  EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                ]
                                                               ] ;
                                                 EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                EXPRESS:item   [ a                EXPRESS:REAL ;
+                                                                                 EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                               ]
+                                                              ] ;
+                                                EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                 EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                  EXPRESS:hasReal  "1"^^xsd:decimal
                                                                                ]
@@ -462,7 +462,7 @@ model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2
                   IFC2X3:representations_IfcProductRepresentation
                           [ a             IFC2X3:IfcRepresentation_List ;
                             EXPRESS:size  1 ;
-                            EXPRESS:slot  [ EXPRESS:index  1 ;
+                            EXPRESS:slot  [ EXPRESS:index  0 ;
                                             EXPRESS:item   [ a                               IFC2X3:IfcShapeRepresentation ;
                                                              IFC2X3:contextOfItems_IfcRepresentation
                                                                      _:b3 ;
@@ -476,17 +476,17 @@ model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2
                                                                                                          IFC2X3:directionRatios_IfcDirection
                                                                                                                  [ a             IFC2X3:REAL_List ;
                                                                                                                    EXPRESS:size  3 ;
-                                                                                                                   EXPRESS:slot  [ EXPRESS:index  3 ;
+                                                                                                                   EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                                                                                    EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                     EXPRESS:hasReal  "1"^^xsd:decimal
                                                                                                                                                   ]
                                                                                                                                  ] ;
-                                                                                                                   EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                   EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                    EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                     EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                   ]
                                                                                                                                  ] ;
-                                                                                                                   EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                   EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                    EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                     EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                   ]
@@ -500,17 +500,17 @@ model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2
                                                                                                                    IFC2X3:directionRatios_IfcDirection
                                                                                                                            [ a             IFC2X3:REAL_List ;
                                                                                                                              EXPRESS:size  3 ;
-                                                                                                                             EXPRESS:slot  [ EXPRESS:index  3 ;
+                                                                                                                             EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                                                                                              EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                               EXPRESS:hasReal  "1"^^xsd:decimal
                                                                                                                                                             ]
                                                                                                                                            ] ;
-                                                                                                                             EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                             EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                              EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                               EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                             ]
                                                                                                                                            ] ;
-                                                                                                                             EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                             EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                              EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                               EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                             ]
@@ -521,17 +521,17 @@ model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2
                                                                                                                                          IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                  [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                    EXPRESS:size  3 ;
-                                                                                                                                                   EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                                                                                                                                   EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                    EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                                                                                                                  ]
-                                                                                                                                                                 ] ;
                                                                                                                                                    EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                                                                                                                    EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                     EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                   ]
                                                                                                                                                                  ] ;
                                                                                                                                                    EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                   EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
+                                                                                                                                                                                    EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                                                                                                                  ]
+                                                                                                                                                                 ] ;
+                                                                                                                                                   EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                    EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                     EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                   ]
@@ -543,17 +543,17 @@ model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2
                                                                                                                    IFC2X3:directionRatios_IfcDirection
                                                                                                                            [ a             IFC2X3:REAL_List ;
                                                                                                                              EXPRESS:size  3 ;
-                                                                                                                             EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                                                                                                             EXPRESS:item   [ a                EXPRESS:REAL ;
-                                                                                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                                                                                            ]
-                                                                                                                                           ] ;
                                                                                                                              EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                                                                                              EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                               EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                             ]
                                                                                                                                            ] ;
                                                                                                                              EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                             EXPRESS:item   [ a                EXPRESS:REAL ;
+                                                                                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                                                                                            ]
+                                                                                                                                           ] ;
+                                                                                                                             EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                              EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                               EXPRESS:hasReal  "1"^^xsd:decimal
                                                                                                                                                             ]
@@ -567,37 +567,19 @@ model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2
                                                                                                                  [ a                          IFC2X3:IfcPolyline ;
                                                                                                                    IFC2X3:points_IfcPolyline  [ a             IFC2X3:IfcCartesianPoint_List ;
                                                                                                                                                 EXPRESS:size  5 ;
-                                                                                                                                                EXPRESS:slot  [ EXPRESS:index  5 ;
-                                                                                                                                                                EXPRESS:item   [ a       IFC2X3:IfcCartesianPoint ;
-                                                                                                                                                                                 IFC2X3:coordinates_IfcCartesianPoint
-                                                                                                                                                                                         [ a             IFC2X3:IfcLengthMeasure_List ;
-                                                                                                                                                                                           EXPRESS:size  2 ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  2 ;
-                                                                                                                                                                                                           EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                                                                                                                                                          ]
-                                                                                                                                                                                                         ] ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
-                                                                                                                                                                                                           EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                                                                                                                                                          ]
-                                                                                                                                                                                                         ]
-                                                                                                                                                                                         ]
-                                                                                                                                                                               ]
-                                                                                                                                                              ] ;
                                                                                                                                                 EXPRESS:slot  [ EXPRESS:index  4 ;
                                                                                                                                                                 EXPRESS:item   [ a       IFC2X3:IfcCartesianPoint ;
                                                                                                                                                                                  IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                                                          [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                                                            EXPRESS:size  2 ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ] ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                                                            EXPRESS:hasReal  0.75
+                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ]
                                                                                                                                                                                          ]
@@ -608,12 +590,12 @@ model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2
                                                                                                                                                                                  IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                                                          [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                                                            EXPRESS:size  2 ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                                                            EXPRESS:hasReal  0.1
+                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ] ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                                             EXPRESS:hasReal  0.75
                                                                                                                                                                                                                           ]
@@ -626,14 +608,14 @@ model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2
                                                                                                                                                                                  IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                                                          [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                                                            EXPRESS:size  2 ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                                             EXPRESS:hasReal  0.1
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ] ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                                                                                                                                                            EXPRESS:hasReal  0.75
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ]
                                                                                                                                                                                          ]
@@ -644,12 +626,30 @@ model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2
                                                                                                                                                                                  IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                                                          [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                                                            EXPRESS:size  2 ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                                                           EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
+                                                                                                                                                                                                                            EXPRESS:hasReal  0.1
+                                                                                                                                                                                                                          ]
+                                                                                                                                                                                                         ] ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  0 ;
+                                                                                                                                                                                                           EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
+                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                                                                                                                                                          ]
+                                                                                                                                                                                                         ]
+                                                                                                                                                                                         ]
+                                                                                                                                                                               ]
+                                                                                                                                                              ] ;
+                                                                                                                                                EXPRESS:slot  [ EXPRESS:index  0 ;
+                                                                                                                                                                EXPRESS:item   [ a       IFC2X3:IfcCartesianPoint ;
+                                                                                                                                                                                 IFC2X3:coordinates_IfcCartesianPoint
+                                                                                                                                                                                         [ a             IFC2X3:IfcLengthMeasure_List ;
+                                                                                                                                                                                           EXPRESS:size  2 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ] ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                                           ]
@@ -703,7 +703,7 @@ model:GUID_F92C2898-FD68-44EF-9178-3348E340017B
                   IFC2X3:representations_IfcProductRepresentation
                           [ a             IFC2X3:IfcRepresentation_List ;
                             EXPRESS:size  2 ;
-                            EXPRESS:slot  [ EXPRESS:index  2 ;
+                            EXPRESS:slot  [ EXPRESS:index  1 ;
                                             EXPRESS:item   [ a                               IFC2X3:IfcShapeRepresentation ;
                                                              IFC2X3:contextOfItems_IfcRepresentation
                                                                      _:b3 ;
@@ -717,17 +717,17 @@ model:GUID_F92C2898-FD68-44EF-9178-3348E340017B
                                                                                                          IFC2X3:directionRatios_IfcDirection
                                                                                                                  [ a             IFC2X3:REAL_List ;
                                                                                                                    EXPRESS:size  3 ;
-                                                                                                                   EXPRESS:slot  [ EXPRESS:index  3 ;
+                                                                                                                   EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                                                                                    EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                     EXPRESS:hasReal  "1"^^xsd:decimal
                                                                                                                                                   ]
                                                                                                                                  ] ;
-                                                                                                                   EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                   EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                    EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                     EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                   ]
                                                                                                                                  ] ;
-                                                                                                                   EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                   EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                    EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                     EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                   ]
@@ -741,17 +741,17 @@ model:GUID_F92C2898-FD68-44EF-9178-3348E340017B
                                                                                                                    IFC2X3:directionRatios_IfcDirection
                                                                                                                            [ a             IFC2X3:REAL_List ;
                                                                                                                              EXPRESS:size  3 ;
-                                                                                                                             EXPRESS:slot  [ EXPRESS:index  3 ;
+                                                                                                                             EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                                                                                              EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                               EXPRESS:hasReal  "1"^^xsd:decimal
                                                                                                                                                             ]
                                                                                                                                            ] ;
-                                                                                                                             EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                             EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                              EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                               EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                             ]
                                                                                                                                            ] ;
-                                                                                                                             EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                             EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                              EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                               EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                             ]
@@ -762,17 +762,17 @@ model:GUID_F92C2898-FD68-44EF-9178-3348E340017B
                                                                                                                                          IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                  [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                    EXPRESS:size  3 ;
-                                                                                                                                                   EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                                                                                                                                   EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                    EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                                                                                                                  ]
-                                                                                                                                                                 ] ;
                                                                                                                                                    EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                                                                                                                    EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                     EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                   ]
                                                                                                                                                                  ] ;
                                                                                                                                                    EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                   EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
+                                                                                                                                                                                    EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                                                                                                                  ]
+                                                                                                                                                                 ] ;
+                                                                                                                                                   EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                    EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                     EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                   ]
@@ -784,17 +784,17 @@ model:GUID_F92C2898-FD68-44EF-9178-3348E340017B
                                                                                                                    IFC2X3:directionRatios_IfcDirection
                                                                                                                            [ a             IFC2X3:REAL_List ;
                                                                                                                              EXPRESS:size  3 ;
-                                                                                                                             EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                                                                                                             EXPRESS:item   [ a                EXPRESS:REAL ;
-                                                                                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                                                                                            ]
-                                                                                                                                           ] ;
                                                                                                                              EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                                                                                              EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                               EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                             ]
                                                                                                                                            ] ;
                                                                                                                              EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                             EXPRESS:item   [ a                EXPRESS:REAL ;
+                                                                                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                                                                                            ]
+                                                                                                                                           ] ;
+                                                                                                                             EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                              EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                               EXPRESS:hasReal  "1"^^xsd:decimal
                                                                                                                                                             ]
@@ -808,37 +808,19 @@ model:GUID_F92C2898-FD68-44EF-9178-3348E340017B
                                                                                                                  [ a                          IFC2X3:IfcPolyline ;
                                                                                                                    IFC2X3:points_IfcPolyline  [ a             IFC2X3:IfcCartesianPoint_List ;
                                                                                                                                                 EXPRESS:size  5 ;
-                                                                                                                                                EXPRESS:slot  [ EXPRESS:index  5 ;
-                                                                                                                                                                EXPRESS:item   [ a       IFC2X3:IfcCartesianPoint ;
-                                                                                                                                                                                 IFC2X3:coordinates_IfcCartesianPoint
-                                                                                                                                                                                         [ a             IFC2X3:IfcLengthMeasure_List ;
-                                                                                                                                                                                           EXPRESS:size  2 ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  2 ;
-                                                                                                                                                                                                           EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                                                                                                                                                          ]
-                                                                                                                                                                                                         ] ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
-                                                                                                                                                                                                           EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                                                                                                                                                          ]
-                                                                                                                                                                                                         ]
-                                                                                                                                                                                         ]
-                                                                                                                                                                               ]
-                                                                                                                                                              ] ;
                                                                                                                                                 EXPRESS:slot  [ EXPRESS:index  4 ;
                                                                                                                                                                 EXPRESS:item   [ a       IFC2X3:IfcCartesianPoint ;
                                                                                                                                                                                  IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                                                          [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                                                            EXPRESS:size  2 ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ] ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                                                            EXPRESS:hasReal  "5"^^xsd:decimal
+                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ]
                                                                                                                                                                                          ]
@@ -849,12 +831,12 @@ model:GUID_F92C2898-FD68-44EF-9178-3348E340017B
                                                                                                                                                                                  IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                                                          [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                                                            EXPRESS:size  2 ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                                                            EXPRESS:hasReal  0.3
+                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ] ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                                             EXPRESS:hasReal  "5"^^xsd:decimal
                                                                                                                                                                                                                           ]
@@ -867,14 +849,14 @@ model:GUID_F92C2898-FD68-44EF-9178-3348E340017B
                                                                                                                                                                                  IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                                                          [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                                                            EXPRESS:size  2 ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                                             EXPRESS:hasReal  0.3
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ] ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                                                                                                                                                            EXPRESS:hasReal  "5"^^xsd:decimal
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ]
                                                                                                                                                                                          ]
@@ -885,12 +867,30 @@ model:GUID_F92C2898-FD68-44EF-9178-3348E340017B
                                                                                                                                                                                  IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                                                          [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                                                            EXPRESS:size  2 ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                                                           EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
+                                                                                                                                                                                                                            EXPRESS:hasReal  0.3
+                                                                                                                                                                                                                          ]
+                                                                                                                                                                                                         ] ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  0 ;
+                                                                                                                                                                                                           EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
+                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                                                                                                                                                          ]
+                                                                                                                                                                                                         ]
+                                                                                                                                                                                         ]
+                                                                                                                                                                               ]
+                                                                                                                                                              ] ;
+                                                                                                                                                EXPRESS:slot  [ EXPRESS:index  0 ;
+                                                                                                                                                                EXPRESS:item   [ a       IFC2X3:IfcCartesianPoint ;
+                                                                                                                                                                                 IFC2X3:coordinates_IfcCartesianPoint
+                                                                                                                                                                                         [ a             IFC2X3:IfcLengthMeasure_List ;
+                                                                                                                                                                                           EXPRESS:size  2 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ] ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                                           ]
@@ -916,24 +916,24 @@ model:GUID_F92C2898-FD68-44EF-9178-3348E340017B
                                                                      ]
                                                            ]
                                           ] ;
-                            EXPRESS:slot  [ EXPRESS:index  1 ;
+                            EXPRESS:slot  [ EXPRESS:index  0 ;
                                             EXPRESS:item   [ a                               IFC2X3:IfcShapeRepresentation ;
                                                              IFC2X3:contextOfItems_IfcRepresentation
                                                                      _:b3 ;
                                                              IFC2X3:items_IfcRepresentation  [ a                          IFC2X3:IfcPolyline ;
                                                                                                IFC2X3:points_IfcPolyline  [ a             IFC2X3:IfcCartesianPoint_List ;
                                                                                                                             EXPRESS:size  2 ;
-                                                                                                                            EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                            EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                             EXPRESS:item   [ a       IFC2X3:IfcCartesianPoint ;
                                                                                                                                                              IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                                      [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                                        EXPRESS:size  2 ;
-                                                                                                                                                                       EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                                                                       EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                                                                        EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                         EXPRESS:hasReal  0.15
                                                                                                                                                                                                       ]
                                                                                                                                                                                      ] ;
-                                                                                                                                                                       EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                       EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                                        EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                         EXPRESS:hasReal  "5"^^xsd:decimal
                                                                                                                                                                                                       ]
@@ -941,17 +941,17 @@ model:GUID_F92C2898-FD68-44EF-9178-3348E340017B
                                                                                                                                                                      ]
                                                                                                                                                            ]
                                                                                                                                           ] ;
-                                                                                                                            EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                            EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                             EXPRESS:item   [ a       IFC2X3:IfcCartesianPoint ;
                                                                                                                                                              IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                                      [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                                        EXPRESS:size  2 ;
-                                                                                                                                                                       EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                                                                       EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                                                                        EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                         EXPRESS:hasReal  0.15
                                                                                                                                                                                                       ]
                                                                                                                                                                                      ] ;
-                                                                                                                                                                       EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                       EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                                        EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                         EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                       ]
@@ -998,17 +998,17 @@ _:b4    a       IFC2X3:IfcLocalPlacement ;
                             IFC2X3:directionRatios_IfcDirection
                                     [ a             IFC2X3:REAL_List ;
                                       EXPRESS:size  3 ;
-                                      EXPRESS:slot  [ EXPRESS:index  3 ;
+                                      EXPRESS:slot  [ EXPRESS:index  2 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "1"^^xsd:decimal
                                                                      ]
                                                     ] ;
-                                      EXPRESS:slot  [ EXPRESS:index  2 ;
+                                      EXPRESS:slot  [ EXPRESS:index  1 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                      ]
                                                     ] ;
-                                      EXPRESS:slot  [ EXPRESS:index  1 ;
+                                      EXPRESS:slot  [ EXPRESS:index  0 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                      ]
@@ -1019,17 +1019,17 @@ _:b4    a       IFC2X3:IfcLocalPlacement ;
                                                   IFC2X3:coordinates_IfcCartesianPoint
                                                           [ a             IFC2X3:IfcLengthMeasure_List ;
                                                             EXPRESS:size  3 ;
-                                                            EXPRESS:slot  [ EXPRESS:index  3 ;
+                                                            EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                             EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                              EXPRESS:hasReal  0.25
                                                                                            ]
                                                                           ] ;
-                                                            EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                            EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                             EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                            ]
                                                                           ] ;
-                                                            EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                            EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                             EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                              EXPRESS:hasReal  0.9
                                                                                            ]
@@ -1041,17 +1041,17 @@ _:b4    a       IFC2X3:IfcLocalPlacement ;
                             IFC2X3:directionRatios_IfcDirection
                                     [ a             IFC2X3:REAL_List ;
                                       EXPRESS:size  3 ;
-                                      EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                      EXPRESS:item   [ a                EXPRESS:REAL ;
-                                                                       EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                     ]
-                                                    ] ;
                                       EXPRESS:slot  [ EXPRESS:index  2 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                      ]
                                                     ] ;
                                       EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                      EXPRESS:item   [ a                EXPRESS:REAL ;
+                                                                       EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                     ]
+                                                    ] ;
+                                      EXPRESS:slot  [ EXPRESS:index  0 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "1"^^xsd:decimal
                                                                      ]
@@ -1096,17 +1096,17 @@ _:b6    a       IFC2X3:IfcLocalPlacement ;
                             IFC2X3:directionRatios_IfcDirection
                                     [ a             IFC2X3:REAL_List ;
                                       EXPRESS:size  3 ;
-                                      EXPRESS:slot  [ EXPRESS:index  3 ;
+                                      EXPRESS:slot  [ EXPRESS:index  2 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "1"^^xsd:decimal
                                                                      ]
                                                     ] ;
-                                      EXPRESS:slot  [ EXPRESS:index  2 ;
+                                      EXPRESS:slot  [ EXPRESS:index  1 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                      ]
                                                     ] ;
-                                      EXPRESS:slot  [ EXPRESS:index  1 ;
+                                      EXPRESS:slot  [ EXPRESS:index  0 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                      ]
@@ -1117,17 +1117,17 @@ _:b6    a       IFC2X3:IfcLocalPlacement ;
                                                   IFC2X3:coordinates_IfcCartesianPoint
                                                           [ a             IFC2X3:IfcLengthMeasure_List ;
                                                             EXPRESS:size  3 ;
-                                                            EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                           ]
-                                                                          ] ;
                                                             EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                             EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                            ]
                                                                           ] ;
                                                             EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
+                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                           ]
+                                                                          ] ;
+                                                            EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                             EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                            ]
@@ -1139,17 +1139,17 @@ _:b6    a       IFC2X3:IfcLocalPlacement ;
                             IFC2X3:directionRatios_IfcDirection
                                     [ a             IFC2X3:REAL_List ;
                                       EXPRESS:size  3 ;
-                                      EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                      EXPRESS:item   [ a                EXPRESS:REAL ;
-                                                                       EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                     ]
-                                                    ] ;
                                       EXPRESS:slot  [ EXPRESS:index  2 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                      ]
                                                     ] ;
                                       EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                      EXPRESS:item   [ a                EXPRESS:REAL ;
+                                                                       EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                     ]
+                                                    ] ;
+                                      EXPRESS:slot  [ EXPRESS:index  0 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "1"^^xsd:decimal
                                                                      ]
@@ -1679,17 +1679,17 @@ _:b3    a       IFC2X3:IfcGeometricRepresentationContext ;
                                                   IFC2X3:coordinates_IfcCartesianPoint
                                                           [ a             IFC2X3:IfcLengthMeasure_List ;
                                                             EXPRESS:size  3 ;
-                                                            EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                           ]
-                                                                          ] ;
                                                             EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                             EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                            ]
                                                                           ] ;
                                                             EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
+                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                           ]
+                                                                          ] ;
+                                                            EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                             EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                            ]
@@ -1724,7 +1724,7 @@ model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D
                   IFC2X3:representations_IfcProductRepresentation
                           [ a             IFC2X3:IfcRepresentation_List ;
                             EXPRESS:size  1 ;
-                            EXPRESS:slot  [ EXPRESS:index  1 ;
+                            EXPRESS:slot  [ EXPRESS:index  0 ;
                                             EXPRESS:item   [ a                               IFC2X3:IfcShapeRepresentation ;
                                                              IFC2X3:contextOfItems_IfcRepresentation
                                                                      _:b3 ;
@@ -1738,17 +1738,17 @@ model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D
                                                                                                          IFC2X3:directionRatios_IfcDirection
                                                                                                                  [ a             IFC2X3:REAL_List ;
                                                                                                                    EXPRESS:size  3 ;
-                                                                                                                   EXPRESS:slot  [ EXPRESS:index  3 ;
+                                                                                                                   EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                                                                                    EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                     EXPRESS:hasReal  "1"^^xsd:decimal
                                                                                                                                                   ]
                                                                                                                                  ] ;
-                                                                                                                   EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                   EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                    EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                     EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                   ]
                                                                                                                                  ] ;
-                                                                                                                   EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                   EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                    EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                     EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                   ]
@@ -1762,17 +1762,17 @@ model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D
                                                                                                                    IFC2X3:directionRatios_IfcDirection
                                                                                                                            [ a             IFC2X3:REAL_List ;
                                                                                                                              EXPRESS:size  3 ;
-                                                                                                                             EXPRESS:slot  [ EXPRESS:index  3 ;
+                                                                                                                             EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                                                                                              EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                               EXPRESS:hasReal  "1"^^xsd:decimal
                                                                                                                                                             ]
                                                                                                                                            ] ;
-                                                                                                                             EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                             EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                              EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                               EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                             ]
                                                                                                                                            ] ;
-                                                                                                                             EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                             EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                              EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                               EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                             ]
@@ -1783,17 +1783,17 @@ model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D
                                                                                                                                          IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                  [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                    EXPRESS:size  3 ;
-                                                                                                                                                   EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                                                                                                                                   EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                    EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                                                                                                                  ]
-                                                                                                                                                                 ] ;
                                                                                                                                                    EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                                                                                                                    EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                     EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                   ]
                                                                                                                                                                  ] ;
                                                                                                                                                    EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                   EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
+                                                                                                                                                                                    EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                                                                                                                  ]
+                                                                                                                                                                 ] ;
+                                                                                                                                                   EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                    EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                     EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                   ]
@@ -1805,17 +1805,17 @@ model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D
                                                                                                                    IFC2X3:directionRatios_IfcDirection
                                                                                                                            [ a             IFC2X3:REAL_List ;
                                                                                                                              EXPRESS:size  3 ;
-                                                                                                                             EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                                                                                                             EXPRESS:item   [ a                EXPRESS:REAL ;
-                                                                                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                                                                                            ]
-                                                                                                                                           ] ;
                                                                                                                              EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                                                                                              EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                               EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                             ]
                                                                                                                                            ] ;
                                                                                                                              EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                             EXPRESS:item   [ a                EXPRESS:REAL ;
+                                                                                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                                                                                            ]
+                                                                                                                                           ] ;
+                                                                                                                             EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                              EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                                                                                                               EXPRESS:hasReal  "1"^^xsd:decimal
                                                                                                                                                             ]
@@ -1829,37 +1829,19 @@ model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D
                                                                                                                  [ a                          IFC2X3:IfcPolyline ;
                                                                                                                    IFC2X3:points_IfcPolyline  [ a             IFC2X3:IfcCartesianPoint_List ;
                                                                                                                                                 EXPRESS:size  5 ;
-                                                                                                                                                EXPRESS:slot  [ EXPRESS:index  5 ;
-                                                                                                                                                                EXPRESS:item   [ a       IFC2X3:IfcCartesianPoint ;
-                                                                                                                                                                                 IFC2X3:coordinates_IfcCartesianPoint
-                                                                                                                                                                                         [ a             IFC2X3:IfcLengthMeasure_List ;
-                                                                                                                                                                                           EXPRESS:size  2 ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  2 ;
-                                                                                                                                                                                                           EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                                                                                                                                                          ]
-                                                                                                                                                                                                         ] ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
-                                                                                                                                                                                                           EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                                                                                                                                                          ]
-                                                                                                                                                                                                         ]
-                                                                                                                                                                                         ]
-                                                                                                                                                                               ]
-                                                                                                                                                              ] ;
                                                                                                                                                 EXPRESS:slot  [ EXPRESS:index  4 ;
                                                                                                                                                                 EXPRESS:item   [ a       IFC2X3:IfcCartesianPoint ;
                                                                                                                                                                                  IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                                                          [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                                                            EXPRESS:size  2 ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ] ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                                                            EXPRESS:hasReal  0.75
+                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ]
                                                                                                                                                                                          ]
@@ -1870,12 +1852,12 @@ model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D
                                                                                                                                                                                  IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                                                          [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                                                            EXPRESS:size  2 ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                                                            EXPRESS:hasReal  0.3
+                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ] ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                                             EXPRESS:hasReal  0.75
                                                                                                                                                                                                                           ]
@@ -1888,14 +1870,14 @@ model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D
                                                                                                                                                                                  IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                                                          [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                                                            EXPRESS:size  2 ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                                             EXPRESS:hasReal  0.3
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ] ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                                                                                                                                                            EXPRESS:hasReal  0.75
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ]
                                                                                                                                                                                          ]
@@ -1906,12 +1888,30 @@ model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D
                                                                                                                                                                                  IFC2X3:coordinates_IfcCartesianPoint
                                                                                                                                                                                          [ a             IFC2X3:IfcLengthMeasure_List ;
                                                                                                                                                                                            EXPRESS:size  2 ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  2 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                                                           EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
+                                                                                                                                                                                                                            EXPRESS:hasReal  0.3
+                                                                                                                                                                                                                          ]
+                                                                                                                                                                                                         ] ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  0 ;
+                                                                                                                                                                                                           EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
+                                                                                                                                                                                                                            EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                                                                                                                                                          ]
+                                                                                                                                                                                                         ]
+                                                                                                                                                                                         ]
+                                                                                                                                                                               ]
+                                                                                                                                                              ] ;
+                                                                                                                                                EXPRESS:slot  [ EXPRESS:index  0 ;
+                                                                                                                                                                EXPRESS:item   [ a       IFC2X3:IfcCartesianPoint ;
+                                                                                                                                                                                 IFC2X3:coordinates_IfcCartesianPoint
+                                                                                                                                                                                         [ a             IFC2X3:IfcLengthMeasure_List ;
+                                                                                                                                                                                           EXPRESS:size  2 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                                           ]
                                                                                                                                                                                                          ] ;
-                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                                                                                                                                           EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                                                                                                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                                                                                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                                                                                                                                                           ]
@@ -1994,17 +1994,17 @@ _:b5    a       IFC2X3:IfcLocalPlacement ;
                             IFC2X3:directionRatios_IfcDirection
                                     [ a             IFC2X3:REAL_List ;
                                       EXPRESS:size  3 ;
-                                      EXPRESS:slot  [ EXPRESS:index  3 ;
+                                      EXPRESS:slot  [ EXPRESS:index  2 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "1"^^xsd:decimal
                                                                      ]
                                                     ] ;
-                                      EXPRESS:slot  [ EXPRESS:index  2 ;
+                                      EXPRESS:slot  [ EXPRESS:index  1 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                      ]
                                                     ] ;
-                                      EXPRESS:slot  [ EXPRESS:index  1 ;
+                                      EXPRESS:slot  [ EXPRESS:index  0 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                      ]
@@ -2015,17 +2015,17 @@ _:b5    a       IFC2X3:IfcLocalPlacement ;
                                                   IFC2X3:coordinates_IfcCartesianPoint
                                                           [ a             IFC2X3:IfcLengthMeasure_List ;
                                                             EXPRESS:size  3 ;
-                                                            EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                           ]
-                                                                          ] ;
                                                             EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                             EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                            ]
                                                                           ] ;
                                                             EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
+                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                           ]
+                                                                          ] ;
+                                                            EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                             EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                            ]
@@ -2037,17 +2037,17 @@ _:b5    a       IFC2X3:IfcLocalPlacement ;
                             IFC2X3:directionRatios_IfcDirection
                                     [ a             IFC2X3:REAL_List ;
                                       EXPRESS:size  3 ;
-                                      EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                      EXPRESS:item   [ a                EXPRESS:REAL ;
-                                                                       EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                     ]
-                                                    ] ;
                                       EXPRESS:slot  [ EXPRESS:index  2 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                      ]
                                                     ] ;
                                       EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                      EXPRESS:item   [ a                EXPRESS:REAL ;
+                                                                       EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                     ]
+                                                    ] ;
+                                      EXPRESS:slot  [ EXPRESS:index  0 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "1"^^xsd:decimal
                                                                      ]
@@ -2079,17 +2079,17 @@ model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B
         IFC2X3:refElevation_IfcSite     EXPRESS:NULL ;
         IFC2X3:refLatitude_IfcSite      [ a             IFC2X3:IfcCompoundPlaneAngleMeasure ;
                                           EXPRESS:size  3 ;
-                                          EXPRESS:slot  [ EXPRESS:index  3 ;
+                                          EXPRESS:slot  [ EXPRESS:index  2 ;
                                                           EXPRESS:item   [ a                   EXPRESS:INTEGER ;
                                                                            EXPRESS:hasInteger  0
                                                                          ]
                                                         ] ;
-                                          EXPRESS:slot  [ EXPRESS:index  2 ;
+                                          EXPRESS:slot  [ EXPRESS:index  1 ;
                                                           EXPRESS:item   [ a                   EXPRESS:INTEGER ;
                                                                            EXPRESS:hasInteger  28
                                                                          ]
                                                         ] ;
-                                          EXPRESS:slot  [ EXPRESS:index  1 ;
+                                          EXPRESS:slot  [ EXPRESS:index  0 ;
                                                           EXPRESS:item   [ a                   EXPRESS:INTEGER ;
                                                                            EXPRESS:hasInteger  24
                                                                          ]
@@ -2097,17 +2097,17 @@ model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B
                                         ] ;
         IFC2X3:refLongitude_IfcSite     [ a             IFC2X3:IfcCompoundPlaneAngleMeasure ;
                                           EXPRESS:size  3 ;
-                                          EXPRESS:slot  [ EXPRESS:index  3 ;
+                                          EXPRESS:slot  [ EXPRESS:index  2 ;
                                                           EXPRESS:item   [ a                   EXPRESS:INTEGER ;
                                                                            EXPRESS:hasInteger  0
                                                                          ]
                                                         ] ;
-                                          EXPRESS:slot  [ EXPRESS:index  2 ;
+                                          EXPRESS:slot  [ EXPRESS:index  1 ;
                                                           EXPRESS:item   [ a                   EXPRESS:INTEGER ;
                                                                            EXPRESS:hasInteger  25
                                                                          ]
                                                         ] ;
-                                          EXPRESS:slot  [ EXPRESS:index  1 ;
+                                          EXPRESS:slot  [ EXPRESS:index  0 ;
                                                           EXPRESS:item   [ a                   EXPRESS:INTEGER ;
                                                                            EXPRESS:hasInteger  54
                                                                          ]
@@ -2232,17 +2232,17 @@ _:b7    a       IFC2X3:IfcLocalPlacement ;
                             IFC2X3:directionRatios_IfcDirection
                                     [ a             IFC2X3:REAL_List ;
                                       EXPRESS:size  3 ;
-                                      EXPRESS:slot  [ EXPRESS:index  3 ;
+                                      EXPRESS:slot  [ EXPRESS:index  2 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "1"^^xsd:decimal
                                                                      ]
                                                     ] ;
-                                      EXPRESS:slot  [ EXPRESS:index  2 ;
+                                      EXPRESS:slot  [ EXPRESS:index  1 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                      ]
                                                     ] ;
-                                      EXPRESS:slot  [ EXPRESS:index  1 ;
+                                      EXPRESS:slot  [ EXPRESS:index  0 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                      ]
@@ -2253,17 +2253,17 @@ _:b7    a       IFC2X3:IfcLocalPlacement ;
                                                   IFC2X3:coordinates_IfcCartesianPoint
                                                           [ a             IFC2X3:IfcLengthMeasure_List ;
                                                             EXPRESS:size  3 ;
-                                                            EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
-                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                                           ]
-                                                                          ] ;
                                                             EXPRESS:slot  [ EXPRESS:index  2 ;
                                                                             EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                            ]
                                                                           ] ;
                                                             EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                                            EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
+                                                                                             EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                                           ]
+                                                                          ] ;
+                                                            EXPRESS:slot  [ EXPRESS:index  0 ;
                                                                             EXPRESS:item   [ a                IFC2X3:IfcLengthMeasure ;
                                                                                              EXPRESS:hasReal  "0"^^xsd:decimal
                                                                                            ]
@@ -2275,17 +2275,17 @@ _:b7    a       IFC2X3:IfcLocalPlacement ;
                             IFC2X3:directionRatios_IfcDirection
                                     [ a             IFC2X3:REAL_List ;
                                       EXPRESS:size  3 ;
-                                      EXPRESS:slot  [ EXPRESS:index  3 ;
-                                                      EXPRESS:item   [ a                EXPRESS:REAL ;
-                                                                       EXPRESS:hasReal  "0"^^xsd:decimal
-                                                                     ]
-                                                    ] ;
                                       EXPRESS:slot  [ EXPRESS:index  2 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "0"^^xsd:decimal
                                                                      ]
                                                     ] ;
                                       EXPRESS:slot  [ EXPRESS:index  1 ;
+                                                      EXPRESS:item   [ a                EXPRESS:REAL ;
+                                                                       EXPRESS:hasReal  "0"^^xsd:decimal
+                                                                     ]
+                                                    ] ;
+                                      EXPRESS:slot  [ EXPRESS:index  0 ;
                                                       EXPRESS:item   [ a                EXPRESS:REAL ;
                                                                        EXPRESS:hasReal  "1"^^xsd:decimal
                                                                      ]
@@ -2341,7 +2341,7 @@ model:GUID_BDA2AA8B-B6E2-4A17-A9A6-0EE24C8B49D5
                             IFC2X3:materialLayers_IfcMaterialLayerSet
                                     [ a             IFC2X3:IfcMaterialLayer_List ;
                                       EXPRESS:size  1 ;
-                                      EXPRESS:slot  [ EXPRESS:index  1 ;
+                                      EXPRESS:slot  [ EXPRESS:index  0 ;
                                                       EXPRESS:item   [ a       IFC2X3:IfcMaterialLayer ;
                                                                        IFC2X3:isVentilated_IfcMaterialLayer
                                                                                EXPRESS:NULL ;
