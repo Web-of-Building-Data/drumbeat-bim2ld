@@ -1,0 +1,10 @@
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix EXPRESS: <http://drumbeat.cs.hut.fi/owl/EXPRESS#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix TestSchema: <http://drumbeat.cs.hut.fi/owl/TestSchema#> .
+
+EXPRESS:LOGICAL  a  owl:Class .
+
+EXPRESS:BOOLEAN  a  owl:Class .

@@ -23,6 +23,9 @@ public class RdfAsserter {
 	private static final Logger logger = Logger.getLogger(RdfAsserter.class); 
 	
 	private final RdfComparatorPool comparatorPool;
+	private RdfMsgContainer lastAssertedMsg1;
+	private RdfMsgContainer lastAssertedMsg2;
+	private Stack<Pair<Object, Object>> lastAssertionDifferences;
 	
 	public RdfAsserter(RdfComparatorPool comparatorPool) {
 		this.comparatorPool = comparatorPool;
@@ -46,20 +49,26 @@ public class RdfAsserter {
 	}
 	
 	private void internalAssertEquals(Model model1, Model model2, boolean expectedEquals) throws RdfAsserterException {
+		
+		lastAssertedMsg1 = null;
+		lastAssertedMsg2 = null;
+		lastAssertionDifferences = null;
+		
 		try {
-			RdfMsgContainer msgContainer1 = RdfMsgContainerBuilder.build(model1, comparatorPool);
-			RdfMsgContainer msgContainer2 = RdfMsgContainerBuilder.build(model2, comparatorPool);
+			lastAssertedMsg1 = RdfMsgContainerBuilder.build(model1, comparatorPool);
+			lastAssertedMsg2 = RdfMsgContainerBuilder.build(model2, comparatorPool);
 			
-			Stack<Pair<Object, Object>> differences = new Stack<>();		
-			int result = msgContainer1.compareTo(msgContainer2, differences);		
+			lastAssertionDifferences = new Stack<>();		
+			int result = lastAssertedMsg1.compareTo(lastAssertedMsg2, lastAssertionDifferences);		
 			if (expectedEquals && (result != 0)) {
 				Map<String, String> nsPrefixMap = new HashMap<>();
 				nsPrefixMap.putAll(model1.getNsPrefixMap());
 				nsPrefixMap.putAll(model2.getNsPrefixMap());
-				printDifferences(nsPrefixMap, differences);
-			}
-			
+				printDifferences(nsPrefixMap, lastAssertionDifferences);
+			}			
 			Assert.assertEquals(expectedEquals, result == 0);
+			lastAssertionDifferences = null;
+			
 		} catch (RdfChecksumException e) {
 			throw new RdfAsserterException(e);			
 		}
@@ -98,8 +107,7 @@ public class RdfAsserter {
 						expectedObject.getClass().getSimpleName(),
 						printer.toString(expectedObject),
 						actualObject.getClass().getSimpleName(),
-						printer.toString(actualObject));
-				
+						printer.toString(actualObject));				
 				
 //				System.err.println(message);
 				logger.warn(message);
@@ -107,6 +115,18 @@ public class RdfAsserter {
 		} catch (RdfChecksumException e) {
 			throw new RdfAsserterException(e);
 		}
+	}
+	
+	public RdfMsgContainer getLastExpectedMsgContainer() {
+		return lastAssertedMsg1;
+	}
+	
+	public RdfMsgContainer getLastActualMsgContainer() {
+		return lastAssertedMsg2;
+	}
+	
+	public Stack<Pair<Object, Object>> getLastAssertionDifferences() {
+		return lastAssertionDifferences;
 	}
 		
 }

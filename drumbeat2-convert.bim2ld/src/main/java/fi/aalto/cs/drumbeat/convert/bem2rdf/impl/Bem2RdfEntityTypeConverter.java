@@ -282,7 +282,7 @@ class Bem2RdfEntityTypeConverter {
 			
 //			System.out.println("Exporting entity: " + entity);
 
-			long childNodeCount = 1L;
+			int childNodeCount = Bem2RdfConverterManager.MIN_CHILD_NODE_INDEX;
 			
 			BemEntityTypeInfo entityTypeInfo = entity.getTypeInfo();
 			Resource entityTypeResource = convertEntityTypeInfo(jenaModel, entityTypeInfo, false);

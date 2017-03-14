@@ -20,14 +20,14 @@
 //import fi.aalto.cs.drumbeat.convert.bem2rdf.ifc2ld.Ifc2RdfModelExporter;
 //import fi.aalto.cs.drumbeat.convert.bem2rdf.ifc2ld.Ifc2RdfSchemaExporter;
 //import fi.aalto.cs.drumbeat.ifc.common.IfcException;
-//import fi.aalto.cs.drumbeat.ifc.data.model.IfcModel;
+//import fi.aalto.cs.drumbeat.ifc.data.model.BemDataset;
 //import fi.aalto.cs.drumbeat.ifc.data.schema.IfcEntityTypeInfo;
 //import fi.aalto.cs.drumbeat.ifc.data.schema.IfcSchema;
 //
-//public class Test_Ifc2RdfModelExporter_Exporting_IfcModel {
+//public class Test_Ifc2RdfModelExporter_Exporting_BemDataset {
 //	
 //	private static IfcSchema ifcSchema;
-//	private static IfcModel ifcModel;
+//	private static BemDataset ifcModel;
 //	private Model jenaModel;
 //	private Ifc2RdfConversionContext context;
 //	private Ifc2RdfConverter converter;
@@ -36,7 +36,7 @@
 //	@BeforeClass
 //	public static void setUpBeforeClass() throws Exception {
 //		DrumbeatTestHelper.init();
-//		ifcModel = DrumbeatTestHelper.getTestIfcModel();
+//		ifcModel = DrumbeatTestHelper.getTestBemDataset();
 //		ifcSchema = ifcModel.getSchema();
 //	}
 //	

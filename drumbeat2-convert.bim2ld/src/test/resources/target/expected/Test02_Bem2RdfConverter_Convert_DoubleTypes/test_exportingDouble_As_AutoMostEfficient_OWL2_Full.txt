@@ -1,0 +1,32 @@
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix EXPRESS: <http://drumbeat.cs.hut.fi/owl/EXPRESS#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix TestSchema: <http://drumbeat.cs.hut.fi/owl/TestSchema#> .
+
+EXPRESS:NUMBER  a        owl:Class ;
+        rdfs:subClassOf  [ a                owl:Restriction ;
+                           owl:cardinality  1 ;
+                           owl:onProperty   EXPRESS:hasNumber
+                         ] ;
+        rdfs:subClassOf  [ a                  owl:Restriction ;
+                           owl:allValuesFrom  xsd:double ;
+                           owl:onProperty     EXPRESS:hasNumber
+                         ] .
+
+EXPRESS:REAL  a          owl:Class ;
+        rdfs:subClassOf  [ a                owl:Restriction ;
+                           owl:cardinality  1 ;
+                           owl:onProperty   EXPRESS:hasReal
+                         ] ;
+        rdfs:subClassOf  [ a                  owl:Restriction ;
+                           owl:allValuesFrom  xsd:double ;
+                           owl:onProperty     EXPRESS:hasReal
+                         ] .
+
+EXPRESS:hasNumber  a        owl:FunctionalDataProperty , owl:DatatypeProperty ;
+        rdfs:subPropertyOf  EXPRESS:hasValue .
+
+EXPRESS:hasReal  a          owl:FunctionalDataProperty , owl:DatatypeProperty ;
+        rdfs:subPropertyOf  EXPRESS:hasValue .

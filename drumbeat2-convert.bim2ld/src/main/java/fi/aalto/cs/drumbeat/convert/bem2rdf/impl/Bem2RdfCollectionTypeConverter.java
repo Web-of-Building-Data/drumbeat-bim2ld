@@ -24,7 +24,7 @@ public abstract class Bem2RdfCollectionTypeConverter {
 	abstract Resource convertCollectionTypeInfo(Model jenaModel, BemCollectionTypeInfo typeInfo, boolean includeDetails);	
 	
 	abstract Resource convertListToResource(Model jenaModel, BemCollectionValue<? extends BemValue> listValue, BemCollectionTypeInfo collectionTypeInfo,
-			Resource parentResource, long childNodeCount);	 
+			Resource parentResource, int childNodeCount);	 
 
 	//*****************************************
 	// EndRegion COLLECTION TYPES AND VALUES

@@ -21,6 +21,12 @@ import fi.aalto.cs.drumbeat.data.bem.parsers.util.BemParserUtil;
 import fi.aalto.cs.drumbeat.data.ifc.parsers.IfcDatasetParser;
 import fi.aalto.cs.drumbeat.owl.OwlProfileEnum;
 import fi.aalto.cs.drumbeat.owl.owlapi.OwlApiUtils;
+import fi.aalto.cs.drumbeat.rdf.data.RdfChecksumException;
+import fi.aalto.cs.drumbeat.rdf.data.RdfComparatorPool;
+import fi.aalto.cs.drumbeat.rdf.data.msg.RdfMsg;
+import fi.aalto.cs.drumbeat.rdf.data.msg.RdfMsgContainer;
+import fi.aalto.cs.drumbeat.rdf.data.msg.RdfMsgContainerBuilder;
+import fi.aalto.cs.drumbeat.rdf.data.msg.RdfMsgContainerPrinter;
 
 public class TestHelper {
 	
@@ -173,6 +179,32 @@ public class TestHelper {
 		assertNotNull(dataset);
 		return dataset;
 	}
+	
+	public static void printRdfMsgContainer(Model model, RdfMsgContainer msgContainer, RdfComparatorPool comparatorPool, String filePath) throws RdfChecksumException, IOException {
+		
+		System.out.println("Exporting MSGs to " + filePath);
+		
+		if (msgContainer != null) {
+			msgContainer = RdfMsgContainerBuilder.build(model, comparatorPool);
+		}
+		RdfMsgContainerPrinter printer = new RdfMsgContainerPrinter(
+				model.getNsPrefixMap(), comparatorPool.getChecksumCalculator());
+		
+		FileWriter writer = FileManager.createFileWriter(filePath);
+		
+		try {
+		
+			for (RdfMsg msg : msgContainer) {
+				writer.write(printer.toString(msg));
+			}
+			
+		} finally {
+			
+			writer.close();
+		}
+		
+	}
+
 
 
 	

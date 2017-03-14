@@ -72,40 +72,40 @@ public class Test08_Bem2RdfSchemaExporter_Exporting_IfcDataset_sample extends Te
 		export_Dataset(VALUE_DRUMMOND_LIST, OwlProfileEnum.OWL2_Full);
 	}
 	
-//	@Test
-//	public void test_exportIfcDataset_DrummondList_OWL_2_DL() throws Exception {
-//		export_Dataset(VALUE_DRUMMOND_LIST, OwlProfileEnum.OWL2_DL);
-//	}
-//
-//	@Test
-//	public void test_exportIfcDataset_DrummondList_OWL_2_RL() throws Exception {
-//		export_Dataset(VALUE_DRUMMOND_LIST, OwlProfileEnum.OWL2_RL);
-//	}
-//
-//	@Test
-//	public void test_exportIfcDataset_DrummondList_OWL_2_EL() throws Exception {
-//		export_Dataset(VALUE_DRUMMOND_LIST, OwlProfileEnum.OWL2_EL);
-//	}
-//
-//	@Test
-//	public void test_exportIfcDataset_OloSimilarList_OWL_2_FULL() throws Exception {
-//		export_Dataset(VALUE_OLO_SIMILAR_LIST, OwlProfileEnum.OWL2_Full);
-//	}
-//	
-//	@Test
-//	public void test_exportIfcDataset_OloSimilarList_OWL_2_DL() throws Exception {
-//		export_Dataset(VALUE_OLO_SIMILAR_LIST, OwlProfileEnum.OWL2_DL);
-//	}
-//
-//	@Test
-//	public void test_exportIfcDataset_OloSimilarList_OWL_2_RL() throws Exception {
-//		export_Dataset(VALUE_OLO_SIMILAR_LIST, OwlProfileEnum.OWL2_RL);
-//	}
-//
-//	@Test
-//	public void test_exportIfcDataset_OloSimilarList_OWL_2_EL() throws Exception {
-//		export_Dataset(VALUE_OLO_SIMILAR_LIST, OwlProfileEnum.OWL2_EL);
-//	}
+	@Test
+	public void test_exportIfcDataset_DrummondList_OWL_2_DL() throws Exception {
+		export_Dataset(VALUE_DRUMMOND_LIST, OwlProfileEnum.OWL2_DL);
+	}
+
+	@Test
+	public void test_exportIfcDataset_DrummondList_OWL_2_RL() throws Exception {
+		export_Dataset(VALUE_DRUMMOND_LIST, OwlProfileEnum.OWL2_RL);
+	}
+
+	@Test
+	public void test_exportIfcDataset_DrummondList_OWL_2_EL() throws Exception {
+		export_Dataset(VALUE_DRUMMOND_LIST, OwlProfileEnum.OWL2_EL);
+	}
+
+	@Test
+	public void test_exportIfcDataset_OloSimilarList_OWL_2_FULL() throws Exception {
+		export_Dataset(VALUE_OLO_SIMILAR_LIST, OwlProfileEnum.OWL2_Full);
+	}
+	
+	@Test
+	public void test_exportIfcDataset_OloSimilarList_OWL_2_DL() throws Exception {
+		export_Dataset(VALUE_OLO_SIMILAR_LIST, OwlProfileEnum.OWL2_DL);
+	}
+
+	@Test
+	public void test_exportIfcDataset_OloSimilarList_OWL_2_RL() throws Exception {
+		export_Dataset(VALUE_OLO_SIMILAR_LIST, OwlProfileEnum.OWL2_RL);
+	}
+
+	@Test
+	public void test_exportIfcDataset_OloSimilarList_OWL_2_EL() throws Exception {
+		export_Dataset(VALUE_OLO_SIMILAR_LIST, OwlProfileEnum.OWL2_EL);
+	}
 
 
 	private void export_Dataset(String convertCollectionsTo, OwlProfileEnum owlProfileId) throws Exception {

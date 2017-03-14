@@ -26,6 +26,7 @@ import org.apache.jena.vocabulary.*;
 
 public class Bem2RdfConverterManager {
 	
+	public static final int MIN_CHILD_NODE_INDEX = 1;
 	/**
 	 * Package variables
 	 */
@@ -144,7 +145,7 @@ public class Bem2RdfConverterManager {
 	 * @return
 	 * @
 	 */
-	public RDFNode convertValue(Model jenaModel, BemValue value, BemTypeInfo typeInfo, Resource parentResource, long childNodeCount, boolean includeEntityAttributes) {		
+	public RDFNode convertValue(Model jenaModel, BemValue value, BemTypeInfo typeInfo, Resource parentResource, int childNodeCount, boolean includeEntityAttributes) {		
 		
 		if (value instanceof BemSimpleValue) {
 			
@@ -161,7 +162,7 @@ public class Bem2RdfConverterManager {
 				
 //				assert(typeInfo.getValueKind() != BemValueKindEnum.LOGICAL) : value;
 				
-				return primitiveTypeConverter.convertPrimitiveValue(jenaModel, internalValue, typeInfo, parentResource, 0);
+				return primitiveTypeConverter.convertPrimitiveValue(jenaModel, internalValue, typeInfo, parentResource, childNodeCount);
 				
 			} else if (value instanceof BemLogicalValue) {
 				
@@ -175,7 +176,7 @@ public class Bem2RdfConverterManager {
 				return entityTypeConverter.convertEntityValue(jenaModel, (BemEntity)value, includeEntityAttributes);
 			} else if (value instanceof BemTypedSimpleValue) {
 				//return convertTypedSimpleValue(jenaModel, (BemTypedSimpleValue)value, parentResource, childNodeCount);
-				return convertValue(jenaModel, ((BemTypedSimpleValue)value).getValue(), ((BemTypedSimpleValue)value).getType(), parentResource, 0, false);
+				return convertValue(jenaModel, ((BemTypedSimpleValue)value).getValue(), ((BemTypedSimpleValue)value).getType(), parentResource, childNodeCount, false);
 			} else if (value instanceof BemCollectionValue<?>) {
 				return collectionTypeConverter.convertListToResource(
 						jenaModel, (BemCollectionValue<?>)value, (BemCollectionTypeInfo)typeInfo, parentResource, childNodeCount);
@@ -193,12 +194,7 @@ public class Bem2RdfConverterManager {
 	
 	public Resource convertEntityValue(Model jenaModel, BemEntity entity) {
 		return entityTypeConverter.convertEntityValue(jenaModel, entity, true);
-	}
-	
-	public RDFNode convertSimpleValue(Model jenaModel, BemSimpleValue value, BemTypeInfo typeInfo) {
-		return convertValue(jenaModel, value, typeInfo, null, 0, false);
-	}
-	
+	}	
 	
 	/**
 	 * Returns an RDF property with name in format hasXXX, where XXX is the name of the original type (e.g.: hasReal, hasNumber, hasLogical, etc.)  

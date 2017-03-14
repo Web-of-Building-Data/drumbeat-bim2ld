@@ -1,0 +1,67 @@
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix EXPRESS: <http://drumbeat.cs.hut.fi/owl/EXPRESS#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+EXPRESS:Select  a  owl:Class .
+
+EXPRESS:BOOLEAN  a  owl:Class .
+
+EXPRESS:hasBinary  a        owl:DatatypeProperty ;
+        rdfs:subPropertyOf  EXPRESS:hasValue .
+
+EXPRESS:INTEGER  a  owl:Class .
+
+EXPRESS:EmptyList  a     owl:Class ;
+        rdfs:subClassOf  EXPRESS:List .
+
+EXPRESS:LOGICAL  a  owl:Class .
+
+EXPRESS:Enum  a  owl:Class .
+
+EXPRESS:Entity  a  owl:Class .
+
+EXPRESS:hasNext  a   owl:ObjectProperty ;
+        rdfs:domain  EXPRESS:List ;
+        rdfs:range   EXPRESS:List .
+
+EXPRESS:STRING  a  owl:Class .
+
+EXPRESS:NUMBER  a  owl:Class .
+
+EXPRESS:hasValue  a  owl:DatatypeProperty .
+
+EXPRESS:BINARY  a  owl:Class .
+
+EXPRESS:hasContent  a  owl:ObjectProperty ;
+        rdfs:domain  EXPRESS:List .
+
+EXPRESS:REAL  a  owl:Class .
+
+EXPRESS:Defined  a  owl:Class .
+
+EXPRESS:UNKNOWN  a  EXPRESS:LOGICAL .
+
+EXPRESS:hasInteger  a       owl:DatatypeProperty ;
+        rdfs:subPropertyOf  EXPRESS:hasValue .
+
+EXPRESS:hasReal  a          owl:DatatypeProperty ;
+        rdfs:subPropertyOf  EXPRESS:hasValue .
+
+EXPRESS:DATETIME  a  owl:Class .
+
+EXPRESS:List  a  owl:Class .
+
+EXPRESS:hasDatetime  a      owl:DatatypeProperty ;
+        rdfs:subPropertyOf  EXPRESS:hasValue .
+
+EXPRESS:FALSE  a  EXPRESS:BOOLEAN , EXPRESS:LOGICAL .
+
+EXPRESS:TRUE  a  EXPRESS:BOOLEAN , EXPRESS:LOGICAL .
+
+EXPRESS:hasString  a        owl:DatatypeProperty ;
+        rdfs:subPropertyOf  EXPRESS:hasValue .
+
+EXPRESS:hasNumber  a        owl:DatatypeProperty ;
+        rdfs:subPropertyOf  EXPRESS:hasValue .

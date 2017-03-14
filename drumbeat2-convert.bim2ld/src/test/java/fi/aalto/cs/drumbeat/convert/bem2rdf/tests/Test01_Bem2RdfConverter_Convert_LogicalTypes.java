@@ -21,6 +21,7 @@ import fi.aalto.cs.drumbeat.owl.OwlVocabulary.XSD;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
 
 public class Test01_Bem2RdfConverter_Convert_LogicalTypes extends Test_Base {
 	
@@ -49,6 +50,12 @@ public class Test01_Bem2RdfConverter_Convert_LogicalTypes extends Test_Base {
 		context.setBuiltInOntologyNamespaceUriFormat(BUILT_IN_ONTOLOGY_NAMESPACE_URI_FORMAT);
 		context.setOntologyNamespacePrefixFormat(ONTOLOGY_NAMESPACE_PREFIX_FORMAT);
 		context.setOntologyNamespaceUriFormat(ONTOLOGY_NAMESPACE_URI_FORMAT);
+		
+		context.setDatasetNamespacePrefixFormat(DATASET_NAMESPACE_PREFIX);
+		context.setDatasetNamespaceUriFormat(DATASET_NAMESPACE_URI_FORMAT);		
+		context.setDatasetBlankNodeNamespacePrefixFormat(DATASET_BLANK_NODE_NAMESPACE_PREFIX_FORMAT);		
+		context.setDatasetBlankNodeNamespaceUriFormat(DATASET_BLANK_NODE_NAMESPACE_URI_FORMAT);	
+		
 	}
 	
 	@Test
@@ -138,8 +145,13 @@ public class Test01_Bem2RdfConverter_Convert_LogicalTypes extends Test_Base {
 	}
 	
 	private void exportLogicalValues(Bem2RdfConverterManager converter, String convertLogicalTo) {
+		
+		Resource parentResource = jenaModel.createResource(DATASET_BLANK_NODE_NAMESPACE_URI_FORMAT + "Fake_parent_resource");		
+		
+		int childCount = Bem2RdfConverterManager.MIN_CHILD_NODE_INDEX;
+		
 		for (BemLogicalEnum logicalValue : BemLogicalEnum.values()) {			
-			RDFNode logicalNode = converter.convertSimpleValue(jenaModel, new BemLogicalValue(logicalValue), bemSchema.LOGICAL);
+			RDFNode logicalNode = converter.convertValue(jenaModel, new BemLogicalValue(logicalValue), bemSchema.LOGICAL, parentResource, childCount++, false);
 			switch (convertLogicalTo) {
 			case Bem2RdfConversionContextParams.VALUE_NAMED_INDIVIDUAL:
 				assertTrue(logicalNode.isURIResource());

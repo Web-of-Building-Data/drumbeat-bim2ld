@@ -1,8 +1,10 @@
 package fi.aalto.cs.drumbeat.convert.bem2rdf;
 
 import java.util.List;
+import java.util.function.Function;
 
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.junit.BeforeClass;
 
@@ -12,6 +14,7 @@ import fi.aalto.cs.drumbeat.data.bem.parsers.util.BemParserUtil;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchema;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchemaPool;
 import fi.aalto.cs.drumbeat.data.ifc.parsers.IfcSchemaParser;
+import fi.aalto.cs.drumbeat.rdf.data.RdfComparatorPool;
 
 public class Test_Base {
 
@@ -126,8 +129,28 @@ public class Test_Base {
 		
 		if (compareWithExpectedModel) {
 			Model expectedModel = TestHelper.readJenaModel(expectedModelFilePath);
-			RdfAsserter rdfAsserter = new RdfAsserter(r -> r.isAnon() || r.getURI().startsWith(DATASET_BLANK_NODE_NAMESPACE_URI_FORMAT));
+			Function<Resource, Boolean> localResourceChecker = r -> r.isAnon() || r.getURI().startsWith(DATASET_BLANK_NODE_NAMESPACE_URI_FORMAT);
+			RdfComparatorPool comparatorPool = new RdfComparatorPool(localResourceChecker);
+			
+			RdfAsserter rdfAsserter = new RdfAsserter(comparatorPool);
 			rdfAsserter.assertEquals(expectedModel, actualModel);
+			
+			if (rdfAsserter.getLastAssertionDifferences() != null) {
+			
+				TestHelper.printRdfMsgContainer(
+						expectedModel,
+						rdfAsserter.getLastExpectedMsgContainer(),
+						comparatorPool,
+						expectedModelFilePath.replaceAll("txt", "msg"));
+				
+				TestHelper.printRdfMsgContainer(
+						actualModel,
+						rdfAsserter.getLastActualMsgContainer(),
+						comparatorPool,
+						actualModelFilePath.replaceAll("txt", "msg"));
+				
+			}
+			
 		} else {
 			String reminderMessage = String.format("Reminder: To compare files '%s' and '%s'", expectedModelFilePath, actualModelFilePath);
 			System.err.println(reminderMessage);

@@ -134,7 +134,7 @@ class Bem2RdfDrummondListCollectionTypeConverter extends Bem2RdfCollectionTypeCo
 	
 	@Override
 	Resource convertListToResource(Model jenaModel, BemCollectionValue<? extends BemValue> listValue, BemCollectionTypeInfo collectionTypeInfo,
-			Resource parentResource, long childNodeCount)
+			Resource parentResource, int childNodeCount)
 	{
 		if (!collectionTypeInfo.isSorted()) {
 			throw new IllegalArgumentException("Collection type must be sorted:" + collectionTypeInfo);
@@ -153,7 +153,8 @@ class Bem2RdfDrummondListCollectionTypeConverter extends Bem2RdfCollectionTypeCo
 		if (manager.nameAllBlankNodes) {
 			assert(parentResource.isURIResource());
 			assert(parentResource.getLocalName() != null);
-			String currentResourceName = manager.uriBuilder.buildDatasetBlankNodeUri(String.format("%s_%d_%d", parentResource.getLocalName(), childNodeCount, index));
+			String currentResourceName = manager.uriBuilder.buildDatasetBlankNodeUri(
+					String.format("%s_%d_%d", parentResource.getLocalName(), childNodeCount, index + Bem2RdfConverterManager.MIN_CHILD_NODE_INDEX));
 			currentListResource = jenaModel.createResource(currentResourceName);			
 		} else {
 			currentListResource = jenaModel.createResource();
@@ -167,7 +168,8 @@ class Bem2RdfDrummondListCollectionTypeConverter extends Bem2RdfCollectionTypeCo
 			if (manager.nameAllBlankNodes) {
 				assert(parentResource.isURIResource());
 				assert(parentResource.getLocalName() != null);
-				String currentResourceName = manager.uriBuilder.buildDatasetBlankNodeUri(String.format("%s_%d_%d", parentResource.getLocalName(), childNodeCount, index));
+				String currentResourceName = manager.uriBuilder.buildDatasetBlankNodeUri(
+						String.format("%s_%d_%d", parentResource.getLocalName(), childNodeCount, index + Bem2RdfConverterManager.MIN_CHILD_NODE_INDEX));
 				currentListResource = jenaModel.createResource(currentResourceName);			
 			} else {
 				currentListResource = jenaModel.createResource();
@@ -179,7 +181,7 @@ class Bem2RdfDrummondListCollectionTypeConverter extends Bem2RdfCollectionTypeCo
 					nextListResource);
 			
 			BemValue value = values.get(index);
-			RDFNode valueNode = manager.convertValue(jenaModel, value, itemTypeInfo, currentListResource, 0, false);
+			RDFNode valueNode = manager.convertValue(jenaModel, value, itemTypeInfo, currentListResource, Bem2RdfConverterManager.MIN_CHILD_NODE_INDEX, false);
 			
 			currentListResource.addProperty(
 					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasContent)),

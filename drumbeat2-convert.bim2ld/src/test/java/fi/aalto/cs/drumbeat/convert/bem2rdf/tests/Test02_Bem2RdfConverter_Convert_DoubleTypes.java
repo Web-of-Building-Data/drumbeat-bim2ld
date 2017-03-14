@@ -55,6 +55,10 @@ public class Test02_Bem2RdfConverter_Convert_DoubleTypes extends Test_Base {
 		context.setBuiltInOntologyNamespaceUriFormat(BUILT_IN_ONTOLOGY_NAMESPACE_URI_FORMAT);
 		context.setOntologyNamespacePrefixFormat(ONTOLOGY_NAMESPACE_PREFIX_FORMAT);
 		context.setOntologyNamespaceUriFormat(ONTOLOGY_NAMESPACE_URI_FORMAT);
+		context.setDatasetNamespacePrefixFormat(DATASET_NAMESPACE_PREFIX);
+		context.setDatasetNamespaceUriFormat(DATASET_NAMESPACE_URI_FORMAT);		
+		context.setDatasetBlankNodeNamespacePrefixFormat(DATASET_BLANK_NODE_NAMESPACE_PREFIX_FORMAT);		
+		context.setDatasetBlankNodeNamespaceUriFormat(DATASET_BLANK_NODE_NAMESPACE_URI_FORMAT);
 	}
 	
 	@Test
@@ -157,9 +161,15 @@ public class Test02_Bem2RdfConverter_Convert_DoubleTypes extends Test_Base {
 		
 		baseTypeForDouble = baseTypeForDouble.replaceAll(OwlVocabulary.XSD.BASE_URI, OwlVocabulary.XSD.BASE_PREFIX + ":");
 
+		Resource parentResource = jenaModel.createResource(DATASET_BLANK_NODE_NAMESPACE_URI_FORMAT + "Fake_parent_resource");		
+		
+		int childCount = Bem2RdfConverterManager.MIN_CHILD_NODE_INDEX;
+
 		double[] values = new double[]{0.0, 0.005456287731e-3};
 		for (double doubleValue : values) {
-			RDFNode doubleNode = converter.convertSimpleValue(jenaModel, new BemPrimitiveValue(doubleValue, BemValueKindEnum.REAL), bemSchema.REAL);			
+			
+			RDFNode doubleNode = converter.convertValue(jenaModel, new BemPrimitiveValue(doubleValue, BemValueKindEnum.REAL), bemSchema.REAL, parentResource, childCount++, false);
+			
 			assertTrue(doubleNode.isResource());
 			StmtIterator properties = doubleNode.asResource().listProperties();
 			while (properties.hasNext()) {

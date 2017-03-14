@@ -129,7 +129,7 @@ class Bem2RdfPrimitiveTypeConverter {
 	}
 	
 	
-	public Resource convertPrimitiveValue(Model jenaModel, Object primitiveValue, BemTypeInfo typeInfo, Resource parentResource, long childNodeCount) {
+	public Resource convertPrimitiveValue(Model jenaModel, Object primitiveValue, BemTypeInfo typeInfo, Resource parentResource, int childNodeCount) {
 		
 		assert(typeInfo instanceof BemPrimitiveTypeInfo || typeInfo instanceof BemDefinedTypeInfo);
 		
@@ -138,6 +138,7 @@ class Bem2RdfPrimitiveTypeConverter {
 
 		Resource resource;
 		if (manager.nameAllBlankNodes) {
+			assert(parentResource != null);
 			String rawNodeName = manager.uriBuilder.buildDatasetBlankNodeUri(String.format("%s_%s", parentResource.getLocalName(), childNodeCount));
 			resource = jenaModel.createResource(rawNodeName);
 		} else {
