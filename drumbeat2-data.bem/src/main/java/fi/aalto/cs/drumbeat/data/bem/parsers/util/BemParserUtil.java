@@ -134,6 +134,7 @@ public class BemParserUtil {
 		for (BemDatasetParser datasetParser : datasetParsers) {
 			try {
 				BemDataset dataset = datasetParser.parse(input, fileExtension, checkFileType);
+				datasetParser.process(dataset);				
 				logger.info(String.format("Parsing dataset '%s' has been completed successfully", filePath));
 				return dataset;
 			} catch (BemUnsupportedDataTypeException e) {				

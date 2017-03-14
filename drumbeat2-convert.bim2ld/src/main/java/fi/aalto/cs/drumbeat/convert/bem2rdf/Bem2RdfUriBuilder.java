@@ -10,6 +10,7 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.XSD;
 
+import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.convert.bem2rdf.Bem2RdfConversionContext;
 import fi.aalto.cs.drumbeat.convert.bem2rdf.Bem2RdfConverterConfigurationException;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemDataset;
@@ -64,17 +65,17 @@ public class Bem2RdfUriBuilder {
 			variableMap.put(TEXT_FORMAT_VARIABLE_DATASET_LANGUAGE, datasetLanguage);			
 		}
 		
-		uriBuilder.setBuiltInOntologyNamespacePrefix(getSubtitutedString(context.getBuiltInOntologyNamespacePrefixFormat(), variableMap));
-		uriBuilder.setBuiltInOntologyNamespaceUri(getSubtitutedString(context.getBuiltInOntologyNamespaceUriFormat(), variableMap));
+		uriBuilder.setBuiltInOntologyNamespacePrefix(getNullableSubtitutedString(context.getBuiltInOntologyNamespacePrefixFormat(), variableMap));
+		uriBuilder.setBuiltInOntologyNamespaceUri(getNullableSubtitutedString(context.getBuiltInOntologyNamespaceUriFormat(), variableMap));
 		
-		uriBuilder.setOntologyNamespacePrefix(getSubtitutedString(context.getOntologyNamespacePrefixFormat(), variableMap));
-		uriBuilder.setOntologyNamespaceUri(getSubtitutedString(context.getOntologyNamespaceUriFormat(), variableMap));
+		uriBuilder.setOntologyNamespacePrefix(getNullableSubtitutedString(context.getOntologyNamespacePrefixFormat(), variableMap));
+		uriBuilder.setOntologyNamespaceUri(getNullableSubtitutedString(context.getOntologyNamespaceUriFormat(), variableMap));
 		
-		uriBuilder.setDatasetNamespacePrefix(getSubtitutedString(context.getDatasetNamespacePrefixFormat(), variableMap));
-		uriBuilder.setDatasetNamespaceUri(getSubtitutedString(context.getDatasetNamespaceUriFormat(), variableMap));
+		uriBuilder.setDatasetNamespacePrefix(getNullableSubtitutedString(context.getDatasetNamespacePrefixFormat(), variableMap));
+		uriBuilder.setDatasetNamespaceUri(getNullableSubtitutedString(context.getDatasetNamespaceUriFormat(), variableMap));
 		
-		uriBuilder.setDatasetBlankNodeNamespacePrefix(getSubtitutedString(context.getDatasetBlankNodeNamespacePrefixFormat(), variableMap));
-		uriBuilder.setDatasetBlankNodeNamespaceUri(getSubtitutedString(context.getDatasetBlankNodeNamespaceUriFormat(), variableMap));
+		uriBuilder.setDatasetBlankNodeNamespacePrefix(getNullableSubtitutedString(context.getDatasetBlankNodeNamespacePrefixFormat(), variableMap));
+		uriBuilder.setDatasetBlankNodeNamespaceUri(getNullableSubtitutedString(context.getDatasetBlankNodeNamespaceUriFormat(), variableMap));
 
 		return uriBuilder;		
 		
@@ -89,15 +90,11 @@ public class Bem2RdfUriBuilder {
 		return createUriBuilder(context, bemDataset.getSchema().getName(), bemDataset.getSchema().getLanguage(), bemDataset.getName(), bemDataset.getLanguage());
 	}
 	
-	private static String getSubtitutedString(String format, Map<String, String> variableMap) throws Bem2RdfConverterConfigurationException {
-		if (format != null) {
-			try {
-				return StrSubstitutor.replace(format, variableMap);		
-			} catch (Exception e) {
-				throw new Bem2RdfConverterConfigurationException("Invalid namespace prefix or URI format: " + format, e);
-			}
-		} else {
-			return null;
+	private static String getNullableSubtitutedString(String format, Map<String, String> variableMap) throws Bem2RdfConverterConfigurationException {
+		try {
+			return StringUtils.substituteVariables(format, variableMap);		
+		} catch (Exception e) {
+			throw new Bem2RdfConverterConfigurationException("Invalid namespace prefix or URI format: " + format, e);
 		}
 	}
 	

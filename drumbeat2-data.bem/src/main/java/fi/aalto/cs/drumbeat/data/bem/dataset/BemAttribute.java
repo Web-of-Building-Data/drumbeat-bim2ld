@@ -12,7 +12,7 @@ import fi.aalto.cs.drumbeat.data.bem.schema.BemAttributeInfo;
  * @author Nam Vu
  *
  */
-@Deprecated
+@Deprecated 
 public class BemAttribute implements Comparable<BemAttribute> { 
 	
 	private final BemAttributeInfo attributeInfo;

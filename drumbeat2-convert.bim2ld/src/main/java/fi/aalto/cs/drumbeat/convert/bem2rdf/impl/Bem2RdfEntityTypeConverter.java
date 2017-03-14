@@ -265,7 +265,7 @@ class Bem2RdfEntityTypeConverter {
 		Resource entityResource;
 		
 		if (entity.hasName()) {
-			String localName = String.format(Bem2RdfVocabulary.Dataset.GUID_NODE_ENTITY_URI_FORMAT, entity.getName()); 
+			String localName = String.format(Bem2RdfVocabulary.Dataset.NAMED_NODE_ENTITY_URI_FORMAT, entity.getName()); 
 			entityResource = jenaModel.createResource(manager.uriBuilder.buildDatasetUri(localName));
 		} else {
 			String localName = String.format(Bem2RdfVocabulary.Dataset.BLANK_NODE_ENTITY_URI_FORMAT, entity.getLocalId());

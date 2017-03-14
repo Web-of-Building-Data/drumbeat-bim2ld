@@ -43,6 +43,10 @@ public class BemAttributeMap {
 	public void add(BemAttributeInfo attributeInfo, BemValue value) {
 		map.put(attributeInfo, value);
 	}
+	
+	public void remove(BemAttributeInfo attributeInfo, BemValue value) {
+		map.remove(attributeInfo, value);
+	}
 
 	public List<BemValue> get(BemAttributeInfo attributeInfo) {
 		return map.get(attributeInfo);

@@ -74,6 +74,9 @@ public class IfcDatasetParser_Test {
 		assertEquals(BemPrimitiveValue.class, guidValue.getClass());
 		assertEquals("0YvctVUKr0kugbFTf53O9L", ((BemPrimitiveValue)guidValue).getValue());
 		
+		assertTrue(projectEntity.hasName());
+		assertEquals("GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255", projectEntity.getName());
+
 		List<BemValue> representationContextAttributes = projectEntity.getAttributeMap().getAll("RepresentationContexts");
 		assertNotNull(representationContextAttributes);
 		assertEquals(1, representationContextAttributes.size());

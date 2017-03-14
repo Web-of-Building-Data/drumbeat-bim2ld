@@ -1,5 +1,7 @@
 package fi.aalto.cs.drumbeat.data.bem.dataset;
 
+import java.util.Map.Entry;
+
 import org.apache.commons.lang3.NotImplementedException;
 
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
@@ -19,9 +21,8 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 	private BemEntity parent;
 //	private boolean isSharedBlankNode;
 //	private boolean isLiteralValueContainer;
-//	private BemEntity sameAsEntity;
+	private BemEntity sameAsEntity;
 	private String debugMessage;
-	private boolean isDuplicated;
 	
 	public BemEntity(String localId) {
 		this.localId = localId;
@@ -233,32 +234,31 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 //		this.isLiteralValueContainer = isLiteralValueContainer;
 //	}
 	
-//	/**
-//	 * @return the isDuplicated
-//	 */
-//	public boolean isDuplicated() {
-//		return sameAsEntity != null;
-//	}
-//	
-//	public void setSameAs(BemEntity other) {
-//		throw new NotImplementedException("");
-//		
-////		this.sameAsEntity = other;
-////		
-////		for (BemAttribute incomingLink : incomingLinks) {
-////			List<BemEntity> destinations = incomingLink.getDestinations();
-////			int index = destinations.indexOf(this);
-////			assert(index >= 0) : "Expected: index >= 0";
-////			destinations.remove(index);
-////			destinations.add(index, other);
-////			other.addIncomingLink(incomingLink);
-////		}
-//		
-//	}
-//	
-//	public BemEntity getSameAsEntity() {
-//		return sameAsEntity;
-//	}
+	/**
+	 * @return the isDuplicated
+	 */
+	public boolean isDuplicated() {
+		return sameAsEntity != null;
+	}
+	
+	public void setSameAs(BemEntity other) {
+		this.sameAsEntity = other;
+		
+		for (Entry<BemAttributeInfo, BemValue> entry : incomingAttributeMap.entries()) {
+			BemAttributeInfo linkAttributeInfo = entry.getKey();
+			BemEntity linkSourceEntity = (BemEntity)entry.getValue();
+			
+			linkSourceEntity.getAttributeMap().add(linkAttributeInfo, other);
+			linkSourceEntity.getAttributeMap().remove(linkAttributeInfo, this);
+			
+			other.getIncomingAttributeMap().add(linkAttributeInfo, linkSourceEntity);
+		}
+		
+	}
+	
+	public BemEntity getSameAsEntity() {
+		return sameAsEntity;
+	}
 	
 	public void appendDebugMessage(String s) {
 		if (debugMessage != null) {
@@ -352,20 +352,6 @@ public class BemEntity extends BemComplexValue implements Comparable<BemEntity> 
 	@Override
 	public int hashCode() {
 		return localId.hashCode() ^ typeInfo.hashCode();
-	}
-
-	/**
-	 * @return the isDuplicated
-	 */
-	public boolean isDuplicated() {
-		return isDuplicated;
-	}
-
-	/**
-	 * @param isDuplicated the isDuplicated to set
-	 */
-	public void setDuplicated(boolean isDuplicated) {
-		this.isDuplicated = isDuplicated;
 	}
 
 //	@Override

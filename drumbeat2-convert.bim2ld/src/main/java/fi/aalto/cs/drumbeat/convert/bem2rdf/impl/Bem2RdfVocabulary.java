@@ -63,7 +63,7 @@ public class Bem2RdfVocabulary {
 	
 	public static class Dataset {
 		
-		public static final String GUID_NODE_ENTITY_URI_FORMAT = "GUID_%s";
+		public static final String NAMED_NODE_ENTITY_URI_FORMAT = "%s";
 		public static final String BLANK_NODE_ENTITY_URI_FORMAT = "BLANK_%s";
 		
 	}
