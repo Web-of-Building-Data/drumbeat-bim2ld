@@ -30,7 +30,7 @@ public class Test09_Bem2RdfSchemaExporter_Exporting_IfcSchema_IFC4 extends Test_
 	
 	@Before
 	public void setUp() throws Exception {		
-		bemSchema = BemSchemaPool.getSchema("IFC4");
+		bemSchema = BemSchemaPool.getSchema("IFC4_ADD1");
 		assertNotNull(bemSchema);
 		
 		jenaModel = ModelFactory.createDefaultModel();
