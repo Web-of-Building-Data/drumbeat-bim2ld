@@ -1,3 +1,4 @@
+@prefix ex:    <http://example.org/> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix owl:   <http://www.w3.org/2002/07/owl#> .
 @prefix EXPRESS: <http://drumbeat.cs.hut.fi/owl/EXPRESS#> .
@@ -9,23 +10,20 @@
 
 EXPRESS:NUMBER  a  owl:Class .
 
-<http://example.org/uri2>
-        a                               <http://example.org/uri1> ;
-        <http://example.org/property1>  model_b:uri2_1 , model_b:uri2_0 .
+ex:uri2  a            ex:uri1 ;
+        ex:property1  model_b:uri2_1 , model_b:uri2_0 .
 
 model_b:uri2_1  a        EXPRESS:REAL ;
         EXPRESS:hasReal  "5.456287731E-6"^^owl:real .
 
-<http://example.org/property1>
-        a       owl:ObjectProperty .
+ex:property1  a  owl:ObjectProperty .
 
 EXPRESS:REAL  a  owl:Class .
 
 EXPRESS:hasNumber  a        owl:DatatypeProperty ;
         rdfs:subPropertyOf  EXPRESS:hasValue .
 
-<http://example.org/uri1>
-        a       owl:Class .
+ex:uri1  a      owl:Class .
 
 model_b:uri2_0  a        EXPRESS:REAL ;
         EXPRESS:hasReal  "0.0"^^owl:real .

@@ -19,6 +19,7 @@ public class Bem2RdfVocabulary {
 		public static final String Select = "Select";		
 		public static final String Set = "Set";		
 		public static final String Slot = "Slot";
+		public static final String SpecialValue = "SpecialValue";
 
 		public static final String endIndex = "endIndex";
 		public static final String index = "index";

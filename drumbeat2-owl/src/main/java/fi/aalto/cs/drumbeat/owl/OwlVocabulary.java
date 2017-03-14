@@ -6,11 +6,14 @@ public class OwlVocabulary {
 
 	public static final Model DEFAULT_MODEL = ModelFactory.createDefaultModel();	
 	
-	public static class DumpData {	
+	public static class DumpData {
 		
-		public final static Resource SAMPLE_URI_1 = DEFAULT_MODEL.createResource("http://example.org/uri1");
-		public final static Resource SAMPLE_URI_2 = DEFAULT_MODEL.createResource("http://example.org/uri2");
-		public final static Resource SAMPLE_URI_3 = DEFAULT_MODEL.createResource("http://example.org/uri3");
+		public final static String SAMPLE_NAMESPACE_PREFIX = "ex";
+		public final static String SAMPLE_NAMESPACE_URI = "http://example.org/";
+		
+		public final static Resource SAMPLE_URI_1 = DEFAULT_MODEL.createResource(SAMPLE_NAMESPACE_URI + "uri1");
+		public final static Resource SAMPLE_URI_2 = DEFAULT_MODEL.createResource(SAMPLE_NAMESPACE_URI + "uri2");
+		public final static Resource SAMPLE_URI_3 = DEFAULT_MODEL.createResource(SAMPLE_NAMESPACE_URI + "uri3");
 		
 		public final static RDFList SAMPLE_URI_LIST = DEFAULT_MODEL.createList(new RDFNode[]{SAMPLE_URI_1, SAMPLE_URI_2, SAMPLE_URI_3});
 		
@@ -19,9 +22,9 @@ public class OwlVocabulary {
 		public final static RDFNode SAMPLE_LITERAL_3 = DEFAULT_MODEL.createLiteral("s3");
 		public final static RDFNode SAMPLE_LITERAL_LIST = DEFAULT_MODEL.createList(new RDFNode[]{SAMPLE_LITERAL_1, SAMPLE_LITERAL_2, SAMPLE_LITERAL_3});
 		
-		public final static Property SAMPLE_PROPERTY_1 = DEFAULT_MODEL.createProperty("http://example.org/property1");
-		public final static Property SAMPLE_PROPERTY_2 = DEFAULT_MODEL.createProperty("http://example.org/property2");
-		public final static Property SAMPLE_PROPERTY_3 = DEFAULT_MODEL.createProperty("http://example.org/property3");
+		public final static Property SAMPLE_PROPERTY_1 = DEFAULT_MODEL.createProperty(SAMPLE_NAMESPACE_URI + "property1");
+		public final static Property SAMPLE_PROPERTY_2 = DEFAULT_MODEL.createProperty(SAMPLE_NAMESPACE_URI + "property2");
+		public final static Property SAMPLE_PROPERTY_3 = DEFAULT_MODEL.createProperty(SAMPLE_NAMESPACE_URI + "property3");
 
 	}
 	

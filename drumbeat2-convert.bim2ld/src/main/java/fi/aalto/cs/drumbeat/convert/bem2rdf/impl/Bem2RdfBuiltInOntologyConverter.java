@@ -4,6 +4,8 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
 
+import fi.aalto.cs.drumbeat.data.bem.dataset.BemSpecialValue;
+
 class Bem2RdfBuiltInOntologyConverter {
 
 	private final Bem2RdfConverterManager manager;
@@ -22,13 +24,16 @@ class Bem2RdfBuiltInOntologyConverter {
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Enum)),
 				RDF.type,
 				OWL.Class);
+		
 		jenaModel.add(
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Defined)),
 				RDF.type,
 				OWL.Class);
+		
 		jenaModel.add(jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Select)),
 				RDF.type,
 				OWL.Class);
+		
 		jenaModel.add(jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Entity)),
 				RDF.type,
 				OWL.Class);
@@ -44,25 +49,12 @@ class Bem2RdfBuiltInOntologyConverter {
 					RDF.type,
 					OWL.FunctionalProperty);
 		}
-
-//		jenaModel.add(
-//				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.EntityProperty)),
-//				RDF.type,
-//				OWL.Class);
-//		jenaModel.add(
-//				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.EntityProperty)),
-//				RDFS.subClassOf,
-//				OWL.ObjectProperty);
 		
-		//
-		// // jenaModel.add(Ifc2RdfVocabulary.EXPRESS.propertyIndex, RDF.type,
-		// // OWL.DatatypeProperty);
-		// // jenaModel.add(Ifc2RdfVocabulary.EXPRESS.propertyIndex,
-		// RDFS.domain,
-		// // Ifc2RdfVocabulary.EXPRESS.EntityProperty);
-		// // jenaModel.add(Ifc2RdfVocabulary.EXPRESS.propertyIndex, RDFS.range,
-		// // XSD.integer);
-		//
+		
+		jenaModel.add(jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.SpecialValue)),
+				RDF.type,
+				OWL.Class);
+		
 
 		// jenaModel.add(Ifc2RdfVocabulary.EXPRESS.hasBinary, RDF.type,
 		// OWL.DatatypeProperty);

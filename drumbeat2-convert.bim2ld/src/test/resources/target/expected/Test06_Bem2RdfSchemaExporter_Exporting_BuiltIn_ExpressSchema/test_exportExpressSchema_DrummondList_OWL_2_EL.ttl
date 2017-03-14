@@ -22,17 +22,19 @@ EXPRESS:Enum  a  owl:Class .
 
 EXPRESS:Entity  a  owl:Class .
 
+EXPRESS:STRING  a  owl:Class .
+
 EXPRESS:hasNext  a   owl:ObjectProperty ;
         rdfs:domain  EXPRESS:List ;
         rdfs:range   EXPRESS:List .
-
-EXPRESS:STRING  a  owl:Class .
 
 EXPRESS:NUMBER  a  owl:Class .
 
 EXPRESS:hasValue  a  owl:DatatypeProperty .
 
 EXPRESS:BINARY  a  owl:Class .
+
+EXPRESS:SpecialValue  a  owl:Class .
 
 EXPRESS:hasContent  a  owl:ObjectProperty ;
         rdfs:domain  EXPRESS:List .

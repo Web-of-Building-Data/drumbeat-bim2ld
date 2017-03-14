@@ -26,4 +26,9 @@ public class BemSpecialValue extends BemValue {
 		return name;
 	}
 	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
 }

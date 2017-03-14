@@ -39,6 +39,8 @@ EXPRESS:next  a  owl:ObjectProperty .
 
 EXPRESS:BINARY  a  owl:Class .
 
+EXPRESS:SpecialValue  a  owl:Class .
+
 EXPRESS:REAL  a  owl:Class .
 
 EXPRESS:Defined  a  owl:Class .

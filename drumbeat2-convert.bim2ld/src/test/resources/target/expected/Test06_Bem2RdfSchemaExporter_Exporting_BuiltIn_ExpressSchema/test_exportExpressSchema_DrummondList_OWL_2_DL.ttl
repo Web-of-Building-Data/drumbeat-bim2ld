@@ -36,6 +36,8 @@ EXPRESS:hasInteger  a       owl:FunctionalDataProperty , owl:DatatypeProperty ;
 
 EXPRESS:List  a  owl:Class .
 
+EXPRESS:SpecialValue  a  owl:Class .
+
 EXPRESS:hasBinary  a        owl:FunctionalDataProperty , owl:DatatypeProperty ;
         rdfs:subPropertyOf  EXPRESS:hasValue .
 

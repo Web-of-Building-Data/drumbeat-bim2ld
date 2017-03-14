@@ -1,3 +1,4 @@
+@prefix ex:    <http://example.org/> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix owl:   <http://www.w3.org/2002/07/owl#> .
 @prefix EXPRESS: <http://drumbeat.cs.hut.fi/owl/EXPRESS#> .
@@ -7,18 +8,15 @@
 @prefix TestSchema: <http://drumbeat.cs.hut.fi/owl/TestSchema#> .
 @prefix model_b: <http://architectural.drb.cs.hut.fi/collection1/model1/B/> .
 
-EXPRESS:LOGICAL  a           owl:Class ;
-        owl:equivalentClass  [ owl:oneOf  ( "FALSE"^^xsd:boolean "TRUE"^^xsd:boolean "UNKNOWN"^^xsd:boolean ) ] .
+ex:uri2  a            ex:uri1 ;
+        ex:property1  "UNKNOWN"^^xsd:boolean , "FALSE"^^xsd:boolean , "TRUE"^^xsd:boolean .
 
-<http://example.org/uri2>
-        a                               <http://example.org/uri1> ;
-        <http://example.org/property1>  "UNKNOWN"^^xsd:boolean , "FALSE"^^xsd:boolean , "TRUE"^^xsd:boolean .
+ex:property1  a  owl:DatatypeProperty .
 
-<http://example.org/property1>
-        a       owl:DatatypeProperty .
-
-<http://example.org/uri1>
-        a       owl:Class .
+ex:uri1  a      owl:Class .
 
 EXPRESS:BOOLEAN  a           owl:Class ;
         owl:equivalentClass  [ owl:oneOf  ( "FALSE"^^xsd:boolean "TRUE"^^xsd:boolean ) ] .
+
+EXPRESS:LOGICAL  a           owl:Class ;
+        owl:equivalentClass  [ owl:oneOf  ( "FALSE"^^xsd:boolean "TRUE"^^xsd:boolean "UNKNOWN"^^xsd:boolean ) ] .

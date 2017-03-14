@@ -16,7 +16,7 @@ import fi.aalto.cs.drumbeat.data.bem.schema.BemLogicalEnum;
 import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
 import fi.aalto.cs.drumbeat.owl.OwlProfileEnum;
 import fi.aalto.cs.drumbeat.owl.OwlProfileList;
-import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
+import fi.aalto.cs.drumbeat.owl.OwlVocabulary.DumpData;
 import fi.aalto.cs.drumbeat.owl.OwlVocabulary.XSD;
 
 import org.apache.jena.rdf.model.Model;
@@ -150,13 +150,15 @@ public class Test01_Bem2RdfConverter_Convert_LogicalTypes extends Test_Base {
 	
 	private void exportLogicalValues(Bem2RdfConverterManager converter, String convertLogicalTo) {
 		
-		Resource sampleClassResource = OwlVocabulary.DumpData.SAMPLE_URI_1.inModel(jenaModel);		
+		jenaModel.setNsPrefix(DumpData.SAMPLE_NAMESPACE_PREFIX, DumpData.SAMPLE_NAMESPACE_URI);
+		
+		Resource sampleClassResource = DumpData.SAMPLE_URI_1.inModel(jenaModel);		
 		sampleClassResource.addProperty(RDF.type, OWL.Class);
 
-		Resource sampleResource = OwlVocabulary.DumpData.SAMPLE_URI_2.inModel(jenaModel);		
+		Resource sampleResource = DumpData.SAMPLE_URI_2.inModel(jenaModel);		
 		sampleResource.addProperty(RDF.type, sampleClassResource);
 		
-		Property sampleProperty = OwlVocabulary.DumpData.SAMPLE_PROPERTY_1.inModel(jenaModel);
+		Property sampleProperty = DumpData.SAMPLE_PROPERTY_1.inModel(jenaModel);
 		
 		int childCount = 0;
 		

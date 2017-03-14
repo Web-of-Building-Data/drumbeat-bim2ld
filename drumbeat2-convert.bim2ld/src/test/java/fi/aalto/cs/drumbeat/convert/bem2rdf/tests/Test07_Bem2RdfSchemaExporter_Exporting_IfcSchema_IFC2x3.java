@@ -3,12 +3,9 @@ package fi.aalto.cs.drumbeat.convert.bem2rdf.tests;
 import static fi.aalto.cs.drumbeat.convert.bem2rdf.Bem2RdfConversionContextParams.*;
 import static org.junit.Assert.*;
 
-import java.io.StringWriter;
-import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.semanticweb.owlapi.profiles.violations.UseOfUndeclaredDataProperty;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 

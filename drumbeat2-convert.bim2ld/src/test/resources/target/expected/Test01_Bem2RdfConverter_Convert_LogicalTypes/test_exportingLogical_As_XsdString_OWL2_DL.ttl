@@ -1,3 +1,4 @@
+@prefix ex:    <http://example.org/> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix owl:   <http://www.w3.org/2002/07/owl#> .
 @prefix EXPRESS: <http://drumbeat.cs.hut.fi/owl/EXPRESS#> .
@@ -9,14 +10,11 @@
 
 EXPRESS:LOGICAL  a  owl:Class .
 
-<http://example.org/uri2>
-        a                               <http://example.org/uri1> ;
-        <http://example.org/property1>  "UNKNOWN" , "FALSE" , "TRUE" .
+ex:uri2  a            ex:uri1 ;
+        ex:property1  "UNKNOWN" , "FALSE" , "TRUE" .
 
-<http://example.org/property1>
-        a       owl:DatatypeProperty .
+ex:property1  a  owl:DatatypeProperty .
 
-<http://example.org/uri1>
-        a       owl:Class .
+ex:uri1  a      owl:Class .
 
 EXPRESS:BOOLEAN  a  owl:Class .

@@ -74,6 +74,8 @@ EXPRESS:List  a          owl:Class ;
 
 EXPRESS:TRUE  a  EXPRESS:BOOLEAN , EXPRESS:LOGICAL .
 
+EXPRESS:SpecialValue  a  owl:Class .
+
 EXPRESS:hasBinary  a        owl:FunctionalDataProperty , owl:DatatypeProperty ;
         rdfs:subPropertyOf  EXPRESS:hasValue .
 

@@ -1,3 +1,4 @@
+@prefix ex:    <http://example.org/> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix owl:   <http://www.w3.org/2002/07/owl#> .
 @prefix EXPRESS: <http://drumbeat.cs.hut.fi/owl/EXPRESS#> .
@@ -17,17 +18,15 @@ EXPRESS:NUMBER  a        owl:Class ;
                            owl:onProperty     EXPRESS:hasNumber
                          ] .
 
-<http://example.org/uri2>
-        a                               <http://example.org/uri1> ;
-        <http://example.org/property1>  [ a                EXPRESS:REAL ;
-                                          EXPRESS:hasReal  0.000005456287731
-                                        ] ;
-        <http://example.org/property1>  [ a                EXPRESS:REAL ;
-                                          EXPRESS:hasReal  "0"^^xsd:decimal
-                                        ] .
+ex:uri2  a            ex:uri1 ;
+        ex:property1  [ a                EXPRESS:REAL ;
+                        EXPRESS:hasReal  0.000005456287731
+                      ] ;
+        ex:property1  [ a                EXPRESS:REAL ;
+                        EXPRESS:hasReal  "0"^^xsd:decimal
+                      ] .
 
-<http://example.org/property1>
-        a       owl:ObjectProperty .
+ex:property1  a  owl:ObjectProperty .
 
 EXPRESS:REAL  a          owl:Class ;
         rdfs:subClassOf  [ a                owl:Restriction ;
@@ -42,8 +41,7 @@ EXPRESS:REAL  a          owl:Class ;
 EXPRESS:hasNumber  a        owl:FunctionalDataProperty , owl:DatatypeProperty ;
         rdfs:subPropertyOf  EXPRESS:hasValue .
 
-<http://example.org/uri1>
-        a       owl:Class .
+ex:uri1  a      owl:Class .
 
 EXPRESS:hasReal  a          owl:FunctionalDataProperty , owl:DatatypeProperty ;
         rdfs:subPropertyOf  EXPRESS:hasValue .

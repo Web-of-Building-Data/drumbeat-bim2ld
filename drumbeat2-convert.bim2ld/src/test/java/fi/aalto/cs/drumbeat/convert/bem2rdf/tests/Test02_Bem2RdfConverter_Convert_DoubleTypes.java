@@ -17,6 +17,7 @@ import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
 import fi.aalto.cs.drumbeat.owl.OwlProfileEnum;
 import fi.aalto.cs.drumbeat.owl.OwlProfileList;
 import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
+import fi.aalto.cs.drumbeat.owl.OwlVocabulary.DumpData;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -210,6 +211,7 @@ public class Test02_Bem2RdfConverter_Convert_DoubleTypes extends Test_Base {
 	}
 	
 	private void exportDoubleValues(Bem2RdfConverterManager converter, String convertDoubleTo, Resource realTypeResource) {
+		
 		String baseTypeForDouble = convertDoubleTo;
 		
 		switch (convertDoubleTo) {
@@ -223,13 +225,15 @@ public class Test02_Bem2RdfConverter_Convert_DoubleTypes extends Test_Base {
 		
 		baseTypeForDouble = baseTypeForDouble.replaceAll(OwlVocabulary.XSD.BASE_URI, OwlVocabulary.XSD.BASE_PREFIX + ":");
 
-		Resource sampleClassResource = OwlVocabulary.DumpData.SAMPLE_URI_1.inModel(jenaModel);		
+		jenaModel.setNsPrefix(DumpData.SAMPLE_NAMESPACE_PREFIX, DumpData.SAMPLE_NAMESPACE_URI);
+
+		Resource sampleClassResource = DumpData.SAMPLE_URI_1.inModel(jenaModel);		
 		sampleClassResource.addProperty(RDF.type, OWL.Class);
 
-		Resource sampleResource = OwlVocabulary.DumpData.SAMPLE_URI_2.inModel(jenaModel);		
+		Resource sampleResource = DumpData.SAMPLE_URI_2.inModel(jenaModel);		
 		sampleResource.addProperty(RDF.type, sampleClassResource);
 		
-		Property sampleProperty = OwlVocabulary.DumpData.SAMPLE_PROPERTY_1.inModel(jenaModel);
+		Property sampleProperty = DumpData.SAMPLE_PROPERTY_1.inModel(jenaModel);
 		sampleProperty.addProperty(RDF.type, OWL.ObjectProperty);
 		
 		int childCount = 0;

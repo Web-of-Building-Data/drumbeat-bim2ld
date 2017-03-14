@@ -71,6 +71,8 @@ EXPRESS:hasInteger  a       owl:FunctionalDataProperty , owl:DatatypeProperty ;
 EXPRESS:List  a          owl:Class ;
         rdfs:subClassOf  EXPRESS:Collection .
 
+EXPRESS:SpecialValue  a  owl:Class .
+
 EXPRESS:hasBinary  a        owl:FunctionalDataProperty , owl:DatatypeProperty ;
         rdfs:subPropertyOf  EXPRESS:hasValue .
 
@@ -92,17 +94,13 @@ EXPRESS:hasNumber  a        owl:FunctionalDataProperty , owl:DatatypeProperty ;
         rdfs:subPropertyOf  EXPRESS:hasValue .
 
 EXPRESS:Slot  a          owl:Class ;
-        rdfs:subClassOf  [ a                owl:Restriction ;
-                           owl:cardinality  1 ;
-                           owl:onProperty   EXPRESS:item
-                         ] ;
         rdfs:subClassOf  [ a                   owl:Restriction ;
                            owl:minCardinality  0 ;
                            owl:onProperty      EXPRESS:previous
                          ] ;
         rdfs:subClassOf  [ a                   owl:Restriction ;
                            owl:maxCardinality  1 ;
-                           owl:onProperty      EXPRESS:previous
+                           owl:onProperty      EXPRESS:next
                          ] ;
         rdfs:subClassOf  [ a                  owl:Restriction ;
                            owl:allValuesFrom  EXPRESS:Slot ;
@@ -112,17 +110,21 @@ EXPRESS:Slot  a          owl:Class ;
                            owl:allValuesFrom  EXPRESS:Slot ;
                            owl:onProperty     EXPRESS:previous
                          ] ;
+        rdfs:subClassOf  [ a                  owl:Restriction ;
+                           owl:allValuesFrom  xsd:integer ;
+                           owl:onProperty     EXPRESS:index
+                         ] ;
         rdfs:subClassOf  [ a                   owl:Restriction ;
                            owl:minCardinality  0 ;
                            owl:onProperty      EXPRESS:next
                          ] ;
         rdfs:subClassOf  [ a                   owl:Restriction ;
                            owl:maxCardinality  1 ;
-                           owl:onProperty      EXPRESS:next
+                           owl:onProperty      EXPRESS:previous
                          ] ;
-        rdfs:subClassOf  [ a                  owl:Restriction ;
-                           owl:allValuesFrom  xsd:integer ;
-                           owl:onProperty     EXPRESS:index
+        rdfs:subClassOf  [ a                owl:Restriction ;
+                           owl:cardinality  1 ;
+                           owl:onProperty   EXPRESS:item
                          ] ;
         rdfs:subClassOf  [ a                owl:Restriction ;
                            owl:cardinality  1 ;

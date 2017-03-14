@@ -2,10 +2,13 @@ package fi.aalto.cs.drumbeat.data.bem.schema;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import fi.aalto.cs.drumbeat.data.bem.BemTypeAlreadyExistsException;
 import fi.aalto.cs.drumbeat.data.bem.BemTypeNotFoundException;
+import fi.aalto.cs.drumbeat.data.bem.dataset.BemSpecialValue;
 
 /**
  * A data schema, i.e. a container for data types. 
@@ -20,10 +23,12 @@ public class BemSchema {
 	private BemSchema header;
 	private final Map<String, BemTypeInfo> allTypeInfoDictionary;
 	private final Map<String, BemEntityTypeInfo> entityTypeInfoDictionary;
+	private final Set<BemSpecialValue> specialValues;
 	
 	public BemSchema() {
 		allTypeInfoDictionary = new HashMap<>();
 		entityTypeInfoDictionary = new HashMap<>();
+		specialValues = new HashSet<>();
 	}
 	
 	public BemSchema(String name, String language) {
@@ -117,6 +122,14 @@ public class BemSchema {
 		if (typeInfo instanceof BemEntityTypeInfo) {
 			entityTypeInfoDictionary.put(upperCaseTypeName, (BemEntityTypeInfo)typeInfo);			
 		}
+	}
+	
+	public Set<BemSpecialValue> getSpecialValues() {
+		return specialValues;
+	}
+	
+	public void addSpecialValue(BemSpecialValue value) {
+		specialValues.add(value);
 	}
 	
 	@Override

@@ -6,6 +6,7 @@ import org.apache.jena.rdf.model.Model;
 
 import fi.aalto.cs.drumbeat.convert.bem2rdf.impl.Bem2RdfConverterManager;
 import fi.aalto.cs.drumbeat.data.bem.BemException;
+import fi.aalto.cs.drumbeat.data.bem.dataset.BemSpecialValue;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 
 public class Bem2RdfSchemaExporter {
@@ -46,6 +47,15 @@ public class Bem2RdfSchemaExporter {
 				}
 				converterManager.convertTypeInfo(jenaModel, typeInfo, true);				
 			}
+		}
+		
+		if (exportBuiltInTypes) {
+			
+			for (BemSpecialValue value : schema.getSpecialValues()) {				
+				converterManager.convertValue(jenaModel, value, null, null, 0, false);				
+			}	
+			
+			
 		}
 			
 		return jenaModel;
