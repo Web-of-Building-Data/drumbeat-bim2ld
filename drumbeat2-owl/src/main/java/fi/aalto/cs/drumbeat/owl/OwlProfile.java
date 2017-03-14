@@ -407,5 +407,10 @@ public class OwlProfile implements OwlProfileInfo, Comparable<OwlProfile> {
 	public boolean supportsAnonymousIndividual() {
 		return owlProfileId != OwlProfileEnum.OWL2_EL && owlProfileId != OwlProfileEnum.OWL2_QL;
 	}
+	
+	@Override
+	public String toString() {
+		return owlProfileId.toString();
+	}
 
 }

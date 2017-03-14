@@ -257,11 +257,11 @@ public class RdfComparatorPool {
 		public int compare(Literal o1, Literal o2) {
 			
 			int result;
-			if ((result = o1.getDatatypeURI().compareTo(o2.getDatatypeURI())) != 0) {
+			if ((result = o1.getLexicalForm().toString().compareTo(o2.getLexicalForm().toString())) != 0) {
 				return result;
 			}
 			
-			return o1.getValue().toString().compareTo(o2.getValue().toString());
+			return o1.getDatatypeURI().compareTo(o2.getDatatypeURI());
 		}
 		
 	}

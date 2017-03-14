@@ -129,7 +129,8 @@ public class RdfChecksumCalculator {
 	private void updateDigest(MessageDigest digest, RDFNode node, Map<Resource, ByteArray> checksumCache) throws RdfCircularChecksumException {
 		if (node.isLiteral()) {
 			digest.update(RDF_NODE_TYPE_LITERAL);
-			digest.update(StringUtils.getBytesUtf8(node.toString()));			
+			digest.update(StringUtils.getBytesUtf8(node.asLiteral().getLexicalForm()));			
+			digest.update(StringUtils.getBytesUtf8(node.asLiteral().getDatatypeURI()));			
 		} else {
 			assert(node.isResource());
 			Resource resource = node.asResource();

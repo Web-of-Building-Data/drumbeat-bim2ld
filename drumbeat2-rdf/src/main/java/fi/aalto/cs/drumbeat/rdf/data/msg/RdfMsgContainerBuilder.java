@@ -43,7 +43,7 @@ public class RdfMsgContainerBuilder {
 		RdfMsgContainerBuilder builder = new RdfMsgContainerBuilder(model, comparatorPool);
 		return builder.internalBuild();		
 	}
-
+	
 	private RdfMsgContainer internalBuild() throws RdfChecksumException {		
 
 		ResIterator subjectsResourcesIterator = model.listSubjects();
