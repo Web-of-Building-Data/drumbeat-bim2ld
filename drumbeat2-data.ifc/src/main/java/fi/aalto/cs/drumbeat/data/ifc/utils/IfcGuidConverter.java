@@ -1,3 +1,4 @@
+package fi.aalto.cs.drumbeat.data.ifc.utils;
 //package fi.aalto.cs.drumbeat.data.ifc.utils;
 //
 //import org.apache.commons.codec.binary.Base64;
