@@ -10,7 +10,7 @@ import fi.aalto.cs.drumbeat.data.bem.dataset.*;
 import fi.aalto.cs.drumbeat.data.bem.processors.*;
 import fi.aalto.cs.drumbeat.data.bem.schema.*;
 import fi.aalto.cs.drumbeat.data.ifc.IfcVocabulary;
-import fi.aalto.cs.drumbeat.data.ifc.utils.GuidCompressor;
+import fi.aalto.cs.drumbeat.data.ifc.utils.IfcGuidCompressor;
 
 
 /**
@@ -64,7 +64,7 @@ public class SetNameByGlobalId extends BemDatasetProcessor {
 			BemPrimitiveValue guidValue = (BemPrimitiveValue)entity.getAttributeMap().getAny(globalIdAttributeInfo);
 			
 			String shortGuid = (String)guidValue.getValue();
-			String longGuid = GuidCompressor.uncompressGuidString(shortGuid);
+			String longGuid = IfcGuidCompressor.uncompressGuidString(shortGuid);
 			
 			HashMap<String, String> variableMap = new HashMap<>();
 			variableMap.put(VARIABLE_NAME_ENTITY_SHORT_GUID, shortGuid);

@@ -27,7 +27,7 @@ import java.util.UUID;
  * @version 1.0 - 24.07.2009
  *
  */
-public class GuidCompressor {
+public class IfcGuidCompressor {
 
 	static char[] cConversionTable = new char[]{'0','1','2','3','4','5','6','7','8','9',
 												'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',

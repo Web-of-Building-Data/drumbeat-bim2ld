@@ -57,6 +57,6 @@ public class Guid implements Serializable {
 	
 	@Override
 	public String toString() {
-		return GuidCompressor.getUncompressedStringFromGuid(this);
+		return IfcGuidCompressor.getUncompressedStringFromGuid(this);
 	}
 }
