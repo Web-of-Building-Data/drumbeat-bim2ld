@@ -116,13 +116,13 @@ public class Test_Base {
 		writeActualModel &= ALL_TESTS_WRITE_ACTUAL_DATASETS;
 		compareWithExpectedModel &= ALL_TESTS_COMPARE_WITH_EXPECTED_DATASETS;
 
-		String actualModelFilePath = getActualTestFilePath(callingMethodCallShift + 1, "txt");
-		String expectedModelFilePath = getExpectedTestFilePath(callingMethodCallShift + 1, "txt");
+		String actualModelFilePath = getActualTestFilePath(callingMethodCallShift + 1, "ttl");
+		String expectedModelFilePath = getExpectedTestFilePath(callingMethodCallShift + 1, "ttl");
 		
 		byte[] buffer = null;
 		
 		if (writeActualModel) {
-			System.out.println("Writing Jena model: " + actualModelFilePath);
+			System.out.printf("Writing Jena model: %s (%,d triples)%n", actualModelFilePath, actualModel.size());
 			buffer = TestHelper.writeJenaModel(actualModel, actualModelFilePath, createBuffer);
 		}
 		
@@ -141,13 +141,13 @@ public class Test_Base {
 						expectedModel,
 						rdfAsserter.getLastExpectedMsgContainer(),
 						comparatorPool,
-						expectedModelFilePath.replaceAll("txt", "msg"));
+						expectedModelFilePath.replaceAll("ttl", "ttl.msg"));
 				
 				TestHelper.printRdfMsgContainer(
 						actualModel,
 						rdfAsserter.getLastActualMsgContainer(),
 						comparatorPool,
-						actualModelFilePath.replaceAll("txt", "msg"));
+						actualModelFilePath.replaceAll("ttl", "ttl.msg"));
 				
 			}
 			

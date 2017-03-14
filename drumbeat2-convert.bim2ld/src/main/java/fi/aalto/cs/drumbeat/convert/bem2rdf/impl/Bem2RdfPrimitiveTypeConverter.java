@@ -136,14 +136,7 @@ class Bem2RdfPrimitiveTypeConverter {
 		RDFNode valueNode = convertLiteral(jenaModel, primitiveValue, typeInfo.getValueKind());		
 		Property hasXXXProperty = manager.getProperty_hasXXX(jenaModel, typeInfo.getValueKind());
 
-		Resource resource;
-		if (manager.nameAllBlankNodes) {
-			assert(parentResource != null);
-			String rawNodeName = manager.uriBuilder.buildDatasetBlankNodeUri(String.format("%s_%s", parentResource.getLocalName(), childNodeCount));
-			resource = jenaModel.createResource(rawNodeName);
-		} else {
-			resource = jenaModel.createResource();
-		}
+		Resource resource = manager.createLocalResource(jenaModel, parentResource, childNodeCount);
 
 		resource.addProperty(RDF.type, jenaModel.createResource(manager.uriBuilder.buildTypeUri(typeInfo)));
 		

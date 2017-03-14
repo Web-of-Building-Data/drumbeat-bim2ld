@@ -26,15 +26,15 @@ import org.apache.jena.vocabulary.*;
 
 public class Bem2RdfConverterManager {
 	
-	public static final int MIN_CHILD_NODE_INDEX = 1;
 	/**
 	 * Package variables
 	 */
+	final private boolean nameAllBlankNodes;
+
 	final Bem2RdfConversionContext context;
 	final Bem2RdfUriBuilder uriBuilder;
 	final Bem2RdfConversionContextParams contextParams;
 	final OwlProfileList targetOwlProfileList;
-	final boolean nameAllBlankNodes;
 	
 	final Bem2RdfBuiltInOntologyConverter builtInOntologyConverter;
 	final Bem2RdfCollectionTypeConverter collectionTypeConverter;
@@ -194,7 +194,25 @@ public class Bem2RdfConverterManager {
 	
 	public Resource convertEntityValue(Model jenaModel, BemEntity entity) {
 		return entityTypeConverter.convertEntityValue(jenaModel, entity, true);
-	}	
+	}
+	
+	
+	
+	public Resource createLocalResource(Model jenaModel, String localName) {
+		if (nameAllBlankNodes) {
+			return jenaModel.createResource(uriBuilder.buildDatasetBlankNodeUri(localName));
+		} else {
+			return jenaModel.createResource(new AnonId(localName));
+		}		
+	}
+	
+	public Resource createLocalResource(Model jenaModel, Resource parentResource, int childNodeCount) {
+		assert(parentResource != null);
+		String localName = String.format("%s_%s",
+				parentResource.isURIResource() ? parentResource.getLocalName() : parentResource.getId(),
+				childNodeCount);
+		return createLocalResource(jenaModel, localName);
+	}
 	
 	/**
 	 * Returns an RDF property with name in format hasXXX, where XXX is the name of the original type (e.g.: hasReal, hasNumber, hasLogical, etc.)  

@@ -116,7 +116,7 @@ public class BemAttributeInfo implements Comparable<BemAttributeInfo>{
 	}
 
 	public boolean equals(BemAttributeInfo o) {
-		return name.equals(o.name);
+		return o != null ? name.equals(o.name) : false;
 	}
 
 	@Override

@@ -148,7 +148,7 @@ public class Test01_Bem2RdfConverter_Convert_LogicalTypes extends Test_Base {
 		
 		Resource parentResource = jenaModel.createResource(DATASET_BLANK_NODE_NAMESPACE_URI_FORMAT + "Fake_parent_resource");		
 		
-		int childCount = Bem2RdfConverterManager.MIN_CHILD_NODE_INDEX;
+		int childCount = 0;
 		
 		for (BemLogicalEnum logicalValue : BemLogicalEnum.values()) {			
 			RDFNode logicalNode = converter.convertValue(jenaModel, new BemLogicalValue(logicalValue), bemSchema.LOGICAL, parentResource, childCount++, false);

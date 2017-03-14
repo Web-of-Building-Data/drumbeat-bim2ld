@@ -97,7 +97,7 @@ public class RdfChecksumCalculator {
 			if (resultChecksum != defaultChecksum) {
 				return resultChecksum;
 			}
-			throw new RdfCircularChecksumException("Circular digest");
+			throw new RdfCircularChecksumException("Circular digest at resource: " + resource);
 		}			
 			
 		checksumCache.put(resource, defaultChecksum);

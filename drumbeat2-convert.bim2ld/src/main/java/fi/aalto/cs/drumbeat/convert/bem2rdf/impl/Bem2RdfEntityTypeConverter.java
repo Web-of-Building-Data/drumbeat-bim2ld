@@ -269,20 +269,17 @@ class Bem2RdfEntityTypeConverter {
 			entityResource = jenaModel.createResource(manager.uriBuilder.buildDatasetUri(localName));
 		} else {
 			String localName = String.format(Bem2RdfVocabulary.Dataset.BLANK_NODE_ENTITY_URI_FORMAT, entity.getLocalId());
-			if (manager.nameAllBlankNodes) {
-				entityResource = jenaModel.createResource(manager.uriBuilder.buildDatasetBlankNodeUri(localName));				
-			} else {
-				entityResource = jenaModel.createResource(new AnonId(localName));				
-			}
+			entityResource = manager.createLocalResource(jenaModel, localName);
 		}
 		
-		assert(!manager.nameAllBlankNodes || entityResource.isURIResource());
-
 		if (includeAttributes) {
 			
 //			System.out.println("Exporting entity: " + entity);
-
-			int childNodeCount = Bem2RdfConverterManager.MIN_CHILD_NODE_INDEX;
+			
+			BemAttributeInfo currentAttributeInfo = null;
+			Property currentAttributeProperty = null;
+			Resource currentAttributeParentResource = null;
+			Integer currentAttributeChildNodeCount = null;
 			
 			BemEntityTypeInfo entityTypeInfo = entity.getTypeInfo();
 			Resource entityTypeResource = convertEntityTypeInfo(jenaModel, entityTypeInfo, false);
@@ -290,16 +287,27 @@ class Bem2RdfEntityTypeConverter {
 			
 			for (Entry<BemAttributeInfo, BemValue> entry : entity.getAttributeMap().entries()) {
 				BemAttributeInfo attributeInfo = entry.getKey();
-				Property attributeProperty = convertEntityTypeAttribute(jenaModel, entityTypeResource, attributeInfo, false);
+				
+				if (currentAttributeInfo == null || !attributeInfo.equals(currentAttributeInfo)) {
+					currentAttributeInfo = attributeInfo;
+					currentAttributeProperty = convertEntityTypeAttribute(jenaModel, entityTypeResource, attributeInfo, false);
+					currentAttributeParentResource = manager.createLocalResource(jenaModel, entityResource, attributeInfo.getAttributeIndex());
+					currentAttributeChildNodeCount = 0;
+				}
 				
 				BemValue attributeValue = entry.getValue();
 
 //				System.out.println("\tExporting property value: " + attributeInfo + " (" + attributeInfo.getValueTypeInfo() + ")");
 				
 				RDFNode attributeNode = manager.convertValue(
-						jenaModel, attributeValue, attributeInfo.getValueTypeInfo(), entityResource, childNodeCount++, false);
+						jenaModel,
+						attributeValue,
+						attributeInfo.getValueTypeInfo(),
+						currentAttributeParentResource,
+						currentAttributeChildNodeCount++,
+						false);
 				
-				entityResource.addProperty(attributeProperty, attributeNode);
+				entityResource.addProperty(currentAttributeProperty, attributeNode);
 			}			
 		}
 

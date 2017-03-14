@@ -317,25 +317,12 @@ class Bem2RdfOloSimilarListCollectionTypeConverter extends Bem2RdfCollectionType
 			throw new IllegalArgumentException("Collection type must be sorted:" + collectionTypeInfo);
 		}
 
-		Resource listResource;
-		if (manager.nameAllBlankNodes) {
-			assert(parentResource != null);
-			String listResourceName = manager.uriBuilder.buildDatasetBlankNodeUri(String.format("%s_%d", parentResource.getLocalName(), childNodeCount));
-			listResource = jenaModel.createResource(listResourceName);			
-		} else {
-			listResource = jenaModel.createResource();
-		}
+		Resource listResource = manager.createLocalResource(jenaModel, parentResource, childNodeCount);
 		
 		BemTypeInfo itemTypeInfo = collectionTypeInfo.getItemTypeInfo();
 		
-		List<RDFNode> nodeList = new ArrayList<>();
-		int count = Bem2RdfConverterManager.MIN_CHILD_NODE_INDEX;
-		for (BemValue value : listValue.getSingleValues()) {
-			nodeList.add(manager.convertValue(jenaModel, value, itemTypeInfo, listResource, count++, false));
-		}
-		
-		int size = nodeList.size();
-		
+		List<? extends BemValue> values = listValue.getSingleValues();
+		int size = values.size();		
 		
 		Resource typeResource = jenaModel.createResource(manager.uriBuilder.buildTypeUri(collectionTypeInfo)); 
 		listResource.addProperty(RDF.type, typeResource);
@@ -344,23 +331,20 @@ class Bem2RdfOloSimilarListCollectionTypeConverter extends Bem2RdfCollectionType
 				manager.primitiveTypeConverter.convertLiteral(jenaModel, size, BemValueKindEnum.INTEGER));
 //		listResource.addProperty(Bem2RdfVocabulary.BuiltInOntology.itemType, jenaModel.createResource(manager.uriBuilder.buildOntologyUri(itemTypeInfo)));
 		
-		for (int i = 0; i < nodeList.size(); ++i) {
-			Resource slotResource;
-			if (manager.nameAllBlankNodes) {
-				String slotResourceName = manager.uriBuilder.buildDatasetBlankNodeUri(String.format("%s_slot_%d", listResource.getLocalName(), i+1));
-				slotResource = jenaModel.createResource(manager.uriBuilder.buildDatasetBlankNodeUri(slotResourceName));
-			} else {
-				slotResource = jenaModel.createResource();
-			}
-			slotResource.addLiteral(
-					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.index)),
-					manager.primitiveTypeConverter.convertLiteral(jenaModel, i + 1, BemValueKindEnum.INTEGER));
-			slotResource.addProperty(
-					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.item)),
-					nodeList.get(i));
+		for (int i = 0; i < size; ++i) {
+			Resource slotResource = manager.createLocalResource(jenaModel, listResource, i);			
 			listResource.addProperty(
 					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.slot)),
 					slotResource);
+
+			slotResource.addLiteral(
+					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.index)),
+					manager.primitiveTypeConverter.convertLiteral(jenaModel, i, BemValueKindEnum.INTEGER));
+			
+			RDFNode valueNode = manager.convertValue(jenaModel, values.get(i), itemTypeInfo, slotResource, i, false);			
+			slotResource.addProperty(
+					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.item)),
+					valueNode);
 		}
 		
 		return listResource;

@@ -163,7 +163,7 @@ public class Test02_Bem2RdfConverter_Convert_DoubleTypes extends Test_Base {
 
 		Resource parentResource = jenaModel.createResource(DATASET_BLANK_NODE_NAMESPACE_URI_FORMAT + "Fake_parent_resource");		
 		
-		int childCount = Bem2RdfConverterManager.MIN_CHILD_NODE_INDEX;
+		int childCount = 0;
 
 		double[] values = new double[]{0.0, 0.005456287731e-3};
 		for (double doubleValue : values) {

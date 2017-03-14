@@ -16,7 +16,6 @@ import fi.aalto.cs.drumbeat.convert.bem2rdf.TestHelper;
 import fi.aalto.cs.drumbeat.convert.bem2rdf.Test_Base;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemDataset;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchema;
-import fi.aalto.cs.drumbeat.data.bem.schema.BemSchemaPool;
 import fi.aalto.cs.drumbeat.owl.OwlProfileEnum;
 import fi.aalto.cs.drumbeat.owl.OwlProfileList;
 
@@ -34,10 +33,11 @@ public class Test08_Bem2RdfSchemaExporter_Exporting_IfcDataset_sample extends Te
 	
 	@Before
 	public void setUp() throws Exception {		
-		bemSchema = BemSchemaPool.getSchema("IFC2X3");
-		assertNotNull(bemSchema);
-		
 		bemDataset = TestHelper.loadDataset(TEST_IFC_MODEL_FILE_PATH);
+		assertNotNull(bemDataset);
+		
+		bemSchema = bemDataset.getSchema();
+		assertNotNull(bemSchema);
 		
 		jenaModel = ModelFactory.createDefaultModel();
 		

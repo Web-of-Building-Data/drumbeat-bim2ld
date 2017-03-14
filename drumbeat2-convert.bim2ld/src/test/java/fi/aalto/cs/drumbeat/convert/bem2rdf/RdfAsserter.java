@@ -65,9 +65,10 @@ public class RdfAsserter {
 				nsPrefixMap.putAll(model1.getNsPrefixMap());
 				nsPrefixMap.putAll(model2.getNsPrefixMap());
 				printDifferences(nsPrefixMap, lastAssertionDifferences);
-			}			
-			Assert.assertEquals(expectedEquals, result == 0);
-			lastAssertionDifferences = null;
+			} else {			
+				lastAssertionDifferences = null;
+			}
+//			Assert.assertEquals(expectedEquals, result == 0);
 			
 		} catch (RdfChecksumException e) {
 			throw new RdfAsserterException(e);			
