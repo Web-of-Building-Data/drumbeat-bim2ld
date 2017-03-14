@@ -106,6 +106,14 @@ public class IfcSchemaParser_Test {
 		assertEquals(BemLogicalTypeInfo.class, type_BOOLEAN.getClass());
 		assertEquals(BemValueKindEnum.LOGICAL, type_BOOLEAN.getValueKind());
 		
+		
+		for (BemTypeInfo typeInfo : schema.getAllTypeInfos()) {
+			assertTrue(!typeInfo.isDerivedType());
+//			if (typeInfo instanceof BemCollectionTypeInfo) {
+//				assertTrue("Type " + typeInfo.getName() + " is unsorted", ((BemCollectionTypeInfo) typeInfo).isSorted());
+//			}
+		}
+		
 	}
 	
 	

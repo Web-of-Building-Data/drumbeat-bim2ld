@@ -33,8 +33,10 @@ import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -61,7 +63,8 @@ class ExpressSchemaInternalParser {
 	 * The output schema
 	 */
 	private ExpressSchemaBuilder builder;
-	private ExpressSchema schema;	
+	private ExpressSchema schema;
+	private Map<String, BemCollectionTypeInfo> derivedCollectionTypes;
 	
 	/**
 	 * Creates a new parser. For internal use.
@@ -72,6 +75,7 @@ class ExpressSchemaInternalParser {
 		this.builder = builder;
 		this.schema = builder.createSchema();
 		lineReader = new StepLineReader(in);
+		derivedCollectionTypes = new HashMap<>();
 	}
 
 	/**
@@ -205,7 +209,7 @@ class ExpressSchemaInternalParser {
 		BemTypeInfo typeInfo;
 		
 		if (collectionKind != null) {
-			typeInfo = builder.createCollectionTypeInfo(schema, typeName);
+			typeInfo = builder.createCollectionTypeInfo(schema, typeName, false);
 		} else if (tokens[0].equals(StepVocabulary.ExpressFormat.SELECT)) {
 			typeInfo = builder.createSelectTypeInfo(schema, typeName);
 		} else if (tokens[0].equals(StepVocabulary.ExpressFormat.ENUMERATION)) {
@@ -269,7 +273,7 @@ class ExpressSchemaInternalParser {
 			tokens = RegexUtils.split2(itemTypeInfoName, RegexUtils.WHITE_SPACE);
 			
 			if (isCollectionTypeHeader(tokens[0])) {				
-				BemTypeInfo itemTypeInfo = builder.createCollectionTypeInfo(schema, itemTypeInfoName);				
+				BemTypeInfo itemTypeInfo = builder.createCollectionTypeInfo(schema, itemTypeInfoName, true);				
 				parseNonEntityTypeBody(itemTypeInfo, typeInfoString);
 				((BemCollectionTypeInfo)typeInfo).setItemTypeInfo(itemTypeInfo);				
 			} else {
@@ -380,7 +384,7 @@ class ExpressSchemaInternalParser {
 		try {
 			entityTypeInfo = schema.getEntityTypeInfo(entityTypeName);
 		} catch (BemTypeNotFoundException e) {
-			entityTypeInfo = new BemEntityTypeInfo(schema, entityTypeName);
+			entityTypeInfo = builder.createEntityTypeInfo(schema, entityTypeName);
 		}
 		ExpressEntityTypeInfoTextWrapper entityTypeInfoTextWrapper = new ExpressEntityTypeInfoTextWrapper(entityTypeInfo);			
 		
@@ -449,7 +453,7 @@ class ExpressSchemaInternalParser {
 		} // for
 	}
 	
-	private BemCollectionTypeInfo parseCollectionType(BemCollectionKindEnum collectionKind, String typeInfoString)
+	private BemCollectionTypeInfo parseCollectionType(BemCollectionKindEnum collectionKind, String typeInfoString, boolean isDerivedType)
 			throws BemParserException, BemTypeNotFoundException, BemTypeAlreadyExistsException
 	{
 		
@@ -475,13 +479,19 @@ class ExpressSchemaInternalParser {
 			} catch (BemTypeNotFoundException e) {					
 			
 				// create collection type (with cardinality)
-				BemCollectionTypeInfo collectionTypeInfo = builder.createCollectionTypeInfo(schema, collectionTypeInfoName);
+				BemCollectionTypeInfo collectionTypeInfo = builder.createCollectionTypeInfo(schema, collectionTypeInfoName, isDerivedType);
 				collectionTypeInfo.setCollectionKind(collectionKind);
 				
 				BemTypeInfo collectionItemTypeInfo = schema.getTypeInfo(collectionItemTypeInfoName);
 				collectionTypeInfo.setItemTypeInfo(collectionItemTypeInfo);
 				collectionTypeInfo.setCardinality(collectionCardinality);
-				schema.addTypeInfo(collectionTypeInfo);
+				
+				if (!isDerivedType) {
+					assert(collectionKind.isSorted()) : collectionTypeInfo;
+					schema.addTypeInfo(collectionTypeInfo);
+				} else {
+					derivedCollectionTypes.put(collectionTypeInfoName, collectionTypeInfo);
+				}
 				
 				return collectionTypeInfo;
 			}
@@ -495,23 +505,35 @@ class ExpressSchemaInternalParser {
 			
 			// case SET/LIST/ARRAY/BAG OF LIST OF ... 
 
-			BemCollectionTypeInfo collectionItemTypeInfo = parseCollectionType(collectionKind2, tokens[1]);
+			BemCollectionTypeInfo collectionItemTypeInfo = parseCollectionType(collectionKind2, tokens[1], isDerivedType);
 			
 			// create or get the super collection type (without cardinality)
 			String collectionTypeInfoName = BemCollectionTypeInfo.formatCollectionTypeName(collectionKind, collectionItemTypeInfo.getName(), collectionCardinality);
 			
-			BemCollectionTypeInfo collectionTypeInfo;
+			BemCollectionTypeInfo collectionTypeInfo = null;
 			
 			try {
 				collectionTypeInfo = (BemCollectionTypeInfo) schema.getTypeInfo(collectionTypeInfoName);
-			} catch (BemTypeNotFoundException e) {				
-				// create collection type (with cardinality)
-				collectionTypeInfo = builder.createCollectionTypeInfo(schema, collectionTypeInfoName);
-				collectionTypeInfo.setCollectionKind(collectionKind2);
-				collectionTypeInfo.setItemTypeInfo(collectionItemTypeInfo);
-				collectionTypeInfo.setCardinality(collectionCardinality);
-				//collectionTypeInfo.bindTypeInfo(schema);
-				schema.addTypeInfo(collectionTypeInfo);				
+			} catch (BemTypeNotFoundException e) {
+				
+				if (isDerivedType) {
+					collectionTypeInfo = derivedCollectionTypes.get(collectionTypeInfoName);
+				}
+				
+				if (collectionTypeInfo == null) {				
+					// create collection type (with cardinality)
+					collectionTypeInfo = builder.createCollectionTypeInfo(schema, collectionTypeInfoName, isDerivedType);
+					collectionTypeInfo.setCollectionKind(collectionKind2);
+					collectionTypeInfo.setItemTypeInfo(collectionItemTypeInfo);
+					collectionTypeInfo.setCardinality(collectionCardinality);
+					//collectionTypeInfo.bindTypeInfo(schema);
+				}
+				
+				if (!isDerivedType) {
+					schema.addTypeInfo(collectionTypeInfo);
+				} else {
+					derivedCollectionTypes.put(collectionTypeInfoName, collectionTypeInfo);					
+				}
 			}
 			
 			return collectionTypeInfo;
@@ -551,7 +573,7 @@ class ExpressSchemaInternalParser {
 			BemCollectionKindEnum collectionKind = parseCollectionKind(tokens[0]); 
 			
 			if (collectionKind != null) {				
-				attributeValueTypeInfo = parseCollectionType(collectionKind, tokens[1]);				
+				attributeValueTypeInfo = parseCollectionType(collectionKind, tokens[1], true);				
 			} else {
 				String attributeValueTypeInfoName = parseAndFormatTypeName(tokens[0]);
 				attributeValueTypeInfo = schema.getTypeInfo(attributeValueTypeInfoName);

@@ -22,8 +22,14 @@ public class BemSchemaBuilder {
 		return new BemSchema();
 	}
 	
-	public BemCollectionTypeInfo createCollectionTypeInfo(BemSchema schema, String typeName) {
-		return new BemCollectionTypeInfo(schema, typeName);
+	public BemEntityTypeInfo createEntityTypeInfo(BemSchema schema, String typeName) {
+		return new BemEntityTypeInfo(schema, typeName);
+	}
+
+	public BemCollectionTypeInfo createCollectionTypeInfo(BemSchema schema, String typeName, boolean isDerivedType) {
+		BemCollectionTypeInfo typeInfo = new BemCollectionTypeInfo(schema, typeName);
+		typeInfo.setDerivedType(isDerivedType);
+		return typeInfo;
 	}
 	
 	public BemSelectTypeInfo createSelectTypeInfo(BemSchema schema, String typeName) {

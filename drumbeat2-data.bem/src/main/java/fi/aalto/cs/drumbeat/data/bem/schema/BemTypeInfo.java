@@ -10,6 +10,7 @@ public abstract class BemTypeInfo implements Comparable<BemTypeInfo> {
 	
 	private final BemSchema schema;
 	private final String name;
+	private boolean isDerivedType;
 	private boolean isBuiltInType;
 	
 	/**
@@ -30,6 +31,14 @@ public abstract class BemTypeInfo implements Comparable<BemTypeInfo> {
 	
 	public BemSchema getSchema() {
 		return schema;
+	}
+	
+	public boolean isDerivedType() {
+		return isDerivedType;
+	}
+	
+	public void setDerivedType(boolean isDerivedType) {
+		this.isDerivedType = isDerivedType;
 	}
 	
 //	/**

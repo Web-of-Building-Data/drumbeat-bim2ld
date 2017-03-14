@@ -55,6 +55,9 @@ EXPRESS:Bag  a           owl:Class ;
 EXPRESS:hasInteger  a       owl:DatatypeProperty ;
         rdfs:subPropertyOf  EXPRESS:hasValue .
 
+EXPRESS:Set  a           owl:Class ;
+        rdfs:subClassOf  EXPRESS:Collection .
+
 EXPRESS:hasReal  a          owl:DatatypeProperty ;
         rdfs:subPropertyOf  EXPRESS:hasValue .
 

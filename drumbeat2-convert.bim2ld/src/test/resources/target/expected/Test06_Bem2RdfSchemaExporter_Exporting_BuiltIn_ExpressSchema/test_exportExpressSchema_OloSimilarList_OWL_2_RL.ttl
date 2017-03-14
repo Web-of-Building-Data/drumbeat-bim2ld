@@ -56,6 +56,9 @@ EXPRESS:STRING  a        owl:Class ;
                            owl:onProperty     EXPRESS:hasString
                          ] .
 
+EXPRESS:Set  a           owl:Class ;
+        rdfs:subClassOf  EXPRESS:Collection .
+
 EXPRESS:FALSE  a  EXPRESS:BOOLEAN , EXPRESS:LOGICAL .
 
 EXPRESS:slot  a  owl:ObjectProperty .

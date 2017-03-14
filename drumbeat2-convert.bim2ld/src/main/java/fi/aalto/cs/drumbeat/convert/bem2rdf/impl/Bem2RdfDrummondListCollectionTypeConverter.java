@@ -20,26 +20,42 @@ class Bem2RdfDrummondListCollectionTypeConverter extends Bem2RdfCollectionTypeCo
 		
 		boolean declareFunctionalProperties = manager.targetOwlProfileList.supportsStatement(RDF.type, OWL.FunctionalProperty);
 		
+		Resource topCollectionTypeResource = jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Collection)); 
+		
 		jenaModel.add(
-				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.List)),
+				topCollectionTypeResource,
 				RDF.type,
 				OWL.Class);
+		
+		for (BemCollectionKindEnum collectionKind : BemCollectionKindEnum.values()) {
+			
+			String collectionTypeName = getCollectionTypeName(null, collectionKind, false);
+			Resource collectionTypeResource = jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(collectionTypeName));
+			
+			jenaModel.add(
+					collectionTypeResource,
+					RDF.type,
+					OWL.Class);
+			
+			jenaModel.add(
+					collectionTypeResource,
+					RDFS.subClassOf,
+					topCollectionTypeResource);
+			
+			String emptyCollectionTypeName = getCollectionTypeName(null, collectionKind, true);
+			Resource emptyCollectionTypeResource = jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(emptyCollectionTypeName));
+			
+			jenaModel.add(
+					emptyCollectionTypeResource,
+					RDF.type,
+					OWL.Class);
 
-		jenaModel.add(
-				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.EmptyList)),
-				RDF.type,
-				OWL.Class);
-		
-		jenaModel.add(
-				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.EmptyList)),
-				RDFS.subClassOf,
-				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.List)));
-		
-		jenaModel.add(
-				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.List)),
-				RDF.type,
-				OWL.Class);
-		
+			jenaModel.add(
+					emptyCollectionTypeResource,
+					RDFS.subClassOf,
+					collectionTypeResource);			
+		}
+
 		jenaModel.add(
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasContent)),
 				RDF.type,
@@ -55,7 +71,7 @@ class Bem2RdfDrummondListCollectionTypeConverter extends Bem2RdfCollectionTypeCo
 		jenaModel.add(
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasContent)),
 				RDFS.domain,
-				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.List)));
+				topCollectionTypeResource);
 
 		jenaModel.add(
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasNext)),
@@ -72,42 +88,50 @@ class Bem2RdfDrummondListCollectionTypeConverter extends Bem2RdfCollectionTypeCo
 		jenaModel.add(
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasNext)),
 				RDFS.domain,
-				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.List)));
+				topCollectionTypeResource);
 
 		jenaModel.add(
 				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasNext)),
 				RDFS.range,
-				jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.List)));
+				topCollectionTypeResource);
 
 	}
 	
 	@Override
 	Resource convertCollectionTypeInfo(Model jenaModel, BemCollectionTypeInfo collectionTypeInfo, boolean includeDetails) {
 		
-		if (!collectionTypeInfo.isSorted()) {
-			throw new IllegalArgumentException("Collection type must be sorted:" + collectionTypeInfo);
-		}
+		BemCollectionKindEnum collectionKind = collectionTypeInfo.getCollectionKind();
 		
-		Resource collectionTypeResource = jenaModel.createResource(manager.uriBuilder.buildTypeUri(collectionTypeInfo));
-		
-		if (includeDetails && !collectionTypeResource.listProperties().hasNext()) {
-			
-			String collectionKindName = collectionTypeInfo.getCollectionKind().name();
-			
-			String additionalCollectionTypeName = String.format("%s_%s", collectionTypeInfo.getItemTypeInfo(), collectionKindName);
-			Resource additionalCollectionTypeResource = jenaModel.createResource(manager.uriBuilder.buildOntologyUri(additionalCollectionTypeName));
-			
-			if (!collectionTypeResource.getURI().equals(additionalCollectionTypeResource.getURI())) {
-				jenaModel.add(collectionTypeResource, RDF.type, OWL.Class);	
-				jenaModel.add(collectionTypeResource, RDFS.subClassOf, additionalCollectionTypeResource);
-				collectionTypeResource = additionalCollectionTypeResource;
-			}
+		String collectionTypeName = collectionTypeInfo.isDerivedType() ?
+				getCollectionTypeName(collectionTypeInfo.getItemTypeInfo(), collectionKind, false) : collectionTypeInfo.getName(); 
 
-			jenaModel.add(collectionTypeResource, RDF.type, OWL.Class);	
-			jenaModel.add(collectionTypeResource, RDFS.subClassOf,
-					jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.List))); // List, Array or Bag
+		Resource collectionTypeResource = jenaModel.createResource(manager.uriBuilder.buildOntologyUri(collectionTypeName));
+		
+		if (includeDetails) {
 			
-			Resource itemTypeResource = jenaModel.createResource(manager.uriBuilder.buildTypeUri(collectionTypeInfo.getItemTypeInfo()));
+			BemTypeInfo itemTypeInfo = collectionTypeInfo.getItemTypeInfo();
+			
+			if (!collectionTypeInfo.isDerivedType()) {
+				
+				String additionalCollectionTypeName = getCollectionTypeName(itemTypeInfo, collectionKind, false);
+				
+				if (!collectionTypeName.equals(additionalCollectionTypeName)) {
+					Resource additionalCollectionTypeResource = jenaModel.createResource(manager.uriBuilder.buildOntologyUri(additionalCollectionTypeName));
+					jenaModel.add(collectionTypeResource, RDF.type, OWL.Class);	
+					jenaModel.add(collectionTypeResource, RDFS.subClassOf, additionalCollectionTypeResource);
+					collectionTypeResource = additionalCollectionTypeResource;
+				}
+				
+			}			
+			
+			jenaModel.add(collectionTypeResource, RDF.type, OWL.Class);
+			
+			String topCollectionTypeName = getCollectionTypeName(null, collectionKind, false);
+			Resource topCollectionTypeResource = jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(topCollectionTypeName));
+			jenaModel.add(collectionTypeResource, RDFS.subClassOf, topCollectionTypeResource); // List, Array, Set or Bag
+			
+			Resource itemTypeResource = manager.convertTypeInfo(jenaModel, itemTypeInfo, itemTypeInfo.isDerivedType());
+			
 			manager.convertPropertyRestrictions(
 					jenaModel,
 					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasContent)),
@@ -117,15 +141,20 @@ class Bem2RdfDrummondListCollectionTypeConverter extends Bem2RdfCollectionTypeCo
 					jenaModel,
 					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasNext)),
 					collectionTypeResource,
-					additionalCollectionTypeResource, true, 1, 1, false, false);
+					collectionTypeResource, true, 1, 1, false, false);
 			 
-			Resource emptyListTypeResource = jenaModel.createResource(manager.uriBuilder.buildTypeUri(collectionTypeInfo).replace(collectionKindName, "Empty" + collectionKindName));
-			jenaModel.add(emptyListTypeResource, RDF.type, OWL.Class);	
-			jenaModel.add(emptyListTypeResource, RDFS.subClassOf, collectionTypeResource);
+			String emptyCollectionTypeName = getCollectionTypeName(itemTypeInfo, collectionKind, true);
+			Resource emptyCollectionTypeResource = jenaModel.createResource(manager.uriBuilder.buildOntologyUri(emptyCollectionTypeName));
+			jenaModel.add(emptyCollectionTypeResource, RDF.type, OWL.Class);	
+			jenaModel.add(emptyCollectionTypeResource, RDFS.subClassOf, collectionTypeResource);
+			
+			String emptyTopCollectionTypeName = getCollectionTypeName(null, collectionKind, true);
+			Resource emptyTopCollectionTypeResource = jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(emptyTopCollectionTypeName));
+			
 			jenaModel.add(
-					collectionTypeResource,
+					emptyCollectionTypeResource,
 					RDFS.subClassOf,
-					jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.EmptyList)));
+					emptyTopCollectionTypeResource);
 				 
 		}
 		
@@ -133,49 +162,62 @@ class Bem2RdfDrummondListCollectionTypeConverter extends Bem2RdfCollectionTypeCo
 	}
 	
 	@Override
-	Resource convertListToResource(Model jenaModel, BemCollectionValue<? extends BemValue> listValue, BemCollectionTypeInfo collectionTypeInfo,
+	Resource convertListToResource(Model jenaModel, BemCollectionValue<? extends BemValue> collectionValue, BemCollectionTypeInfo collectionTypeInfo,
 			Resource parentResource, int childNodeCount)
 	{
 		if (!collectionTypeInfo.isSorted()) {
 			throw new IllegalArgumentException("Collection type must be sorted:" + collectionTypeInfo);
 		}
+		
+		BemTypeInfo itemTypeInfo = collectionTypeInfo.getItemTypeInfo();		
+		
 
 		parentResource = manager.createLocalResource(jenaModel, parentResource, childNodeCount);
 		
-		Resource listTypeResource = jenaModel.createResource(manager.uriBuilder.buildTypeUri(collectionTypeInfo)); 
-		Resource emptyListTypeResource = jenaModel.createResource(manager.uriBuilder.buildTypeUri(collectionTypeInfo).replace("List", "EmptyList"));
-		BemTypeInfo itemTypeInfo = collectionTypeInfo.getItemTypeInfo();			
+		String collectionTypeName = getCollectionTypeName(itemTypeInfo, collectionTypeInfo.getCollectionKind(), false);
+		Resource collectionTypeResource = jenaModel.createResource(manager.uriBuilder.buildOntologyUri(collectionTypeName));
 		
-		List<? extends BemValue> values = listValue.getSingleValues(); 
+		String emptyCollectionTypeName = getCollectionTypeName(itemTypeInfo, collectionTypeInfo.getCollectionKind(), true);
+		Resource emptyCollectionTypeResource = jenaModel.createResource(manager.uriBuilder.buildOntologyUri(emptyCollectionTypeName));
+		
+		
+		List<? extends BemValue> values = collectionValue.getSingleValues(); 
 
 		int index = values.size();
 		
-		Resource currentListResource;
+		Resource currentCollectionResource;
 		assert(parentResource != null);
-		currentListResource = manager.createLocalResource(jenaModel, parentResource, index);
+		currentCollectionResource = manager.createLocalResource(jenaModel, parentResource, index);
 		
-		currentListResource.addProperty(RDF.type, emptyListTypeResource);
+		currentCollectionResource.addProperty(RDF.type, emptyCollectionTypeResource);
 		
 		while (index > 0) {
 			index--;
-			Resource nextListResource = currentListResource;
-			currentListResource = manager.createLocalResource(jenaModel, parentResource, index);
+			Resource nextCollectionResource = currentCollectionResource;
+			currentCollectionResource = manager.createLocalResource(jenaModel, parentResource, index);
 
-			currentListResource.addProperty(RDF.type, listTypeResource);
-			currentListResource.addProperty(
+			currentCollectionResource.addProperty(RDF.type, collectionTypeResource);
+			currentCollectionResource.addProperty(
 					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasNext)),
-					nextListResource);
+					nextCollectionResource);
 			
 			BemValue value = values.get(index);
-			RDFNode valueNode = manager.convertValue(jenaModel, value, itemTypeInfo, currentListResource, 0, false);
+			RDFNode valueNode = manager.convertValue(jenaModel, value, itemTypeInfo, currentCollectionResource, 0, false);
 			
-			currentListResource.addProperty(
+			currentCollectionResource.addProperty(
 					jenaModel.createProperty(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.hasContent)),
 					valueNode);
 		}
 
-		return currentListResource;			
+		return currentCollectionResource;			
 			
+	}
+	
+	private static String getCollectionTypeName(BemTypeInfo itemTypeInfo, BemCollectionKindEnum collectionKind, boolean isEmptyCollection) {
+		return String.format("%s%s%s",
+				itemTypeInfo != null ? itemTypeInfo.getName() + "_" : "",
+				isEmptyCollection ? "Empty" : "",
+				collectionKind);		
 	}
 
 

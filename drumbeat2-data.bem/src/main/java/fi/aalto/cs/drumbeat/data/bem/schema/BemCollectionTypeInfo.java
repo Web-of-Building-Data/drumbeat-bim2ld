@@ -72,7 +72,7 @@ public class BemCollectionTypeInfo extends BemTypeInfo {
 	 */
 	public BemCollectionTypeInfo getSuperCollectionTypeWithItemTypeAndNoCardinalities() {
 		
-		if (cardinality == null) {
+		if (cardinality == null || itemTypeInfo == null) {
 			return null;
 		}
 
@@ -80,7 +80,9 @@ public class BemCollectionTypeInfo extends BemTypeInfo {
 				itemTypeInfo.getName(), null);
 
 		BemCollectionTypeInfo superType = new BemCollectionTypeInfo(getSchema(), superTypeName);
+		superType.setDerivedType(true);
 		superType.setCollectionKind(collectionKind);
+		superType.setCardinality(null);
 		superType.setItemTypeInfo(itemTypeInfo);
 		return superType;
 	}
@@ -90,21 +92,18 @@ public class BemCollectionTypeInfo extends BemTypeInfo {
 	 */
 	public BemCollectionTypeInfo getSuperCollectionTypeWithCardinalitiesAndNoItemType() {
 		
-		if (cardinality == null) {
+		if (cardinality == null || itemTypeInfo == null) {
 			return null;
 		}
 
-		BemTypeInfo itemTypeInfo = getItemTypeInfo();		
-		if (itemTypeInfo == null) {
-			return null; 
-		}
-		
 		String superTypeName = formatCollectionTypeName(collectionKind, null,
 				cardinality);
 
 		BemCollectionTypeInfo superType = new BemCollectionTypeInfo(getSchema(), superTypeName);
+		superType.setDerivedType(true);
 		superType.setCollectionKind(collectionKind);
 		superType.setCardinality(cardinality);
+		superType.setItemTypeInfo(null);
 		return superType;
 
 	}
@@ -122,7 +121,7 @@ public class BemCollectionTypeInfo extends BemTypeInfo {
 			typeNameBuilder.append(String.format(
 					"_%s_%s",
 					left,
-					right != BemCardinality.UNBOUNDED ? right : "UNBOUNDED"));
+					right != BemCardinality.UNBOUNDED ? right : "N"));
 		}
 		
 		if (itemTypeInfoName != null) {

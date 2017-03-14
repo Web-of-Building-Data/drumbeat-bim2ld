@@ -4,6 +4,8 @@
 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 
+EXPRESS:Collection  a  owl:Class .
+
 EXPRESS:DATETIME  a      owl:Class ;
         rdfs:subClassOf  [ a                   owl:Restriction ;
                            owl:maxCardinality  1 ;
@@ -16,6 +18,9 @@ EXPRESS:DATETIME  a      owl:Class ;
 
 EXPRESS:Defined  a  owl:Class .
 
+EXPRESS:EmptyBag  a      owl:Class ;
+        rdfs:subClassOf  EXPRESS:Bag .
+
 EXPRESS:STRING  a        owl:Class ;
         rdfs:subClassOf  [ a                   owl:Restriction ;
                            owl:maxCardinality  1 ;
@@ -26,6 +31,9 @@ EXPRESS:STRING  a        owl:Class ;
                            owl:onProperty     EXPRESS:hasString
                          ] .
 
+EXPRESS:Set  a           owl:Class ;
+        rdfs:subClassOf  EXPRESS:Collection .
+
 EXPRESS:FALSE  a  EXPRESS:BOOLEAN , EXPRESS:LOGICAL .
 
 EXPRESS:LOGICAL  a  owl:Class .
@@ -35,7 +43,8 @@ EXPRESS:Enum  a  owl:Class .
 EXPRESS:hasInteger  a       owl:FunctionalDataProperty , owl:DatatypeProperty ;
         rdfs:subPropertyOf  EXPRESS:hasValue .
 
-EXPRESS:List  a  owl:Class .
+EXPRESS:List  a          owl:Class ;
+        rdfs:subClassOf  EXPRESS:Collection .
 
 EXPRESS:TRUE  a  EXPRESS:BOOLEAN , EXPRESS:LOGICAL .
 
@@ -44,14 +53,17 @@ EXPRESS:SpecialValue  a  owl:Class .
 EXPRESS:hasBinary  a        owl:FunctionalDataProperty , owl:DatatypeProperty ;
         rdfs:subPropertyOf  EXPRESS:hasValue .
 
+EXPRESS:EmptySet  a      owl:Class ;
+        rdfs:subClassOf  EXPRESS:Set .
+
 EXPRESS:hasNext  a   owl:FunctionalProperty , owl:ObjectProperty ;
-        rdfs:domain  EXPRESS:List ;
-        rdfs:range   EXPRESS:List .
+        rdfs:domain  EXPRESS:Collection ;
+        rdfs:range   EXPRESS:Collection .
 
 EXPRESS:UNKNOWN  a  EXPRESS:LOGICAL .
 
 EXPRESS:hasContent  a  owl:FunctionalProperty , owl:ObjectProperty ;
-        rdfs:domain  EXPRESS:List .
+        rdfs:domain  EXPRESS:Collection .
 
 EXPRESS:EmptyList  a     owl:Class ;
         rdfs:subClassOf  EXPRESS:List .
@@ -72,6 +84,9 @@ EXPRESS:hasNumber  a        owl:FunctionalDataProperty , owl:DatatypeProperty ;
         rdfs:subPropertyOf  EXPRESS:hasValue .
 
 EXPRESS:hasValue  a  owl:FunctionalProperty , owl:DatatypeProperty .
+
+EXPRESS:EmptyArray  a    owl:Class ;
+        rdfs:subClassOf  EXPRESS:Array .
 
 EXPRESS:BINARY  a        owl:Class ;
         rdfs:subClassOf  [ a                   owl:Restriction ;
@@ -108,6 +123,12 @@ EXPRESS:hasReal  a          owl:FunctionalDataProperty , owl:DatatypeProperty ;
 
 EXPRESS:hasDatetime  a      owl:FunctionalDataProperty , owl:DatatypeProperty ;
         rdfs:subPropertyOf  EXPRESS:hasValue .
+
+EXPRESS:Array  a         owl:Class ;
+        rdfs:subClassOf  EXPRESS:Collection .
+
+EXPRESS:Bag  a           owl:Class ;
+        rdfs:subClassOf  EXPRESS:Collection .
 
 EXPRESS:BOOLEAN  a  owl:Class .
 

@@ -108,7 +108,7 @@ model_b:BLANK_127_0_0_1
 model_b:BLANK_57_0_0  a    IFC2X3:IfcIdentifier ;
         EXPRESS:hasString  "SurfaceSpreadOfFlame" .
 
-model_b:BLANK_82_0_0  a  IFC2X3:IfcLengthMeasure_List ;
+model_b:BLANK_82_0_0  a  IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_82_0_0_1 , model_b:BLANK_82_0_0_0 .
 
@@ -281,7 +281,7 @@ model_b:BLANK_115_0_0_0
         EXPRESS:index  0 ;
         EXPRESS:item   model_b:BLANK_115_0_0_0_0 .
 
-model_b:BLANK_27_0_0  a  IFC2X3:REAL_List ;
+model_b:BLANK_27_0_0  a  IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_27_0_0_2 , model_b:BLANK_27_0_0_1 , model_b:BLANK_27_0_0_0 .
 
@@ -336,7 +336,7 @@ model_b:BLANK_115  a  IFC2X3:IfcCartesianPoint ;
                 model_b:BLANK_115_0_0 .
 
 model_b:BLANK_160_0_0
-        a             IFC2X3:IfcLengthMeasure_List ;
+        a             IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_160_0_0_2 , model_b:BLANK_160_0_0_1 , model_b:BLANK_160_0_0_0 .
 
@@ -426,7 +426,7 @@ model_b:BLANK_49_0_0_0
         EXPRESS:item   model_b:BLANK_49_0_0_0_0 .
 
 model_b:BLANK_120_0_0
-        a             IFC2X3:IfcLengthMeasure_List ;
+        a             IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_120_0_0_2 , model_b:BLANK_120_0_0_1 , model_b:BLANK_120_0_0_0 .
 
@@ -457,7 +457,7 @@ model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_9_0_0
         EXPRESS:index  0 ;
         EXPRESS:item   model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_9_0_0_0 .
 
-model_b:BLANK_93_0_0  a  IFC2X3:IfcLengthMeasure_List ;
+model_b:BLANK_93_0_0  a  IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_93_0_0_2 , model_b:BLANK_93_0_0_1 , model_b:BLANK_93_0_0_0 .
 
@@ -542,7 +542,7 @@ model_b:BLANK_113_0_0_3
 model_b:BLANK_70_3_0  a  IFC2X3:IfcVolumeMeasure ;
         EXPRESS:hasReal  3.135 .
 
-model_b:BLANK_28_0_0  a  IFC2X3:REAL_List ;
+model_b:BLANK_28_0_0  a  IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_28_0_0_2 , model_b:BLANK_28_0_0_1 , model_b:BLANK_28_0_0_0 .
 
@@ -565,7 +565,7 @@ model_b:BLANK_136_0_0
         EXPRESS:hasString  "SecurityRating" .
 
 model_b:BLANK_161_0_0
-        a             IFC2X3:REAL_List ;
+        a             IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_161_0_0_2 , model_b:BLANK_161_0_0_1 , model_b:BLANK_161_0_0_0 .
 
@@ -635,7 +635,7 @@ model_b:BLANK_91_0_0_1
         EXPRESS:index  1 ;
         EXPRESS:item   model_b:BLANK_91_0_0_1_1 .
 
-model_b:BLANK_38_0_0  a  IFC2X3:IfcLengthMeasure_List ;
+model_b:BLANK_38_0_0  a  IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_38_0_0_2 , model_b:BLANK_38_0_0_1 , model_b:BLANK_38_0_0_0 .
 
@@ -650,7 +650,7 @@ model_b:BLANK_32_0_0_1
         EXPRESS:item   model_b:BLANK_32_0_0_1_1 .
 
 model_b:BLANK_121_0_0
-        a             IFC2X3:REAL_List ;
+        a             IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_121_0_0_2 , model_b:BLANK_121_0_0_1 , model_b:BLANK_121_0_0_0 .
 
@@ -684,7 +684,7 @@ model_b:BLANK_128_0_0_0
 model_b:BLANK_69_0_0  a    IFC2X3:IfcLabel ;
         EXPRESS:hasString  "GrossVolume" .
 
-model_b:BLANK_94_0_0  a  IFC2X3:REAL_List ;
+model_b:BLANK_94_0_0  a  IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_94_0_0_2 , model_b:BLANK_94_0_0_1 , model_b:BLANK_94_0_0_0 .
 
@@ -855,7 +855,7 @@ model_b:BLANK_163_0_0_2
         EXPRESS:index  2 ;
         EXPRESS:item   model_b:BLANK_163_0_0_2_2 .
 
-model_b:BLANK_39_0_0  a  IFC2X3:REAL_List ;
+model_b:BLANK_39_0_0  a  IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_39_0_0_2 , model_b:BLANK_39_0_0_1 , model_b:BLANK_39_0_0_0 .
 
@@ -984,7 +984,7 @@ model_b:BLANK_122_0_0_0_0
         EXPRESS:hasReal  "1"^^xsd:decimal .
 
 model_b:BLANK_103_2_0
-        a             IFC2X3:IfcRepresentation_List ;
+        a             IFC2X3:List_1_N_OF_IfcRepresentation ;
         EXPRESS:size  1 ;
         EXPRESS:slot  model_b:BLANK_103_2_0_0 .
 
@@ -1003,12 +1003,12 @@ model:GUID_D2ECFE17-45BE-4B36-959D-1BE3EC8193BD
         IFC2X3:relatingPropertyDefinition_IfcRelDefinesByProperties
                 model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51 .
 
-model_b:BLANK_51_2_0  a  IFC2X3:IfcRepresentation_List ;
+model_b:BLANK_51_2_0  a  IFC2X3:List_1_N_OF_IfcRepresentation ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_51_2_0_1 , model_b:BLANK_51_2_0_0 .
 
 model_b:BLANK_157_0_0
-        a             IFC2X3:IfcLengthMeasure_List ;
+        a             IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_157_0_0_1 , model_b:BLANK_157_0_0_0 .
 
@@ -1105,7 +1105,7 @@ model_b:BLANK_11_2_0  a    IFC2X3:IfcLabel ;
         EXPRESS:hasString  "DEGREE" .
 
 model_b:BLANK_117_0_0
-        a             IFC2X3:IfcLengthMeasure_List ;
+        a             IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_117_0_0_1 , model_b:BLANK_117_0_0_0 .
 
@@ -1116,7 +1116,7 @@ model_b:BLANK_142_0_0
 model_b:BLANK_65_0_0  a    IFC2X3:IfcLabel ;
         EXPRESS:hasString  "Width" .
 
-model_b:BLANK_90_0_0  a  IFC2X3:IfcLengthMeasure_List ;
+model_b:BLANK_90_0_0  a  IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_90_0_0_1 , model_b:BLANK_90_0_0_0 .
 
@@ -1145,7 +1145,7 @@ model_b:BLANK_121_0_0_1_1
         EXPRESS:hasReal  "0"^^xsd:decimal .
 
 model_b:BLANK_102_0_0
-        a             IFC2X3:REAL_List ;
+        a             IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_102_0_0_2 , model_b:BLANK_102_0_0_1 , model_b:BLANK_102_0_0_0 .
 
@@ -1177,7 +1177,7 @@ model_b:BLANK_154_0_0_1
         EXPRESS:index  1 ;
         EXPRESS:item   model_b:BLANK_154_0_0_1_1 .
 
-model_b:BLANK_50_0_0  a  IFC2X3:REAL_List ;
+model_b:BLANK_50_0_0  a  IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_50_0_0_2 , model_b:BLANK_50_0_0_1 , model_b:BLANK_50_0_0_0 .
 
@@ -1252,7 +1252,7 @@ model_b:BLANK_121_0_0_2_2
         EXPRESS:hasReal  "1"^^xsd:decimal .
 
 model_b:BLANK_158_0_0
-        a             IFC2X3:IfcLengthMeasure_List ;
+        a             IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_158_0_0_1 , model_b:BLANK_158_0_0_0 .
 
@@ -1318,7 +1318,7 @@ model_b:BLANK_22_0_0_1_1
         EXPRESS:hasReal  "0"^^xsd:decimal .
 
 model_b:BLANK_118_0_0
-        a             IFC2X3:IfcLengthMeasure_List ;
+        a             IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_118_0_0_1 , model_b:BLANK_118_0_0_0 .
 
@@ -1410,7 +1410,7 @@ model_b:BLANK_116_0_0_0
         EXPRESS:index  0 ;
         EXPRESS:item   model_b:BLANK_116_0_0_0_0 .
 
-model_b:BLANK_26_0_0  a  IFC2X3:IfcLengthMeasure_List ;
+model_b:BLANK_26_0_0  a  IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_26_0_0_2 , model_b:BLANK_26_0_0_1 , model_b:BLANK_26_0_0_0 .
 
@@ -1429,7 +1429,7 @@ model_b:BLANK_26_0_0_1_1
 model_b:BLANK_68_3_0  a  IFC2X3:IfcAreaMeasure ;
         EXPRESS:hasReal  10.45 .
 
-model_b:BLANK_76_0_0  a  IFC2X3:IfcMaterialLayer_List ;
+model_b:BLANK_76_0_0  a  IFC2X3:List_1_N_OF_IfcMaterialLayer ;
         EXPRESS:size  1 ;
         EXPRESS:slot  model_b:BLANK_76_0_0_0 .
 
@@ -1438,7 +1438,7 @@ model_b:BLANK_32_0_0_0_0
         EXPRESS:hasReal  "0"^^xsd:decimal .
 
 model_b:BLANK_130_2_0
-        a             IFC2X3:IfcRepresentation_List ;
+        a             IFC2X3:List_1_N_OF_IfcRepresentation ;
         EXPRESS:size  1 ;
         EXPRESS:slot  model_b:BLANK_130_2_0_0 .
 
@@ -1551,7 +1551,7 @@ model:GUID_26CD5ABB-7EC2-4EE8-82C0-23A3C26AF07A
         IFC2X3:relatingPropertyDefinition_IfcRelDefinesByProperties
                 model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653 .
 
-model_b:BLANK_86_0_0  a  IFC2X3:IfcCartesianPoint_List ;
+model_b:BLANK_86_0_0  a  IFC2X3:List_2_N_OF_IfcCartesianPoint ;
         EXPRESS:size  5 ;
         EXPRESS:slot  model_b:BLANK_86_0_0_4 , model_b:BLANK_86_0_0_3 , model_b:BLANK_86_0_0_2 , model_b:BLANK_86_0_0_1 , model_b:BLANK_86_0_0_0 .
 
@@ -1627,7 +1627,7 @@ model_b:BLANK_160  a  IFC2X3:IfcCartesianPoint ;
                 model_b:BLANK_160_0_0 .
 
 model_b:BLANK_129_0_0
-        a             IFC2X3:REAL_List ;
+        a             IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_129_0_0_2 , model_b:BLANK_129_0_0_1 , model_b:BLANK_129_0_0_0 .
 
@@ -1636,7 +1636,7 @@ model_b:GUID_0C207BA4-D0B8-4FFF-BCD0-C1D8C7F7B5FF_9_0
         EXPRESS:hasReal  "0"^^xsd:decimal .
 
 model_b:BLANK_154_0_0
-        a             IFC2X3:IfcLengthMeasure_List ;
+        a             IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_154_0_0_1 , model_b:BLANK_154_0_0_0 .
 
@@ -1700,7 +1700,7 @@ model_b:BLANK_94_0_0_0_0
         EXPRESS:hasReal  "0"^^xsd:decimal .
 
 model_b:BLANK_114_0_0
-        a             IFC2X3:IfcLengthMeasure_List ;
+        a             IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_114_0_0_1 , model_b:BLANK_114_0_0_0 .
 
@@ -1757,7 +1757,7 @@ model_b:BLANK_39_0_0_0_0
         a                EXPRESS:REAL ;
         EXPRESS:hasReal  "0"^^xsd:decimal .
 
-model_b:BLANK_87_0_0  a  IFC2X3:IfcLengthMeasure_List ;
+model_b:BLANK_87_0_0  a  IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_87_0_0_1 , model_b:BLANK_87_0_0_0 .
 
@@ -1848,7 +1848,7 @@ model_b:BLANK_113_0_0_2
         EXPRESS:index  2 ;
         EXPRESS:item   model_b:BLANK_116 .
 
-model_b:BLANK_22_0_0  a  IFC2X3:IfcLengthMeasure_List ;
+model_b:BLANK_22_0_0  a  IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_22_0_0_2 , model_b:BLANK_22_0_0_1 , model_b:BLANK_22_0_0_0 .
 
@@ -1883,7 +1883,7 @@ model_b:BLANK_94_0_0_2_2
         EXPRESS:hasReal  "1"^^xsd:decimal .
 
 model_b:BLANK_155_0_0
-        a             IFC2X3:IfcLengthMeasure_List ;
+        a             IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_155_0_0_1 , model_b:BLANK_155_0_0_0 .
 
@@ -1936,7 +1936,7 @@ model_b:BLANK_39_0_0_2_2
         a                EXPRESS:REAL ;
         EXPRESS:hasReal  "1"^^xsd:decimal .
 
-model_b:BLANK_32_0_0  a  IFC2X3:IfcLengthMeasure_List ;
+model_b:BLANK_32_0_0  a  IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_32_0_0_2 , model_b:BLANK_32_0_0_1 , model_b:BLANK_32_0_0_0 .
 
@@ -1985,7 +1985,7 @@ model_b:BLANK_38_0_0_1_1
         EXPRESS:hasReal  "0"^^xsd:decimal .
 
 model_b:BLANK_115_0_0
-        a             IFC2X3:IfcLengthMeasure_List ;
+        a             IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_115_0_0_1 , model_b:BLANK_115_0_0_0 .
 
@@ -2005,7 +2005,7 @@ model_b:BLANK_127_0_0_2
         EXPRESS:index  2 ;
         EXPRESS:item   model_b:BLANK_127_0_0_2_2 .
 
-model_b:BLANK_88_0_0  a  IFC2X3:IfcLengthMeasure_List ;
+model_b:BLANK_88_0_0  a  IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_88_0_0_1 , model_b:BLANK_88_0_0_0 .
 
@@ -2030,7 +2030,7 @@ model_b:BLANK_123_0_0_1
         EXPRESS:item   model_b:BLANK_123_0_0_1_1 .
 
 model_b:BLANK_100_0_0
-        a             IFC2X3:IfcLengthMeasure_List ;
+        a             IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_100_0_0_2 , model_b:BLANK_100_0_0_1 , model_b:BLANK_100_0_0_0 .
 
@@ -2125,7 +2125,7 @@ model_b:BLANK_71  a  IFC2X3:IfcQuantityLength ;
         IFC2X3:unit_IfcPhysicalSimpleQuantity
                 EXPRESS:NULL .
 
-model_b:BLANK_48_0_0  a  IFC2X3:IfcLengthMeasure_List ;
+model_b:BLANK_48_0_0  a  IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_48_0_0_2 , model_b:BLANK_48_0_0_1 , model_b:BLANK_48_0_0_0 .
 
@@ -2151,7 +2151,7 @@ model_b:BLANK_148_3_0
         EXPRESS:hasReal  0.75 .
 
 model_b:BLANK_156_0_0
-        a             IFC2X3:IfcLengthMeasure_List ;
+        a             IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_156_0_0_1 , model_b:BLANK_156_0_0_0 .
 
@@ -2197,7 +2197,7 @@ model_b:BLANK_157_0_0_0_0
         a                IFC2X3:IfcLengthMeasure ;
         EXPRESS:hasReal  0.75 .
 
-model_b:BLANK_33_0_0  a  IFC2X3:REAL_List ;
+model_b:BLANK_33_0_0  a  IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_33_0_0_2 , model_b:BLANK_33_0_0_1 , model_b:BLANK_33_0_0_0 .
 
@@ -2229,7 +2229,7 @@ model_b:BLANK_58_0_0  a    IFC2X3:IfcIdentifier ;
         EXPRESS:hasString  "ThermalTransmittance" .
 
 model_b:BLANK_116_0_0
-        a             IFC2X3:IfcLengthMeasure_List ;
+        a             IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_116_0_0_1 , model_b:BLANK_116_0_0_0 .
 
@@ -2303,7 +2303,7 @@ model_b:GUID_3CA7E585-4E3E-4969-A86F-F049F4FBDE52_0_0
         a                  IFC2X3:IfcGloballyUniqueId ;
         EXPRESS:hasString  "0yf_M5JZv9QQXly4dq_zvI" .
 
-model_b:BLANK_89_0_0  a  IFC2X3:IfcLengthMeasure_List ;
+model_b:BLANK_89_0_0  a  IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_89_0_0_1 , model_b:BLANK_89_0_0_0 .
 
@@ -2346,7 +2346,7 @@ model_b:BLANK_38_0_0_1
         EXPRESS:item   model_b:BLANK_38_0_0_1_1 .
 
 model_b:BLANK_101_0_0
-        a             IFC2X3:REAL_List ;
+        a             IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_101_0_0_2 , model_b:BLANK_101_0_0_1 , model_b:BLANK_101_0_0_0 .
 
@@ -2386,7 +2386,7 @@ model_b:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2_2_0
 model_b:BLANK_66_3_0  a  IFC2X3:IfcLengthMeasure ;
         EXPRESS:hasReal  "5"^^xsd:decimal .
 
-model_b:BLANK_49_0_0  a  IFC2X3:REAL_List ;
+model_b:BLANK_49_0_0  a  IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_49_0_0_2 , model_b:BLANK_49_0_0_1 , model_b:BLANK_49_0_0_0 .
 
@@ -2490,7 +2490,7 @@ model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_10_0_2
         EXPRESS:index  2 ;
         EXPRESS:item   model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_10_0_2_2 .
 
-model_b:BLANK_34_0_0  a  IFC2X3:REAL_List ;
+model_b:BLANK_34_0_0  a  IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_34_0_0_2 , model_b:BLANK_34_0_0_1 , model_b:BLANK_34_0_0_0 .
 
@@ -2631,7 +2631,7 @@ model_b:BLANK_60  a                     IFC2X3:IfcPropertySingleValue ;
                 EXPRESS:NULL .
 
 model_b:BLANK_127_0_0
-        a             IFC2X3:IfcLengthMeasure_List ;
+        a             IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_127_0_0_2 , model_b:BLANK_127_0_0_1 , model_b:BLANK_127_0_0_0 .
 
@@ -2684,7 +2684,7 @@ model_b:BLANK_157_0_0_0
         EXPRESS:item   model_b:BLANK_157_0_0_0_0 .
 
 model_b:BLANK_162_0_0
-        a             IFC2X3:REAL_List ;
+        a             IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_162_0_0_2 , model_b:BLANK_162_0_0_1 , model_b:BLANK_162_0_0_0 .
 
@@ -2787,7 +2787,7 @@ model_b:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2_0_0
         EXPRESS:hasString  "0LV8Pid0X3IA3jJLVDPidY" .
 
 model_b:BLANK_122_0_0
-        a             IFC2X3:REAL_List ;
+        a             IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_122_0_0_2 , model_b:BLANK_122_0_0_1 , model_b:BLANK_122_0_0_0 .
 
@@ -2813,7 +2813,7 @@ model_b:BLANK_20_1_0  a    IFC2X3:IfcLabel ;
         EXPRESS:hasString  "Model" .
 
 model_b:BLANK_128_0_0
-        a             IFC2X3:REAL_List ;
+        a             IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_128_0_0_2 , model_b:BLANK_128_0_0_1 , model_b:BLANK_128_0_0_0 .
 
@@ -2821,12 +2821,12 @@ model_b:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255_3_0
         a                  IFC2X3:IfcText ;
         EXPRESS:hasString  "Description of Default Project" .
 
-model_b:BLANK_95_0_0  a  IFC2X3:REAL_List ;
+model_b:BLANK_95_0_0  a  IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_95_0_0_2 , model_b:BLANK_95_0_0_1 , model_b:BLANK_95_0_0_0 .
 
 model_b:BLANK_153_0_0
-        a             IFC2X3:IfcCartesianPoint_List ;
+        a             IFC2X3:List_2_N_OF_IfcCartesianPoint ;
         EXPRESS:size  5 ;
         EXPRESS:slot  model_b:BLANK_153_0_0_4 , model_b:BLANK_153_0_0_3 , model_b:BLANK_153_0_0_2 , model_b:BLANK_153_0_0_1 , model_b:BLANK_153_0_0_0 .
 
@@ -2900,11 +2900,11 @@ model_b:BLANK_55_0_0  a    IFC2X3:IfcIdentifier ;
         EXPRESS:hasString  "FireRating" .
 
 model_b:BLANK_113_0_0
-        a             IFC2X3:IfcCartesianPoint_List ;
+        a             IFC2X3:List_2_N_OF_IfcCartesianPoint ;
         EXPRESS:size  5 ;
         EXPRESS:slot  model_b:BLANK_113_0_0_4 , model_b:BLANK_113_0_0_3 , model_b:BLANK_113_0_0_2 , model_b:BLANK_113_0_0_1 , model_b:BLANK_113_0_0_0 .
 
-model_b:BLANK_80_0_0  a  IFC2X3:IfcCartesianPoint_List ;
+model_b:BLANK_80_0_0  a  IFC2X3:List_2_N_OF_IfcCartesianPoint ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_80_0_0_1 , model_b:BLANK_80_0_0_0 .
 
@@ -2938,7 +2938,7 @@ model_b:BLANK_138_0_0
         EXPRESS:hasString  "Infiltration" .
 
 model_b:BLANK_163_0_0
-        a             IFC2X3:REAL_List ;
+        a             IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_163_0_0_2 , model_b:BLANK_163_0_0_1 , model_b:BLANK_163_0_0_0 .
 
@@ -2978,7 +2978,7 @@ model_b:BLANK_162_0_0_2
         EXPRESS:index  2 ;
         EXPRESS:item   model_b:BLANK_162_0_0_2_2 .
 
-model_b:BLANK_40_0_0  a  IFC2X3:REAL_List ;
+model_b:BLANK_40_0_0  a  IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_40_0_0_2 , model_b:BLANK_40_0_0_1 , model_b:BLANK_40_0_0_0 .
 
@@ -3030,7 +3030,7 @@ model_b:BLANK_90_0_0_0_0
         EXPRESS:hasReal  "5"^^xsd:decimal .
 
 model_b:BLANK_123_0_0
-        a             IFC2X3:REAL_List ;
+        a             IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_123_0_0_2 , model_b:BLANK_123_0_0_1 , model_b:BLANK_123_0_0_0 .
 
@@ -3041,7 +3041,7 @@ model_b:BLANK_81  a  IFC2X3:IfcCartesianPoint ;
 model_b:BLANK_71_0_0  a    IFC2X3:IfcLabel ;
         EXPRESS:hasString  "Height" .
 
-model_b:BLANK_96_0_0  a  IFC2X3:REAL_List ;
+model_b:BLANK_96_0_0  a  IFC2X3:List_2_3_OF_REAL ;
         EXPRESS:size  3 ;
         EXPRESS:slot  model_b:BLANK_96_0_0_2 , model_b:BLANK_96_0_0_1 , model_b:BLANK_96_0_0_0 .
 
@@ -3103,7 +3103,7 @@ model_b:BLANK_48  a  IFC2X3:IfcCartesianPoint ;
         IFC2X3:coordinates_IfcCartesianPoint
                 model_b:BLANK_48_0_0 .
 
-model_b:BLANK_81_0_0  a  IFC2X3:IfcLengthMeasure_List ;
+model_b:BLANK_81_0_0  a  IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_81_0_0_1 , model_b:BLANK_81_0_0_0 .
 
@@ -3250,7 +3250,7 @@ model_b:BLANK_6_3_0  a     IFC2X3:IfcIdentifier ;
 model_b:BLANK_66_0_0  a    IFC2X3:IfcLabel ;
         EXPRESS:hasString  "Lenght" .
 
-model_b:BLANK_91_0_0  a  IFC2X3:IfcLengthMeasure_List ;
+model_b:BLANK_91_0_0  a  IFC2X3:List_1_3_OF_IfcLengthMeasure ;
         EXPRESS:size  2 ;
         EXPRESS:slot  model_b:BLANK_91_0_0_1 , model_b:BLANK_91_0_0_0 .
 

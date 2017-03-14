@@ -185,7 +185,10 @@ class Bem2RdfEntityTypeConverter {
 				if (exportAsSingleCollection) {
 					assert(collectionAttributeTypeInfo.getCollectionKind().isSorted()) : collectionAttributeTypeInfo; 
 					Resource collectionTypeResource =
-							manager.collectionTypeConverter.convertCollectionTypeInfo(jenaModel, collectionAttributeTypeInfo, true);
+							manager.collectionTypeConverter.convertCollectionTypeInfo(
+									jenaModel,
+									collectionAttributeTypeInfo,
+									collectionAttributeTypeInfo.isDerivedType());
 
 					int min = attributeInfo.isOptional() ? 0 : 1;
 					int max = 1;

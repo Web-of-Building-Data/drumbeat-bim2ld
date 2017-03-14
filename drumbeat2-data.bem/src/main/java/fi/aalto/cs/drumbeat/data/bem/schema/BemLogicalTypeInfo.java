@@ -21,7 +21,7 @@ public class BemLogicalTypeInfo extends BemSimpleTypeInfo {
 	 * @param schema
 	 * @param typeName
 	 */
-	public BemLogicalTypeInfo(BemSchema schema, String typeName) {
+	public BemLogicalTypeInfo(BemSchema schema, String typeName, boolean isDerivedType) {
 		super(schema, typeName);
 	}
 	

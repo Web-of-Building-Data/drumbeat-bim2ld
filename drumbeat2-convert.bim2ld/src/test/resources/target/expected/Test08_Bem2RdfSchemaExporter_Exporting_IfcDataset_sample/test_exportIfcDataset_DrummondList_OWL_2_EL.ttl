@@ -455,7 +455,7 @@ model_b:BLANK_68_0_0  a    IFC2X3:IfcLabel ;
         EXPRESS:hasString  "NetSideArea" .
 
 model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_9_0_0
-        a                   IFC2X3:IfcCompoundPlaneAngleMeasure ;
+        a                   IFC2X3:INTEGER_List ;
         EXPRESS:hasContent  model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_9_0_0_0 ;
         EXPRESS:hasNext     model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_9_0_1 .
 
@@ -533,7 +533,7 @@ model_b:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2_3_0
         EXPRESS:hasString  "Description of Window" .
 
 model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_10_0_1
-        a                   IFC2X3:IfcCompoundPlaneAngleMeasure ;
+        a                   IFC2X3:INTEGER_List ;
         EXPRESS:hasContent  model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_10_0_1_0 ;
         EXPRESS:hasNext     model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_10_0_2 .
 
@@ -1037,7 +1037,7 @@ model_b:BLANK_118_0_0_2
         a       IFC2X3:IfcLengthMeasure_EmptyList .
 
 model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_9_0_2
-        a                   IFC2X3:IfcCompoundPlaneAngleMeasure ;
+        a                   IFC2X3:INTEGER_List ;
         EXPRESS:hasContent  model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_9_0_2_0 ;
         EXPRESS:hasNext     model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_9_0_3 .
 
@@ -1132,7 +1132,7 @@ model_b:BLANK_80  a                IFC2X3:IfcPolyline ;
         IFC2X3:points_IfcPolyline  model_b:BLANK_80_0_0_0 .
 
 model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_10_0_3
-        a       IFC2X3:IfcCompoundPlaneAngleMeasure .
+        a       IFC2X3:INTEGER_EmptyList .
 
 model_b:BLANK_121_0_0_0_0
         a                EXPRESS:REAL ;
@@ -1862,7 +1862,7 @@ model_b:BLANK_40_0_0_0
         EXPRESS:hasNext     model_b:BLANK_40_0_0_1 .
 
 model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_10_0_0
-        a                   IFC2X3:IfcCompoundPlaneAngleMeasure ;
+        a                   IFC2X3:INTEGER_List ;
         EXPRESS:hasContent  model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_10_0_0_0 ;
         EXPRESS:hasNext     model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_10_0_1 .
 
@@ -2390,7 +2390,7 @@ model_b:BLANK_12_6_0  a     EXPRESS:INTEGER ;
         EXPRESS:hasInteger  0 .
 
 model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_9_0_1
-        a                   IFC2X3:IfcCompoundPlaneAngleMeasure ;
+        a                   IFC2X3:INTEGER_List ;
         EXPRESS:hasContent  model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_9_0_1_0 ;
         EXPRESS:hasNext     model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_9_0_2 .
 
@@ -2488,7 +2488,7 @@ model_b:BLANK_40_0_0_2
         EXPRESS:hasNext     model_b:BLANK_40_0_0_3 .
 
 model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_10_0_2
-        a                   IFC2X3:IfcCompoundPlaneAngleMeasure ;
+        a                   IFC2X3:INTEGER_List ;
         EXPRESS:hasContent  model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_10_0_2_0 ;
         EXPRESS:hasNext     model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_10_0_3 .
 
@@ -2996,7 +2996,7 @@ model_b:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D_0_0
         EXPRESS:hasString  "2LcE70iQb51PEZynawyvuT" .
 
 model_b:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_9_0_3
-        a       IFC2X3:IfcCompoundPlaneAngleMeasure .
+        a       IFC2X3:INTEGER_EmptyList .
 
 model_b:BLANK_61_1_0  a    IFC2X3:IfcText ;
         EXPRESS:hasString  "LoadBearing" .

@@ -4,8 +4,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
 
-import fi.aalto.cs.drumbeat.data.bem.dataset.BemSpecialValue;
-
 class Bem2RdfBuiltInOntologyConverter {
 
 	private final Bem2RdfConverterManager manager;

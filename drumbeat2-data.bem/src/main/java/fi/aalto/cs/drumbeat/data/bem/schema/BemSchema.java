@@ -114,6 +114,7 @@ public class BemSchema {
 	}
 	
 	public void addTypeInfo(BemTypeInfo typeInfo) throws BemTypeAlreadyExistsException {
+		assert(!typeInfo.isDerivedType());
 		String upperCaseTypeName = typeInfo.getName().toUpperCase();
 		if (allTypeInfoDictionary.containsKey(upperCaseTypeName)) {
 			throw new BemTypeAlreadyExistsException(typeInfo.getName());
