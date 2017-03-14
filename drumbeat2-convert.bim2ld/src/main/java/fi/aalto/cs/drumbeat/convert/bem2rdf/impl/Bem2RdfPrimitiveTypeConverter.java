@@ -18,37 +18,9 @@ class Bem2RdfPrimitiveTypeConverter {
 	private final Resource baseTypeForDoubles;
 	
 	public Bem2RdfPrimitiveTypeConverter(Bem2RdfConverterManager manager) throws Bem2RdfConverterConfigurationException {
-		this.manager = manager;
-		
-		//
-		// calculate baseTypeForDoubles
-		//		
-		String convertDoubleValuesTo = (String)manager.contextParams.convertDoublesTo();
-		switch (convertDoubleValuesTo) {
-		case StringParam.VALUE_AUTO:
-		case Bem2RdfConversionContextParams.VALUE_AUTO_MOST_SUPPORTED:
-		case Bem2RdfConversionContextParams.VALUE_XSD_DECIMAL:
-			baseTypeForDoubles = XSD.decimal;
-			break;
-		case Bem2RdfConversionContextParams.VALUE_XSD_DOUBLE:
-			baseTypeForDoubles = XSD.xdouble;
-			break;
-		case Bem2RdfConversionContextParams.VALUE_OWL_REAL:
-			baseTypeForDoubles = OwlVocabulary.OWL.real;
-			break;
-		case Bem2RdfConversionContextParams.VALUE_XSD_STRING:
-			baseTypeForDoubles = XSD.xstring;
-			break;
-		case Bem2RdfConversionContextParams.VALUE_AUTO_MOST_EFFICIENT:
-			List<Resource> preferredTypes = Arrays.asList(XSD.xdouble, OwlVocabulary.OWL.real, XSD.decimal);
-			baseTypeForDoubles = manager.context.getTargetOwlProfileList().getFirstSupportedDatatype(preferredTypes);						
-			break;
-		default:
-			throw new Bem2RdfConverterConfigurationException("Invalid value of option " + Bem2RdfConversionContextParams.PARAM_CONVERT_DOUBLES_TO);
-		}
-		
-		
-	}
+		this.manager = manager;		
+		baseTypeForDoubles = internalGetBaseTypeForDoubles();
+	}	
 	
 	public Resource convertPrimitiveTypeInfo(Model jenaModel, BemPrimitiveTypeInfo typeInfo, boolean includeDetails) {
 		
@@ -159,5 +131,48 @@ class Bem2RdfPrimitiveTypeConverter {
 		return jenaModel.createTypedLiteral(value, dataTypeUri);
 		
 	}
+	
+	
+	private Resource internalGetBaseTypeForDoubles() throws Bem2RdfConverterConfigurationException {
+		
+		String convertDoubleValuesTo = (String)manager.contextParams.convertDoublesTo();
+		
+		Resource baseTypeForDoubles;
+		
+		switch (convertDoubleValuesTo) {
+		case StringParam.VALUE_AUTO:
+		case Bem2RdfConversionContextParams.VALUE_AUTO_MOST_SUPPORTED:
+		case Bem2RdfConversionContextParams.VALUE_XSD_DECIMAL:
+			baseTypeForDoubles = XSD.decimal;
+			break;
+			
+		case Bem2RdfConversionContextParams.VALUE_XSD_DOUBLE:
+			baseTypeForDoubles = XSD.xdouble;
+			break;
+			
+		case Bem2RdfConversionContextParams.VALUE_OWL_REAL:
+			baseTypeForDoubles = OwlVocabulary.OWL.real;
+			break;
+			
+		case Bem2RdfConversionContextParams.VALUE_XSD_STRING:
+			baseTypeForDoubles = XSD.xstring;
+			break;
+			
+		case Bem2RdfConversionContextParams.VALUE_AUTO_MOST_EFFICIENT:
+			List<Resource> preferredTypes = Arrays.asList(XSD.xdouble, OwlVocabulary.OWL.real, XSD.decimal);
+			return manager.context.getTargetOwlProfileList().getFirstSupportedDatatype(preferredTypes);
+			
+		default:
+			throw new Bem2RdfConverterConfigurationException("Invalid value of option " + Bem2RdfConversionContextParams.PARAM_CONVERT_DOUBLES_TO);
+		}	
+		
+		if (!manager.context.getTargetOwlProfileList().supportsDataType(baseTypeForDoubles)) {
+			throw new DatatypeNotSupportedException(
+					String.format("Datatype '%s' is unsupported by one of OWL profiles: %s", baseTypeForDoubles, manager.context.getTargetOwlProfileList()));
+		}
+		
+		return baseTypeForDoubles;
+		
+	}	
 	
 }

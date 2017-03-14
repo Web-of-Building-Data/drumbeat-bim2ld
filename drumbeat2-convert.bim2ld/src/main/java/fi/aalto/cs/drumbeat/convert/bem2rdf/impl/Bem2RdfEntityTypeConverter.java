@@ -51,7 +51,7 @@ class Bem2RdfEntityTypeConverter {
 		List<BemEntityTypeInfo> disjointClasses = null;
 
 		final boolean supportsDisjointUnionOf = manager.targetOwlProfileList.supportsStatement(OWL2.disjointUnionOf,
-				OwlVocabulary.DumpData.ANY_URI_LIST);
+				OwlVocabulary.DumpData.SAMPLE_URI_LIST);
 
 		if (typeInfo.isAbstractSuperType() && supportsDisjointUnionOf) {
 			List<BemEntityTypeInfo> allSubtypeInfos = typeInfo.getSubTypeInfos();
@@ -82,7 +82,7 @@ class Bem2RdfEntityTypeConverter {
 					int indexOfCurrentType = allSubtypeInfos.indexOf(typeInfo);
 
 					final boolean supportDisjointWithList = manager.targetOwlProfileList
-							.supportsStatement(OWL.disjointWith, OwlVocabulary.DumpData.ANY_URI_LIST);
+							.supportsStatement(OWL.disjointWith, OwlVocabulary.DumpData.SAMPLE_URI_LIST);
 
 					if (allSubtypeInfos.size() > 2 && supportDisjointWithList) {
 						//
@@ -96,7 +96,7 @@ class Bem2RdfEntityTypeConverter {
 
 					} else {
 						final boolean supportDisjointWithSingleClass = manager.targetOwlProfileList
-								.supportsStatement(OWL.disjointWith, OwlVocabulary.DumpData.ANY_URI_1);
+								.supportsStatement(OWL.disjointWith, OwlVocabulary.DumpData.SAMPLE_URI_1);
 						// manager.context.getOwlVersion() <
 						// OwlProfile.OWL_VERSION_2_0
 
@@ -246,7 +246,7 @@ class Bem2RdfEntityTypeConverter {
 		List<BemUniqueKeyInfo> uniqueKeyInfos = typeInfo.getUniqueKeyInfos(false);
 
 		final boolean supportHasKey = manager.targetOwlProfileList.supportsStatement(OWL2.hasKey,
-				OwlVocabulary.DumpData.ANY_URI_LIST);
+				OwlVocabulary.DumpData.SAMPLE_URI_LIST);
 
 		if (uniqueKeyInfos != null && !uniqueKeyInfos.isEmpty() && supportHasKey) {
 			for (BemUniqueKeyInfo uniqueKeyInfo : uniqueKeyInfos) {

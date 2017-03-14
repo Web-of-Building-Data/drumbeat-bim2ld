@@ -46,8 +46,8 @@ public class RdfModelComparator {
 		lastComparisonDifferences = null;
 		
 		try {
-			lastExpectedMsgContainer = RdfMsgContainerBuilder.build(model1, comparatorPool);
-			lastActualMsgContainer = RdfMsgContainerBuilder.build(model2, comparatorPool);
+			lastExpectedMsgContainer = RdfMsgContainerBuilder.build(model1, comparatorPool, true);
+			lastActualMsgContainer = RdfMsgContainerBuilder.build(model2, comparatorPool, false);
 			
 			lastComparisonDifferences = new Stack<>();		
 			int result = lastExpectedMsgContainer.compareTo(lastActualMsgContainer, lastComparisonDifferences);		
@@ -100,7 +100,7 @@ public class RdfModelComparator {
 						actualObject.getClass().getSimpleName(),
 						printer.toString(actualObject));				
 				
-//				System.err.println(message);
+				System.err.println(message);
 				logger.warn(message);
 			}
 		} catch (RdfChecksumException e) {

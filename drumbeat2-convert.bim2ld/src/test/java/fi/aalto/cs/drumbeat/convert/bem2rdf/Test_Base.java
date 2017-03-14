@@ -152,7 +152,7 @@ public class Test_Base {
 				
 			}
 			
-			Assert.assertEquals(0, result);
+			Assert.assertTrue("Actual and expected models are different", result == 0);
 			
 		} else {
 			String reminderMessage = String.format("Reminder: To compare files '%s' and '%s'", expectedModelFilePath, actualModelFilePath);

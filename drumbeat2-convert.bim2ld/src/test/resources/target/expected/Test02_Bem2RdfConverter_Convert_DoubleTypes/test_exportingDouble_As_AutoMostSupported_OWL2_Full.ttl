@@ -3,7 +3,9 @@
 @prefix EXPRESS: <http://drumbeat.cs.hut.fi/owl/EXPRESS#> .
 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix model: <http://architectural.drb.cs.hut.fi/collection1/model1/> .
 @prefix TestSchema: <http://drumbeat.cs.hut.fi/owl/TestSchema#> .
+@prefix model_b: <http://architectural.drb.cs.hut.fi/collection1/model1/B/> .
 
 EXPRESS:NUMBER  a        owl:Class ;
         rdfs:subClassOf  [ a                owl:Restriction ;
@@ -14,6 +16,18 @@ EXPRESS:NUMBER  a        owl:Class ;
                            owl:allValuesFrom  xsd:decimal ;
                            owl:onProperty     EXPRESS:hasNumber
                          ] .
+
+<http://example.org/uri2>
+        a                               <http://example.org/uri1> ;
+        <http://example.org/property1>  [ a                EXPRESS:REAL ;
+                                          EXPRESS:hasReal  0.000005456287731
+                                        ] ;
+        <http://example.org/property1>  [ a                EXPRESS:REAL ;
+                                          EXPRESS:hasReal  "0"^^xsd:decimal
+                                        ] .
+
+<http://example.org/property1>
+        a       owl:ObjectProperty .
 
 EXPRESS:REAL  a          owl:Class ;
         rdfs:subClassOf  [ a                owl:Restriction ;
@@ -27,6 +41,9 @@ EXPRESS:REAL  a          owl:Class ;
 
 EXPRESS:hasNumber  a        owl:FunctionalDataProperty , owl:DatatypeProperty ;
         rdfs:subPropertyOf  EXPRESS:hasValue .
+
+<http://example.org/uri1>
+        a       owl:Class .
 
 EXPRESS:hasReal  a          owl:FunctionalDataProperty , owl:DatatypeProperty ;
         rdfs:subPropertyOf  EXPRESS:hasValue .

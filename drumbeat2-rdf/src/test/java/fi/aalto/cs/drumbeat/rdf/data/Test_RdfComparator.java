@@ -111,8 +111,8 @@ public class Test_RdfComparator {
 	public int compair(Model model1, Model model2, Function<Resource, Boolean> localResourceChecker) throws RdfChecksumException {
 		
 		RdfComparatorPool comparatorPool = new RdfComparatorPool(localResourceChecker);		
-		RdfMsgContainer msgContainer1 = RdfMsgContainerBuilder.build(model1, comparatorPool);
-		RdfMsgContainer msgContainer2 = RdfMsgContainerBuilder.build(model2, comparatorPool);
+		RdfMsgContainer msgContainer1 = RdfMsgContainerBuilder.build(model1, comparatorPool, false);
+		RdfMsgContainer msgContainer2 = RdfMsgContainerBuilder.build(model2, comparatorPool, false);
 		
 		Stack<Pair<Object, Object>> differences = new Stack<>();		
 		int result = msgContainer1.compareTo(msgContainer2, differences);

@@ -25,6 +25,7 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.XSD;
 
@@ -120,6 +121,66 @@ public class Test02_Bem2RdfConverter_Convert_DoubleTypes extends Test_Base {
 	public void test_exportingDouble_As_XsdString_OWL2_EL() throws Exception {
 		exportDouble(Bem2RdfConversionContextParams.VALUE_XSD_STRING, OwlProfileEnum.OWL2_EL);
 	}
+	
+	@Test
+	public void test_exportingDouble_As_XsdDouble_OWL2_Full() throws Exception {
+		exportDouble(Bem2RdfConversionContextParams.VALUE_XSD_DOUBLE, OwlProfileEnum.OWL2_Full);
+	}	
+
+	@Test
+	public void test_exportingDouble_As_XsdDouble_OWL2_DL() throws Exception {
+		exportDouble(Bem2RdfConversionContextParams.VALUE_XSD_DOUBLE, OwlProfileEnum.OWL2_DL);
+	}
+	
+	@Test
+	public void test_exportingDouble_As_XsdDouble_OWL2_RL() throws Exception {
+		exportDouble(Bem2RdfConversionContextParams.VALUE_XSD_DOUBLE, OwlProfileEnum.OWL2_RL);
+	}
+	
+	@Test(expected=DatatypeNotSupportedException.class)
+	public void test_exportingDouble_As_XsdDouble_OWL2_EL() throws Exception {
+		exportDouble(Bem2RdfConversionContextParams.VALUE_XSD_DOUBLE, OwlProfileEnum.OWL2_EL);
+	}
+	
+	@Test
+	public void test_exportingDouble_As_XsdDecimal_OWL2_Full() throws Exception {
+		exportDouble(Bem2RdfConversionContextParams.VALUE_XSD_DECIMAL, OwlProfileEnum.OWL2_Full);
+	}	
+
+	@Test
+	public void test_exportingDouble_As_XsdDecimal_OWL2_DL() throws Exception {
+		exportDouble(Bem2RdfConversionContextParams.VALUE_XSD_DECIMAL, OwlProfileEnum.OWL2_DL);
+	}
+	
+	@Test
+	public void test_exportingDouble_As_XsdDecimal_OWL2_RL() throws Exception {
+		exportDouble(Bem2RdfConversionContextParams.VALUE_XSD_DECIMAL, OwlProfileEnum.OWL2_RL);
+	}
+	
+	@Test
+	public void test_exportingDouble_As_XsdDecimal_OWL2_EL() throws Exception {
+		exportDouble(Bem2RdfConversionContextParams.VALUE_XSD_DECIMAL, OwlProfileEnum.OWL2_EL);
+	}
+
+	@Test
+	public void test_exportingDouble_As_OwlReal_OWL2_Full() throws Exception {
+		exportDouble(Bem2RdfConversionContextParams.VALUE_OWL_REAL, OwlProfileEnum.OWL2_Full);
+	}	
+
+	@Test
+	public void test_exportingDouble_As_OwlReal_OWL2_DL() throws Exception {
+		exportDouble(Bem2RdfConversionContextParams.VALUE_OWL_REAL, OwlProfileEnum.OWL2_DL);
+	}
+	
+	@Test(expected=DatatypeNotSupportedException.class)
+	public void test_exportingDouble_As_OwlReal_OWL2_RL() throws Exception {
+		exportDouble(Bem2RdfConversionContextParams.VALUE_OWL_REAL, OwlProfileEnum.OWL2_RL);
+	}
+	
+	@Test
+	public void test_exportingDouble_As_OwlReal_OWL2_EL() throws Exception {
+		exportDouble(Bem2RdfConversionContextParams.VALUE_OWL_REAL, OwlProfileEnum.OWL2_EL);
+	}
 
 	private void exportDouble(String convertDoubleTo, OwlProfileEnum owlProfileId) throws Exception {
 		startTest(1);
@@ -137,6 +198,8 @@ public class Test02_Bem2RdfConverter_Convert_DoubleTypes extends Test_Base {
 		Resource realTypeResource = converter.convertTypeInfo(jenaModel, bemSchema.REAL, true);
 		converter.convertTypeInfo(jenaModel, bemSchema.NUMBER, true);
 		
+		exportDoubleValues(converter, convertDoubleTo, realTypeResource);		
+		
 		boolean validateOwl = true;		
 		byte[] ontologyBuffer = writeAndCompareModel(1, jenaModel, WRITE_ACTUAL_DATASETS, COMPARE_WITH_EXPECTED_DATASETS, validateOwl);
 		if (validateOwl) {
@@ -144,10 +207,9 @@ public class Test02_Bem2RdfConverter_Convert_DoubleTypes extends Test_Base {
 			TestHelper.validateOwl(ontologyBuffer, owlProfileId, Arrays.asList(UseOfUndeclaredDataProperty.class), THROW_OWL_VIOLATIONS);
 		}
 		
-		exportingDoubleValues(converter, convertDoubleTo, realTypeResource);
 	}
 	
-	private void exportingDoubleValues(Bem2RdfConverterManager converter, String convertDoubleTo, Resource realTypeResource) {
+	private void exportDoubleValues(Bem2RdfConverterManager converter, String convertDoubleTo, Resource realTypeResource) {
 		String baseTypeForDouble = convertDoubleTo;
 		
 		switch (convertDoubleTo) {
@@ -161,15 +223,26 @@ public class Test02_Bem2RdfConverter_Convert_DoubleTypes extends Test_Base {
 		
 		baseTypeForDouble = baseTypeForDouble.replaceAll(OwlVocabulary.XSD.BASE_URI, OwlVocabulary.XSD.BASE_PREFIX + ":");
 
-		Resource parentResource = jenaModel.createResource(DATASET_BLANK_NODE_NAMESPACE_URI_FORMAT + "Fake_parent_resource");		
+		Resource sampleClassResource = OwlVocabulary.DumpData.SAMPLE_URI_1.inModel(jenaModel);		
+		sampleClassResource.addProperty(RDF.type, OWL.Class);
+
+		Resource sampleResource = OwlVocabulary.DumpData.SAMPLE_URI_2.inModel(jenaModel);		
+		sampleResource.addProperty(RDF.type, sampleClassResource);
+		
+		Property sampleProperty = OwlVocabulary.DumpData.SAMPLE_PROPERTY_1.inModel(jenaModel);
+		sampleProperty.addProperty(RDF.type, OWL.ObjectProperty);
 		
 		int childCount = 0;
 
 		double[] values = new double[]{0.0, 0.005456287731e-3};
 		for (double doubleValue : values) {
 			
-			RDFNode doubleNode = converter.convertValue(jenaModel, new BemPrimitiveValue(doubleValue, BemValueKindEnum.REAL), bemSchema.REAL, parentResource, childCount++, false);
+			RDFNode doubleNode = converter.convertValue(jenaModel, new BemPrimitiveValue(doubleValue, BemValueKindEnum.REAL), bemSchema.REAL, sampleResource, childCount++, false);
 			
+			sampleResource.addProperty(
+					sampleProperty,
+					doubleNode);
+
 			assertTrue(doubleNode.isResource());
 			StmtIterator properties = doubleNode.asResource().listProperties();
 			while (properties.hasNext()) {

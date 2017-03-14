@@ -3,8 +3,20 @@
 @prefix EXPRESS: <http://drumbeat.cs.hut.fi/owl/EXPRESS#> .
 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix model: <http://architectural.drb.cs.hut.fi/collection1/model1/> .
 @prefix TestSchema: <http://drumbeat.cs.hut.fi/owl/TestSchema#> .
+@prefix model_b: <http://architectural.drb.cs.hut.fi/collection1/model1/B/> .
 
 EXPRESS:LOGICAL  a  owl:Class .
+
+<http://example.org/uri2>
+        a                               <http://example.org/uri1> ;
+        <http://example.org/property1>  "UNKNOWN" , "FALSE" , "TRUE" .
+
+<http://example.org/property1>
+        a       owl:DatatypeProperty .
+
+<http://example.org/uri1>
+        a       owl:Class .
 
 EXPRESS:BOOLEAN  a  owl:Class .

@@ -32,20 +32,23 @@ public class RdfMsgContainerBuilder {
 	}
 	
 	public static RdfMsgContainer build(Model model, Function<Resource, Boolean> localResourceChecker) throws RdfChecksumException {		
-		return build(model, new RdfComparatorPool(localResourceChecker));
+		return build(model, new RdfComparatorPool(localResourceChecker), false);
 	}
 	
 	public static RdfMsgContainer build(Model model, RdfNodeTypeChecker nodeTypeChecker) throws RdfChecksumException {		
-		return build(model, new RdfComparatorPool(nodeTypeChecker));
+		return build(model, new RdfComparatorPool(nodeTypeChecker), false);
 	}
-
-	public static RdfMsgContainer build(Model model, RdfComparatorPool comparatorPool) throws RdfChecksumException {		
+	
+	public static RdfMsgContainer build(Model model, RdfComparatorPool comparatorPool, boolean clearCacheBefore) throws RdfChecksumException {
+		if (clearCacheBefore) {
+			comparatorPool.getChecksumCalculator().clearCache();			
+		}
 		RdfMsgContainerBuilder builder = new RdfMsgContainerBuilder(model, comparatorPool);
 		return builder.internalBuild();		
 	}
 	
-	private RdfMsgContainer internalBuild() throws RdfChecksumException {		
-
+	private RdfMsgContainer internalBuild() throws RdfChecksumException {
+		
 		ResIterator subjectsResourcesIterator = model.listSubjects();
 
 		while (subjectsResourcesIterator.hasNext()) {

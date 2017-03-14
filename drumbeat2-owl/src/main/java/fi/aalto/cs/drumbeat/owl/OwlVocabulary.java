@@ -8,16 +8,21 @@ public class OwlVocabulary {
 	
 	public static class DumpData {	
 		
-		public final static Resource ANY_URI_1 = DEFAULT_MODEL.createResource("http://example.org/uri1");
-		public final static Resource ANY_URI_2 = DEFAULT_MODEL.createResource("http://example.org/uri2");
-		public final static Resource ANY_URI_3 = DEFAULT_MODEL.createResource("http://example.org/uri3");
-		public final static RDFList ANY_URI_LIST = DEFAULT_MODEL.createList(new RDFNode[]{ANY_URI_1, ANY_URI_2, ANY_URI_3});
+		public final static Resource SAMPLE_URI_1 = DEFAULT_MODEL.createResource("http://example.org/uri1");
+		public final static Resource SAMPLE_URI_2 = DEFAULT_MODEL.createResource("http://example.org/uri2");
+		public final static Resource SAMPLE_URI_3 = DEFAULT_MODEL.createResource("http://example.org/uri3");
 		
-		public final static RDFNode ANY_LITERAL_1 = DEFAULT_MODEL.createLiteral("s1");
-		public final static RDFNode ANY_LITERAL_2 = DEFAULT_MODEL.createLiteral("s2");
-		public final static RDFNode ANY_LITERAL_3 = DEFAULT_MODEL.createLiteral("s3");
-		public final static RDFNode ANY_LITERAL_LIST = DEFAULT_MODEL.createList(new RDFNode[]{ANY_LITERAL_1, ANY_LITERAL_2, ANY_LITERAL_3});
+		public final static RDFList SAMPLE_URI_LIST = DEFAULT_MODEL.createList(new RDFNode[]{SAMPLE_URI_1, SAMPLE_URI_2, SAMPLE_URI_3});
 		
+		public final static RDFNode SAMPLE_LITERAL_1 = DEFAULT_MODEL.createLiteral("s1");
+		public final static RDFNode SAMPLE_LITERAL_2 = DEFAULT_MODEL.createLiteral("s2");
+		public final static RDFNode SAMPLE_LITERAL_3 = DEFAULT_MODEL.createLiteral("s3");
+		public final static RDFNode SAMPLE_LITERAL_LIST = DEFAULT_MODEL.createList(new RDFNode[]{SAMPLE_LITERAL_1, SAMPLE_LITERAL_2, SAMPLE_LITERAL_3});
+		
+		public final static Property SAMPLE_PROPERTY_1 = DEFAULT_MODEL.createProperty("http://example.org/property1");
+		public final static Property SAMPLE_PROPERTY_2 = DEFAULT_MODEL.createProperty("http://example.org/property2");
+		public final static Property SAMPLE_PROPERTY_3 = DEFAULT_MODEL.createProperty("http://example.org/property3");
+
 	}
 	
 	public static class OWL {

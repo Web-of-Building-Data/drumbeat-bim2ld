@@ -37,7 +37,7 @@ class Bem2RdfSelectTypeConverter {
 			}
 	
 			final boolean unionIsSupported = manager.targetOwlProfileList.supportsStatement(
-					OWL.unionOf, OwlVocabulary.DumpData.ANY_URI_LIST);
+					OWL.unionOf, OwlVocabulary.DumpData.SAMPLE_URI_LIST);
 	
 			if (unionIsSupported && subTypeResources.size() > 1) {
 				RDFList rdfList = jenaModel.createList(subTypeResources.iterator());

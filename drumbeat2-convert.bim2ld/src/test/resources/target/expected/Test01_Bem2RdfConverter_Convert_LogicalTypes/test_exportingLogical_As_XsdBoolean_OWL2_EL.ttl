@@ -3,7 +3,9 @@
 @prefix EXPRESS: <http://drumbeat.cs.hut.fi/owl/EXPRESS#> .
 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix model: <http://architectural.drb.cs.hut.fi/collection1/model1/> .
 @prefix TestSchema: <http://drumbeat.cs.hut.fi/owl/TestSchema#> .
+@prefix model_b: <http://architectural.drb.cs.hut.fi/collection1/model1/B/> .
 
 EXPRESS:LOGICAL  a  owl:Class .
 

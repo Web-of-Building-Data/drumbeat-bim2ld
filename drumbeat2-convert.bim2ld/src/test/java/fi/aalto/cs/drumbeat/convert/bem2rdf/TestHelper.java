@@ -185,7 +185,7 @@ public class TestHelper {
 		System.out.println("Exporting MSGs to " + filePath);
 		
 		if (msgContainer != null) {
-			msgContainer = RdfMsgContainerBuilder.build(model, comparatorPool);
+			msgContainer = RdfMsgContainerBuilder.build(model, comparatorPool, false);
 		}
 		RdfMsgContainerPrinter printer = new RdfMsgContainerPrinter(
 				model.getNsPrefixMap(), comparatorPool.getChecksumCalculator());

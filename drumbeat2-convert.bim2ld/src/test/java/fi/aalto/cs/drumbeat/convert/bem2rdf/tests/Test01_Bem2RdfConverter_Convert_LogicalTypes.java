@@ -16,17 +16,21 @@ import fi.aalto.cs.drumbeat.data.bem.schema.BemLogicalEnum;
 import fi.aalto.cs.drumbeat.data.step.schema.ExpressSchema;
 import fi.aalto.cs.drumbeat.owl.OwlProfileEnum;
 import fi.aalto.cs.drumbeat.owl.OwlProfileList;
+import fi.aalto.cs.drumbeat.owl.OwlVocabulary;
 import fi.aalto.cs.drumbeat.owl.OwlVocabulary.XSD;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.vocabulary.OWL;
+import org.apache.jena.vocabulary.RDF;
 
 public class Test01_Bem2RdfConverter_Convert_LogicalTypes extends Test_Base {
 	
-	public static final boolean COMPARE_WITH_EXPECTED_DATASETS = true;
 	public static final boolean WRITE_ACTUAL_DATASETS = true;
+	public static final boolean COMPARE_WITH_EXPECTED_DATASETS = true;
 	public static final Boolean THROW_OWL_VIOLATIONS = true;
 	
 	private Model jenaModel;
@@ -93,7 +97,7 @@ public class Test01_Bem2RdfConverter_Convert_LogicalTypes extends Test_Base {
 		exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_BOOLEAN, OwlProfileEnum.OWL2_RL);
 	}
 
-	@Test
+	@Test(expected=DatatypeNotSupportedException.class)
 	public void test_exportingLogical_As_XsdBoolean_OWL2_EL() throws Exception {
 		exportLogical(Bem2RdfConversionContextParams.VALUE_XSD_BOOLEAN, OwlProfileEnum.OWL2_EL);
 	}
@@ -134,32 +138,46 @@ public class Test01_Bem2RdfConverter_Convert_LogicalTypes extends Test_Base {
 		converter.convertTypeInfo(jenaModel, bemSchema.BOOLEAN, true);
 		converter.convertTypeInfo(jenaModel, bemSchema.LOGICAL, true);
 		
+		exportLogicalValues(converter, convertLogicalTo);
+		
 		boolean validateOwl = true;		
 		byte[] ontologyBuffer = writeAndCompareModel(1, jenaModel, WRITE_ACTUAL_DATASETS, COMPARE_WITH_EXPECTED_DATASETS, validateOwl);
 		if (validateOwl) {
 			assertNotNull(ontologyBuffer);
 			TestHelper.validateOwl(ontologyBuffer, owlProfileId, Arrays.asList(UseOfUndeclaredDataProperty.class), THROW_OWL_VIOLATIONS);
-		}
-		
-		exportLogicalValues(converter, convertLogicalTo);
+		}		
 	}
 	
 	private void exportLogicalValues(Bem2RdfConverterManager converter, String convertLogicalTo) {
 		
-		Resource parentResource = jenaModel.createResource(DATASET_BLANK_NODE_NAMESPACE_URI_FORMAT + "Fake_parent_resource");		
+		Resource sampleClassResource = OwlVocabulary.DumpData.SAMPLE_URI_1.inModel(jenaModel);		
+		sampleClassResource.addProperty(RDF.type, OWL.Class);
+
+		Resource sampleResource = OwlVocabulary.DumpData.SAMPLE_URI_2.inModel(jenaModel);		
+		sampleResource.addProperty(RDF.type, sampleClassResource);
+		
+		Property sampleProperty = OwlVocabulary.DumpData.SAMPLE_PROPERTY_1.inModel(jenaModel);
 		
 		int childCount = 0;
 		
 		for (BemLogicalEnum logicalValue : BemLogicalEnum.values()) {			
-			RDFNode logicalNode = converter.convertValue(jenaModel, new BemLogicalValue(logicalValue), bemSchema.LOGICAL, parentResource, childCount++, false);
+			RDFNode logicalNode = converter.convertValue(jenaModel, new BemLogicalValue(logicalValue), bemSchema.LOGICAL, sampleResource, childCount++, false);
+			
+			sampleResource.addProperty(
+					sampleProperty,
+					logicalNode);
+			
 			switch (convertLogicalTo) {
 			case Bem2RdfConversionContextParams.VALUE_NAMED_INDIVIDUAL:
+				sampleProperty.addProperty(RDF.type, OWL.ObjectProperty);
 				assertTrue(logicalNode.isURIResource());
 				assertEquals(logicalValue.name(), logicalNode.asResource().getLocalName());
+				
 				break;
 			case Bem2RdfConversionContextParams.VALUE_XSD_BOOLEAN:
 			case Bem2RdfConversionContextParams.VALUE_XSD_STRING:
 			default:
+				sampleProperty.addProperty(RDF.type, OWL.DatatypeProperty);
 				assertTrue(logicalNode.isLiteral());
 				assertEquals(convertLogicalTo, logicalNode.asLiteral().getDatatypeURI().replaceAll(XSD.BASE_URI, XSD.BASE_PREFIX + ":"));
 				break;

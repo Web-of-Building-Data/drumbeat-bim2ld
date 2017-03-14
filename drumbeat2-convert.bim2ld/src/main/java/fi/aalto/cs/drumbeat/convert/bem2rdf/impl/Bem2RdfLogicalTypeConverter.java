@@ -14,35 +14,13 @@ class Bem2RdfLogicalTypeConverter{
 	
 	private final Bem2RdfConverterManager manager;
 
-	final Map<BemValueKindEnum, Property> map_Type_hasXXXProperty;
 	
 	private final Resource baseTypeForLogical;
 	
 	public Bem2RdfLogicalTypeConverter(Bem2RdfConverterManager manager) throws Bem2RdfConverterConfigurationException {
 		this.manager = manager;
-		map_Type_hasXXXProperty = new HashMap<>();
-		
-		//
-		// calculate baseTypeForLogicals
-		//		
-		String convertLogicalValuesTo = manager.contextParams.convertLogicalsTo();
-		switch (convertLogicalValuesTo) {
-		case StringParam.VALUE_AUTO:
-		case Bem2RdfConversionContextParams.VALUE_NAMED_INDIVIDUAL:
-			baseTypeForLogical = OWL2.NamedIndividual;
-			break;
-		case Bem2RdfConversionContextParams.VALUE_XSD_STRING:
-			baseTypeForLogical = XSD.xstring;
-			break;
-		case Bem2RdfConversionContextParams.VALUE_XSD_BOOLEAN:
-			baseTypeForLogical = XSD.xboolean;
-			break;
-		default:
-			throw new Bem2RdfConverterConfigurationException("Invalid value of option " + Bem2RdfConversionContextParams.PARAM_CONVERT_LOGICALS_TO);
-		}
-
+		this.baseTypeForLogical = internalGetBaseTypeForLogical();
 	}
-	
 	
 	public Resource convertLogicalTypeInfo(Model jenaModel, BemLogicalTypeInfo typeInfo, boolean includeDetails) {
 		String typeUri = manager.uriBuilder.buildTypeUri(typeInfo);
@@ -62,7 +40,7 @@ class Bem2RdfLogicalTypeConverter{
 			
 			final boolean enumerationIsSupported = 
 					manager.targetOwlProfileList.supportsStatement(OWL.oneOf, 
-							baseTypeForLogical.equals(OWL2.NamedIndividual) ? OwlVocabulary.DumpData.ANY_URI_LIST : OwlVocabulary.DumpData.ANY_LITERAL_LIST);	
+							baseTypeForLogical.equals(OWL2.NamedIndividual) ? OwlVocabulary.DumpData.SAMPLE_URI_LIST : OwlVocabulary.DumpData.SAMPLE_LITERAL_LIST);	
 					
 			if (enumerationIsSupported) {
 				
@@ -125,7 +103,36 @@ class Bem2RdfLogicalTypeConverter{
 //	
 
 
-
+	private Resource internalGetBaseTypeForLogical() throws Bem2RdfConverterConfigurationException {
+		
+		String convertLogicalValuesTo = manager.contextParams.convertLogicalsTo();
+		
+		Resource baseTypeForLogical;
+		
+		switch (convertLogicalValuesTo) {
+		case StringParam.VALUE_AUTO:
+		case Bem2RdfConversionContextParams.VALUE_NAMED_INDIVIDUAL:
+			baseTypeForLogical = OWL2.NamedIndividual;
+			break;
+		case Bem2RdfConversionContextParams.VALUE_XSD_STRING:
+			baseTypeForLogical = XSD.xstring;
+			break;
+		case Bem2RdfConversionContextParams.VALUE_XSD_BOOLEAN:
+			baseTypeForLogical = XSD.xboolean;
+			break;
+		default:
+			throw new Bem2RdfConverterConfigurationException("Invalid value of option " + Bem2RdfConversionContextParams.PARAM_CONVERT_LOGICALS_TO);
+		}
+		
+		if (!baseTypeForLogical.equals(OWL2.NamedIndividual) &&
+				!manager.context.getTargetOwlProfileList().supportsDataType(baseTypeForLogical)) {
+			throw new DatatypeNotSupportedException(
+					String.format("Datatype '%s' is unsupported by one of OWL profiles: %s", baseTypeForLogical, manager.context.getTargetOwlProfileList()));
+		}
+		
+		return baseTypeForLogical;
+		
+	}	
 	
 	
 }
