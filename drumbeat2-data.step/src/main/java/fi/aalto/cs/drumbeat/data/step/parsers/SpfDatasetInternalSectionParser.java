@@ -377,19 +377,45 @@ class SpfDatasetInternalSectionParser {
 				
 				if ((attributeValueTypeInfo instanceof BemCollectionTypeInfo) && 
 						((BemCollectionTypeInfo)attributeValueTypeInfo).isSorted())
-				{
-					// sorted collection
-					BemCollectionValue<BemValue> valueCollection = new BemCollectionValue<>();						
-					for (BemValue value : ((StepTemporaryCollectionValueWrapper)attributeValue).getValues()) {
-						valueCollection.add(value);
+				{					
+					
+					BemCollectionValue<BemValue> collectionValue = new BemCollectionValue<BemValue>();
+
+					if (((BemCollectionTypeInfo)attributeValueTypeInfo).getItemTypeInfo() instanceof BemCollectionTypeInfo) {
+						
+						// COLLECTION of COLLECTION
+						
+						for (BemValue value : ((StepTemporaryCollectionValueWrapper)attributeValue).getValues()) {
+							BemCollectionValue<BemValue> internalCollectionValue = new BemCollectionValue<>();
+							for (BemValue value2 : ((StepTemporaryCollectionValueWrapper)value).getValues()) {
+								internalCollectionValue.add(value2);
+							}
+							collectionValue.add(internalCollectionValue);	
+						}
+						
+						
+					} else {
+						
+						// COLLECTION of VALUE
+						for (BemValue value : ((StepTemporaryCollectionValueWrapper)attributeValue).getValues()) {
+							collectionValue.add(value);
+						}
+						
 					}
-					entity.getAttributeMap().add(attributeInfo, valueCollection);
-				} else {
+					
+					entity.getAttributeMap().add(attributeInfo, collectionValue);
+					
+					
+				} else {										
+					
 					// unsorted collection
 					for (BemValue value : ((StepTemporaryCollectionValueWrapper)attributeValue).getValues()) {
+						assert(!(value instanceof StepTemporaryCollectionValueWrapper));
 						entity.getAttributeMap().add(attributeInfo, value);
 					}
+					
 				}
+				
 				
 			} else {
 				
