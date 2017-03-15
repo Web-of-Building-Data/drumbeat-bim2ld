@@ -5,10 +5,8 @@ import org.apache.log4j.Logger;
 
 import org.apache.jena.rdf.model.Model;
 
-import fi.aalto.cs.drumbeat.common.config.document.ConfigurationDocument;
 import fi.aalto.cs.drumbeat.common.config.document.ConfigurationParserException;
 import fi.aalto.cs.drumbeat.convert.bem2rdf.*;
-import fi.aalto.cs.drumbeat.data.bem.dataset.BemDataset;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchema;
 
 

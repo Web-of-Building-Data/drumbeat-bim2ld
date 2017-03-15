@@ -1,25 +1,18 @@
 package fi.aalto.cs.drumbeat.rdf.data.msg;
 
-import java.security.MessageDigest;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 import java.util.Stack;
 
-import org.apache.commons.codec.digest.DigestUtils;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 
 import fi.aalto.cs.drumbeat.common.collections.Pair;
 import fi.aalto.cs.drumbeat.common.digest.ByteArray;
-import fi.aalto.cs.drumbeat.common.digest.MessageDigestManager;
-import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.rdf.data.RdfChecksumException;
 import fi.aalto.cs.drumbeat.rdf.data.RdfComparatorPool.*;
 
@@ -28,9 +21,6 @@ public class RdfTree extends TreeMap<Statement, RdfTree> implements Comparable<R
 	
 	private static final long serialVersionUID = 1L;
 
-	private static final byte BYTE_START_PREDICATE = (byte)0;
-	private static final byte BYTE_END_PREDICATE = (byte)0xFF;
-	
 	private final Resource headNode;
 	private final RdfMsgContainer msgContainer;
 	private RdfTreeTypeEnum type;

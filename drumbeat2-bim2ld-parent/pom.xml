@@ -67,7 +67,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -122,6 +122,8 @@
 		<module>../drumbeat2-data.ifc</module>
 		<module>../drumbeat2-data.rdf</module>
 		<module>../drumbeat2-data.owl</module>
+		<module>../drumbeat2-convert.bim2ld</module>
+		<module>../drumbeat2-bim2ld-cli</module>
 		<!-- 
 		<module>../drumbeat2-rdf</module>
 		<module>../drumbeat2-ifc.common</module>

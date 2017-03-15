@@ -4,7 +4,6 @@ import static fi.aalto.cs.drumbeat.convert.bem2rdf.Bem2RdfConversionContextParam
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Calendar;
 
 import org.junit.Before;
@@ -14,7 +13,6 @@ import org.apache.jena.rdf.model.ModelFactory;
 
 import fi.aalto.cs.drumbeat.convert.bem2rdf.Bem2RdfConversionContext;
 import fi.aalto.cs.drumbeat.convert.bem2rdf.Bem2RdfDatasetExporter;
-import fi.aalto.cs.drumbeat.convert.bem2rdf.Bem2RdfSchemaExporter;
 import fi.aalto.cs.drumbeat.convert.bem2rdf.TestHelper;
 import fi.aalto.cs.drumbeat.convert.bem2rdf.Test_Base;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemDataset;
