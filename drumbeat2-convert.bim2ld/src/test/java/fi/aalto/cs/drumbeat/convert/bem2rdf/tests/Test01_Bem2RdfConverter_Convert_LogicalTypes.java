@@ -129,7 +129,7 @@ public class Test01_Bem2RdfConverter_Convert_LogicalTypes extends Test_Base {
 				Bem2RdfConversionContextParams.PARAM_CONVERT_LOGICALS_TO,
 				convertLogicalTo);
 		
-		context.setTargetOwlProfileList(new OwlProfileList(owlProfileId));
+		context.setLimitingOwlProfileList(new OwlProfileList(owlProfileId));
 		
 		Bem2RdfConverterManager converter = new Bem2RdfConverterManager(context, bemSchema);
 		

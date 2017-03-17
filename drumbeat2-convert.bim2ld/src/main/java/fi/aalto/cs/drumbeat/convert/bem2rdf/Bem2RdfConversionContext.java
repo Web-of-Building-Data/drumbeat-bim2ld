@@ -5,7 +5,9 @@ import fi.aalto.cs.drumbeat.owl.OwlProfileList;
 
 public class Bem2RdfConversionContext {
 	
-	private OwlProfileList targetOwlProfileList;
+	private String name;
+	
+	private OwlProfileList limitingOwlProfileList;
 	private Bem2RdfConversionContextParams conversionParams;
 	
 	private String builtInOntologyNamespacePrefixFormat;
@@ -21,21 +23,30 @@ public class Bem2RdfConversionContext {
 	private String datasetBlankNodeNamespaceUriFormat;	
 
 	public Bem2RdfConversionContext() {
-		this(null, null);
+		this(null, null, null);
 	}
 
-	public Bem2RdfConversionContext(OwlProfileList targetOwlProfileList, Bem2RdfConversionContextParams conversionParams) {
-		this.targetOwlProfileList = targetOwlProfileList != null ?
-				targetOwlProfileList : new OwlProfileList(OwlProfileEnum.OWL2_Full);
+	public Bem2RdfConversionContext(String name, OwlProfileList limitingOwlProfileList, Bem2RdfConversionContextParams conversionParams) {
+		this.name = name;
+		this.limitingOwlProfileList = limitingOwlProfileList != null ?
+				limitingOwlProfileList : new OwlProfileList(OwlProfileEnum.OWL2_Full);
 		this.conversionParams = conversionParams != null ? conversionParams :new Bem2RdfConversionContextParams();
 	}
-
-	public OwlProfileList getTargetOwlProfileList() {
-		return targetOwlProfileList;
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public void setTargetOwlProfileList(OwlProfileList targetOwlProfileList) {
-		this.targetOwlProfileList = targetOwlProfileList;
+	public OwlProfileList getLimitingOwlProfileList() {
+		return limitingOwlProfileList;
+	}
+
+	public void setLimitingOwlProfileList(OwlProfileList limitingOwlProfileList) {
+		this.limitingOwlProfileList = limitingOwlProfileList;
 	}
 
 	public Bem2RdfConversionContextParams getConversionParams() {

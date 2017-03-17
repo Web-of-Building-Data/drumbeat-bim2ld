@@ -190,7 +190,7 @@ public class Test02_Bem2RdfConverter_Convert_DoubleTypes extends Test_Base {
 				Bem2RdfConversionContextParams.PARAM_CONVERT_DOUBLES_TO,
 				convertDoubleTo);
 		
-		context.setTargetOwlProfileList(new OwlProfileList(owlProfileId));
+		context.setLimitingOwlProfileList(new OwlProfileList(owlProfileId));
 		
 		Bem2RdfConverterManager converter = new Bem2RdfConverterManager(context, bemSchema);
 		
@@ -258,7 +258,7 @@ public class Test02_Bem2RdfConverter_Convert_DoubleTypes extends Test_Base {
 					assertEquals(realTypeResource.getURI(), object.asResource().getURI());
 				} else {
 					property.getLocalName().equals("hasReal");
-					assertEquals(doubleValue, statement.getObject().asLiteral().getDouble(), 0.1);
+					assertEquals(doubleValue, statement.getObject().asLiteral().getDouble(), DOUBLE_DELTA);
 				}
 			}
 		}		

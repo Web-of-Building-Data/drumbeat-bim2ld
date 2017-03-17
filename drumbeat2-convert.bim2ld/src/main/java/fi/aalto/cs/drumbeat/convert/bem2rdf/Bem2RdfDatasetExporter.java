@@ -39,5 +39,10 @@ public class Bem2RdfDatasetExporter {
 		return jenaModel;
 	}
 	
+	
+	public Bem2RdfUriBuilder getUriBuilder() {
+		return uriBuilder;
+	}
+	
 
 }

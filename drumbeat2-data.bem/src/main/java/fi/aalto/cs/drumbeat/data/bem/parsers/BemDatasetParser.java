@@ -33,7 +33,7 @@ public abstract class BemDatasetParser {
 	
 	public boolean checkFileType(String fileType) {
 		// case-sensitive checking (like in UNIX)
-		return getSupportedFileTypes().contains(fileType);		
+		return getSupportedFileTypes().contains(fileType.trim());		
 	}
 	
 	protected void internalCheckFileType(String fileType, boolean checkFileType) throws BemUnsupportedDataTypeException {

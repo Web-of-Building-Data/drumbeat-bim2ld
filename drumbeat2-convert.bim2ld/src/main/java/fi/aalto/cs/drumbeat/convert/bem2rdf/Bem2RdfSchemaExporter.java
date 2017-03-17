@@ -22,8 +22,12 @@ public class Bem2RdfSchemaExporter {
 		this.context = context;
 		this.jenaModel = targetJenaModel;
 		
-		this.uriBuilder = Bem2RdfUriBuilder.createUriBuilder(context, sourceBemSchema);		
+		this.uriBuilder = Bem2RdfUriBuilder.createUriBuilder(context, sourceBemSchema);
 		this.converterManager = new Bem2RdfConverterManager(context, uriBuilder);
+	}
+	
+	public Bem2RdfUriBuilder getUriBuilder() {
+		return uriBuilder;
 	}
 	
 	public Model export() throws IOException, BemException {

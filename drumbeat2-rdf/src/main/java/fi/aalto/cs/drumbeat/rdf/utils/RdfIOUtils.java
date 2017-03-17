@@ -49,6 +49,13 @@ public class RdfIOUtils {
 	}
 	
 	
+	/**
+	 * Imports a RDF file from a file
+	 * 
+	 * @param model
+	 * @param filePath
+	 * @throws IOException
+	 */
 	public static void importRdfFileToJenaModel(Model model, String filePath) throws IOException {
 		
 		SerializedInputStream sis = SerializedInputStream.getUncompressedInputStream(filePath);

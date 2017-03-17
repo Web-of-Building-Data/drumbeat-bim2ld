@@ -18,7 +18,7 @@ class Bem2RdfDrummondListCollectionTypeConverter extends Bem2RdfCollectionTypeCo
 	@Override
 	void exportPermanentBuiltInDefinitions(Model jenaModel) {
 		
-		boolean declareFunctionalProperties = manager.targetOwlProfileList.supportsStatement(RDF.type, OWL.FunctionalProperty);
+		boolean declareFunctionalProperties = manager.limitingOwlProfileList.supportsStatement(RDF.type, OWL.FunctionalProperty);
 		
 		Resource topCollectionTypeResource = jenaModel.createResource(manager.uriBuilder.buildBuiltInOntologyUri(Bem2RdfVocabulary.BuiltInOntology.Collection)); 
 		

@@ -112,7 +112,7 @@ public class Test08_Bem2RdfSchemaExporter_Exporting_IfcDataset_sample extends Te
 		
 		startTest(1);
 		
-		context.setTargetOwlProfileList(new OwlProfileList(owlProfileId));
+		context.setLimitingOwlProfileList(new OwlProfileList(owlProfileId));
 		context.getConversionParams().setParamValue(
 				PARAM_CONVERT_COLLECTIONS_TO,
 				convertCollectionsTo);

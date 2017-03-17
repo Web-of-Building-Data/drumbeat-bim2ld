@@ -96,7 +96,7 @@ public class Test06_Bem2RdfSchemaExporter_Exporting_BuiltIn_ExpressSchema extend
 		
 		startTest(1);
 		
-		context.setTargetOwlProfileList(new OwlProfileList(owlProfileId));
+		context.setLimitingOwlProfileList(new OwlProfileList(owlProfileId));
 		context.getConversionParams().setParamValue(
 				PARAM_CONVERT_COLLECTIONS_TO,
 				convertCollectionsTo);

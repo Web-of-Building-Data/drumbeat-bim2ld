@@ -1,0 +1,52 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>fi.aalto.cs.drumbeat</groupId>
+		<artifactId>drumbeat2-bim2ld-parent</artifactId>
+		<version>0.0.1</version>
+		<relativePath>../drumbeat2-bim2ld-parent/pom.xml</relativePath>
+	</parent>
+
+	<artifactId>drumbeat2-bim2ld-cli</artifactId>
+	<packaging>jar</packaging>
+
+	<name>drumbeat2-bim2ld-cli</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+
+		<!-- Drumbeat -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>drumbeat2-convert.bim2ld</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>drumbeat2-data.ifc</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>drumbeat-rdf.jena.provider</artifactId>
+			<version>${drumbeat.jena.version}</version>
+		</dependency>
+
+		<!-- JUnit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+</project>

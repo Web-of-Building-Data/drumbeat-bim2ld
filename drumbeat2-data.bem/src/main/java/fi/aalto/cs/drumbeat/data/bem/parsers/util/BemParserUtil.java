@@ -82,7 +82,8 @@ public class BemParserUtil {
 			}
 		}
 		
-		throw new BemUnsupportedDataTypeException(filePath);
+		throw new BemUnsupportedDataTypeException(
+				String.format("No BEM Schema Parser resistered for this file extension: %s (file extension: %s)", filePath, fileExtension));
 	}	
 	
 	public static List<BemDatasetParser> getDatasetParsers() {
@@ -141,7 +142,8 @@ public class BemParserUtil {
 			}
 		}
 		
-		throw new BemUnsupportedDataTypeException(filePath);
+		throw new BemUnsupportedDataTypeException(
+				String.format("No BEM Dataset Parser resistered for this file extension: %s (file extension: %s)", filePath, fileExtension));
 	}	
 	
 	

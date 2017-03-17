@@ -23,9 +23,7 @@ public class Test_Base {
 	public static final boolean ALL_TESTS_COMPARE_WITH_EXPECTED_DATASETS = true;
 
 	public static final String TEST_RESOURCES_FOLDER_PATH ="src/test/resources/"; 
-	public static final String TEST_CONFIG_FOLDER_PATH = TEST_RESOURCES_FOLDER_PATH + "config/"; 
-	
-	public static final double DOUBLE_DELTA = 1e-15;
+	public static final String TEST_CONFIG_FOLDER_PATH = TEST_RESOURCES_FOLDER_PATH + "config/";
 	
 	public static final String CONFIG_FILE_PATH = TEST_CONFIG_FOLDER_PATH + "ifc2ld.xml";
 	public static final String LOGGER_CONFIG_FILE_PATH = TEST_CONFIG_FOLDER_PATH + "log4j.xml";
@@ -51,6 +49,8 @@ public class Test_Base {
 	
 	public static final String DATASET_BLANK_NODE_NAMESPACE_PREFIX_FORMAT = "model_b";
 	public static final String DATASET_BLANK_NODE_NAMESPACE_URI_FORMAT = DATASET_NAMESPACE_URI_FORMAT + "B/";
+	
+	public static final double DOUBLE_DELTA = 1e-15;	
 	
 	private static boolean initialized = false;
 	

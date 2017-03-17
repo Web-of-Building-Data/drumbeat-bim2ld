@@ -33,7 +33,7 @@ class Bem2RdfPrimitiveTypeConverter {
 			Property property_hasXXX = manager.getProperty_hasXXX(jenaModel, typeInfo.getValueKind());
 			
 	//		jenaModel.add(property, RDF.type, OWL.DatatypeProperty);
-	//		if (targetOwlProfileList.supportsRdfProperty(OWL.FunctionalProperty, null)) {
+	//		if (limitingOwlProfileList.supportsRdfProperty(OWL.FunctionalProperty, null)) {
 	//			jenaModel.add(property, RDF.type, OwlVocabulary.OWL.FunctionalDataProperty);
 	//		}
 			
@@ -51,7 +51,7 @@ class Bem2RdfPrimitiveTypeConverter {
 			// TODO: check if it is needed to export domains and ranges
 			manager.convertPropertyRestrictions(jenaModel, property_hasXXX, typeResource, baseDataType, false, 1, 1, true, true);
 	
-	//		if (targetOwlProfileList.supportsRdfProperty(OWL.allValuesFrom, null)) {		
+	//		if (limitingOwlProfileList.supportsRdfProperty(OWL.allValuesFrom, null)) {		
 	//			
 	//			writePropertyRestriction(typeResource, Ifc2RdfVocabulary.EXPRESS.value, OWL.allValuesFrom, getXsdDataType((IfcLiteralTypeInfo)baseTypeInfo));
 	//		
@@ -160,15 +160,15 @@ class Bem2RdfPrimitiveTypeConverter {
 			
 		case Bem2RdfConversionContextParams.VALUE_AUTO_MOST_EFFICIENT:
 			List<Resource> preferredTypes = Arrays.asList(XSD.xdouble, OwlVocabulary.OWL.real, XSD.decimal);
-			return manager.context.getTargetOwlProfileList().getFirstSupportedDatatype(preferredTypes);
+			return manager.context.getLimitingOwlProfileList().getFirstSupportedDatatype(preferredTypes);
 			
 		default:
 			throw new Bem2RdfConverterConfigurationException("Invalid value of option " + Bem2RdfConversionContextParams.PARAM_CONVERT_DOUBLES_TO);
 		}	
 		
-		if (!manager.context.getTargetOwlProfileList().supportsDataType(baseTypeForDoubles)) {
+		if (!manager.context.getLimitingOwlProfileList().supportsDataType(baseTypeForDoubles)) {
 			throw new DatatypeNotSupportedException(
-					String.format("Datatype '%s' is unsupported by one of OWL profiles: %s", baseTypeForDoubles, manager.context.getTargetOwlProfileList()));
+					String.format("Datatype '%s' is unsupported by one of OWL profiles: %s", baseTypeForDoubles, manager.context.getLimitingOwlProfileList()));
 		}
 		
 		return baseTypeForDoubles;

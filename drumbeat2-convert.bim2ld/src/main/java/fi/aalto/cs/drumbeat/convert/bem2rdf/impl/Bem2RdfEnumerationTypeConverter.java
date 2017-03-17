@@ -61,7 +61,7 @@ class Bem2RdfEnumerationTypeConverter {
 			
 	//		assert(enumValueNodes.size() > 1) : String.format("Type %s has only 1 enum value", typeInfo);
 			
-			final boolean enumerationIsSupported = manager.targetOwlProfileList.supportsStatement(OWL.oneOf, OwlVocabulary.DumpData.SAMPLE_URI_LIST);	
+			final boolean enumerationIsSupported = manager.limitingOwlProfileList.supportsStatement(OWL.oneOf, OwlVocabulary.DumpData.SAMPLE_URI_LIST);	
 					
 			if (enumerationIsSupported) {
 				

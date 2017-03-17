@@ -92,7 +92,7 @@ public class Test09_Bem2RdfSchemaExporter_Exporting_IfcSchema_IFC4 extends Test_
 		
 		startTest(1);
 		
-		context.setTargetOwlProfileList(new OwlProfileList(owlProfileId));
+		context.setLimitingOwlProfileList(new OwlProfileList(owlProfileId));
 		context.getConversionParams().setParamValue(
 				PARAM_CONVERT_COLLECTIONS_TO,
 				convertCollectionsTo);

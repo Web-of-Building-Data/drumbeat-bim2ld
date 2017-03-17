@@ -84,7 +84,7 @@ public class Test10_Bem2RdfSchemaExporter_Exporting_IfcDataset_C3DTerrainCorrido
 		
 		if (bemDataset != null) {
 		
-			context.setTargetOwlProfileList(new OwlProfileList(owlProfileId));
+			context.setLimitingOwlProfileList(new OwlProfileList(owlProfileId));
 			context.getConversionParams().setParamValue(
 					PARAM_CONVERT_COLLECTIONS_TO,
 					convertCollectionsTo);

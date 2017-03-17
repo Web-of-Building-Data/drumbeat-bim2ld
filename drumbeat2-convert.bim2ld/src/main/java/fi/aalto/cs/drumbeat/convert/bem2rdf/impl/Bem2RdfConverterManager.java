@@ -34,7 +34,7 @@ public class Bem2RdfConverterManager {
 	final Bem2RdfConversionContext context;
 	final Bem2RdfUriBuilder uriBuilder;
 	final Bem2RdfConversionContextParams contextParams;
-	final OwlProfileList targetOwlProfileList;
+	final OwlProfileList limitingOwlProfileList;
 	
 	final Bem2RdfBuiltInOntologyConverter builtInOntologyConverter;
 	final Bem2RdfCollectionTypeConverter collectionTypeConverter;
@@ -52,8 +52,8 @@ public class Bem2RdfConverterManager {
 		this.uriBuilder = uriBuilder;
 		
 		contextParams = context.getConversionParams();
-		targetOwlProfileList = context.getTargetOwlProfileList();
-		nameAllBlankNodes = contextParams.nameAllBlankNodes() || !targetOwlProfileList.supportsAnonymousIndividual();
+		limitingOwlProfileList = context.getLimitingOwlProfileList();
+		nameAllBlankNodes = contextParams.nameAllBlankNodes() || !limitingOwlProfileList.supportsAnonymousIndividual();
 		
 		builtInOntologyConverter = new Bem2RdfBuiltInOntologyConverter(this);
 //		collectionTypeConverter = new Bem2RdfCollectionTypeConverter(this);
@@ -342,7 +342,7 @@ public class Bem2RdfConverterManager {
 			property.addProperty(RDFS.range, range);
 		}
 
-		if (max != null && max == 1 && targetOwlProfileList.supportsStatement(RDF.type, OWL.FunctionalProperty)) {			
+		if (max != null && max == 1 && limitingOwlProfileList.supportsStatement(RDF.type, OWL.FunctionalProperty)) {			
 			// TODO: detect when FunctionalDataProperty is supported
 			property.addProperty(RDF.type, isObjectProperty ? OWL.FunctionalProperty : OwlVocabulary.OWL.FunctionalDataProperty);
 		}
@@ -350,12 +350,12 @@ public class Bem2RdfConverterManager {
 		
 //		jenaModel.add(attributeResource, RDF.type, Ifc2RdfVocabulary.EXPRESS.EntityProperty);						
 
-		if (targetOwlProfileList.supportsStatement(RDF.type, OWL.Restriction)) {
+		if (limitingOwlProfileList.supportsStatement(RDF.type, OWL.Restriction)) {
 
 			//
 			// write constraint about property type
 			//
-			if (range != null && targetOwlProfileList.supportsStatement(OWL.allValuesFrom, null)) {
+			if (range != null && limitingOwlProfileList.supportsStatement(OWL.allValuesFrom, null)) {
 				exportPropertyRestriction(domain, property, OWL.allValuesFrom, range, jenaModel);
 			}
 			
@@ -370,18 +370,18 @@ public class Bem2RdfConverterManager {
 			}
 			
 			if (minNode != null) {
-				if (minNode.equals(maxNode) && targetOwlProfileList.supportsStatement(OWL.cardinality, minNode)) {
+				if (minNode.equals(maxNode) && limitingOwlProfileList.supportsStatement(OWL.cardinality, minNode)) {
 					exportPropertyRestriction(domain, property, OWL.cardinality, minNode, jenaModel);
 					minNode = null;
 					maxNode = null;
-				} else if (targetOwlProfileList.supportsStatement(OWL.minCardinality, minNode)) {
+				} else if (limitingOwlProfileList.supportsStatement(OWL.minCardinality, minNode)) {
 					exportPropertyRestriction(domain, property, OWL.minCardinality, minNode, jenaModel);
 					minNode = null;
 				}
 			}
 			
 			if (maxNode != null) {
-				if (targetOwlProfileList.supportsStatement(OWL.maxCardinality, maxNode)) {
+				if (limitingOwlProfileList.supportsStatement(OWL.maxCardinality, maxNode)) {
 					exportPropertyRestriction(domain, property, OWL.maxCardinality, maxNode, jenaModel);
 					minNode = null;
 				}

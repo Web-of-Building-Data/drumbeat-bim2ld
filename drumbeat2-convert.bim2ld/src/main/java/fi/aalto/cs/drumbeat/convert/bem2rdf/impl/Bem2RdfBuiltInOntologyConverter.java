@@ -14,7 +14,7 @@ class Bem2RdfBuiltInOntologyConverter {
 	
 	public void exportPermanentBuiltInDefinitions(Model jenaModel) {
 		
-		final boolean declareFunctionalProperty = manager.targetOwlProfileList.supportsStatement(RDF.type, OWL.FunctionalProperty);
+		final boolean declareFunctionalProperty = manager.limitingOwlProfileList.supportsStatement(RDF.type, OWL.FunctionalProperty);
 		
 		manager.collectionTypeConverter.exportPermanentBuiltInDefinitions(jenaModel);		
 

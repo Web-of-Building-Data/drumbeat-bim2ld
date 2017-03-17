@@ -39,7 +39,7 @@ class Bem2RdfLogicalTypeConverter{
 	//		assert(enumValueNodes.size() > 1) : String.format("Type %s has only 1 enum value", typeInfo);
 			
 			final boolean enumerationIsSupported = 
-					manager.targetOwlProfileList.supportsStatement(OWL.oneOf, 
+					manager.limitingOwlProfileList.supportsStatement(OWL.oneOf, 
 							baseTypeForLogical.equals(OWL2.NamedIndividual) ? OwlVocabulary.DumpData.SAMPLE_URI_LIST : OwlVocabulary.DumpData.SAMPLE_LITERAL_LIST);	
 					
 			if (enumerationIsSupported) {
@@ -125,9 +125,9 @@ class Bem2RdfLogicalTypeConverter{
 		}
 		
 		if (!baseTypeForLogical.equals(OWL2.NamedIndividual) &&
-				!manager.context.getTargetOwlProfileList().supportsDataType(baseTypeForLogical)) {
+				!manager.context.getLimitingOwlProfileList().supportsDataType(baseTypeForLogical)) {
 			throw new DatatypeNotSupportedException(
-					String.format("Datatype '%s' is unsupported by one of OWL profiles: %s", baseTypeForLogical, manager.context.getTargetOwlProfileList()));
+					String.format("Datatype '%s' is unsupported by one of OWL profiles: %s", baseTypeForLogical, manager.context.getLimitingOwlProfileList()));
 		}
 		
 		return baseTypeForLogical;

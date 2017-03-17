@@ -38,7 +38,7 @@
 
 		<drumbeat.groupId>${project.groupId}</drumbeat.groupId>
 		<drumbeat2-common.version>0.0.1</drumbeat2-common.version>
-		<drumbeat2-jena.version>0.8.0</drumbeat2-jena.version>
+		<drumbeat.jena.version>0.9.0</drumbeat.jena.version>
 
 		<!-- All versions updated on 12.03.2017 -->
 		<commons-cli.version>1.3.1</commons-cli.version>

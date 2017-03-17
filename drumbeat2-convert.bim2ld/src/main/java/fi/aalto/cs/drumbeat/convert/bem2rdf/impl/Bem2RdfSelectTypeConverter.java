@@ -36,7 +36,7 @@ class Bem2RdfSelectTypeConverter {
 				subTypeResources.add(jenaModel.createResource(manager.uriBuilder.buildTypeUri(subType)));
 			}
 	
-			final boolean unionIsSupported = manager.targetOwlProfileList.supportsStatement(
+			final boolean unionIsSupported = manager.limitingOwlProfileList.supportsStatement(
 					OWL.unionOf, OwlVocabulary.DumpData.SAMPLE_URI_LIST);
 	
 			if (unionIsSupported && subTypeResources.size() > 1) {

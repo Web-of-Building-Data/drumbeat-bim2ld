@@ -4,40 +4,61 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.zip.GZIPOutputStream;
 
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
 import org.apache.log4j.Logger;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.rdf.model.Model;
 
 import fi.aalto.cs.drumbeat.common.file.FileManager;
-import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
 
 public class RdfUtils {
 	
 	private static final Logger logger = Logger.getRootLogger();
-	private static Map<String, RDFFormat> rdfFormats;
 	
-	@Deprecated	
+	/**
+	 * Create RDF file name
+	 * @param filePath
+	 * @param format
+	 * @param gzip
+	 * @return
+	 */
 	public static String formatRdfFileName(String filePath, RDFFormat format, boolean gzip) {
-		String fileExtension = RdfVocabulary.getRdfFileExtension(format);
+		
+		String rdfFileExtension = format.getLang().getFileExtensions().get(0);
+		
+		String gzipFileExtension = "";
+		
 		if (gzip) {
-			fileExtension += ".gz";
+			gzipFileExtension = ".gz";
 		}
 		
-		if (FilenameUtils.isExtension(filePath, fileExtension)) {
-			return filePath;
-		} else {
+		String fileExtension = rdfFileExtension + gzipFileExtension;
+
+		if (FilenameUtils.isExtension(filePath, fileExtension)) {			
+			return filePath;			
+		} else if (FilenameUtils.isExtension(filePath, rdfFileExtension)) {			
+			return FilenameUtils.normalize(filePath + gzipFileExtension); 			
+		} else {			
 			return FilenameUtils.normalize(filePath + "." + fileExtension);
-		}		
+		}
+		
 	}	
 	
-	@Deprecated
+	
+	/**
+	 * Exports a Jena {@link Model} to a file
+	 * 
+	 * @param model
+	 * @param baseUri
+	 * @param filePath
+	 * @param format
+	 * @param gzip
+	 * @return
+	 * @throws IOException
+	 */
 	public static String exportJenaModelToRdfFile(Model model, String baseUri, String filePath, RDFFormat format, boolean gzip) throws IOException {
 		
 		String filePathWithExtension = formatRdfFileName(filePath, format, gzip);		
@@ -49,9 +70,9 @@ public class RdfUtils {
 			out = new GZIPOutputStream(out);
 		}
 		try {
-			String lang = format.getLang().getName();
-//			RDFDataMgr.write(out, model, format);
-			model.write(out, lang, baseUri);
+//			String lang = format.getLang().getName();
+//			model.write(out, lang, baseUri);
+			RDFDataMgr.write(out, model, format);
 		}
 		finally {
 			out.close();
@@ -60,27 +81,5 @@ public class RdfUtils {
 		
 		return filePathWithExtension;
 	}
-	
-	@Deprecated
-	public static Map<String, RDFFormat> getRdfFormatMap() {
-		
-		if (rdfFormats == null) {
-			rdfFormats = new TreeMap<>();
-			Field[] declaredFields = RDFFormat.class.getDeclaredFields();
-			for (Field field : declaredFields) {
-			    if (Modifier.isStatic(field.getModifiers()) && field.getType().equals(RDFFormat.class)) {			    	
-			    	try {
-						rdfFormats.put(field.getName(), (RDFFormat)field.get(null));
-					} catch (Exception e) {
-						throw new RuntimeException("Unexpected error: " + e.getMessage(), e);
-					}
-			    }
-			}			
-		}
-		
-		return rdfFormats;
-		
-	}
-	
 	
 }
