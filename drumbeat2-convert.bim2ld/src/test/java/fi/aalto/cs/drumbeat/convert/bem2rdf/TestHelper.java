@@ -14,7 +14,7 @@ import org.apache.jena.riot.RDFFormat;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.profiles.OWLProfileReport;
 
-import fi.aalto.cs.drumbeat.common.file.FileManager;
+import fi.aalto.cs.drumbeat.common.io.FileManager;
 import fi.aalto.cs.drumbeat.data.bem.BemException;
 import fi.aalto.cs.drumbeat.data.bem.dataset.BemDataset;
 import fi.aalto.cs.drumbeat.data.bem.parsers.util.BemParserUtil;

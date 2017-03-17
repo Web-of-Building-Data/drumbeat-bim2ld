@@ -1,6 +1,6 @@
 package fi.aalto.cs.drumbeat.data.ifc;
 
-import fi.aalto.cs.drumbeat.common.file.FileManager;
+import fi.aalto.cs.drumbeat.common.io.FileManager;
 import fi.aalto.cs.drumbeat.data.step.StepVocabulary;
 
 public class IfcVocabulary extends StepVocabulary {

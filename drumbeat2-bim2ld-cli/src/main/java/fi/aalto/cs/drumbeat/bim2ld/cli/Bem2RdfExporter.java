@@ -30,7 +30,7 @@ import fi.aalto.cs.drumbeat.data.ifc.parsers.IfcSchemaParser;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.AbstractJenaProvider;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.MemoryJenaProvider;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.config.JenaProviderPoolConfigurationSection;
-import fi.aalto.cs.drumbeat.rdf.utils.RdfUtils;
+import fi.aalto.cs.drumbeat.rdf.utils.RdfIOUtils;
 
 import org.apache.jena.riot.RDFFormat;
 
@@ -349,7 +349,7 @@ public class Bem2RdfExporter {
 				baseUri = schemaExporter.getUriBuilder().buildBuiltInOntologyUri("");
 			}
 			
-			RdfUtils.exportJenaModelToRdfFile(schemaGraph, baseUri, outputSchemaFilePath, outputFileFormat, gzipOutputFile);
+			RdfIOUtils.exportJenaModelToRdfFile(schemaGraph, baseUri, outputSchemaFilePath, outputFileFormat, gzipOutputFile);
 		}
 		return schemaGraph;
 	}
@@ -399,7 +399,7 @@ public class Bem2RdfExporter {
 		// export model to RDF file
 		if (!StringUtils.isEmptyOrNull(outputDatasetFilePath)) {
 			String baseUri = datasetExporter.getUriBuilder().buildDatasetUri("");
-			RdfUtils.exportJenaModelToRdfFile(modelGraph, baseUri, outputDatasetFilePath, outputFileFormat, gzipOutputFile);
+			RdfIOUtils.exportJenaModelToRdfFile(modelGraph, baseUri, outputDatasetFilePath, outputFileFormat, gzipOutputFile);
 		}
 		
 		return modelGraph;
@@ -446,7 +446,7 @@ public class Bem2RdfExporter {
 //		// export model to RDF file
 //		if (!StringUtils.isEmptyOrNull(outputMetaModelFilePath)) {
 //			String baseUri = conversionContext.generateModelNamespaceUri(dataset.getSchema().getName());
-//			RdfUtils.exportJenaModelToRdfFile(modelGraph, baseUri, outputMetaModelFilePath, outputFileFormat, gzipOutputFile);
+//			RdfIOUtils.exportJenaModelToRdfFile(modelGraph, baseUri, outputMetaModelFilePath, outputFileFormat, gzipOutputFile);
 //		}
 //		
 //		return modelGraph;

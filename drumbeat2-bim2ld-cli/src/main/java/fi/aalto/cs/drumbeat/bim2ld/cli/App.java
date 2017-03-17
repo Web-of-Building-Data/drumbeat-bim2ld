@@ -18,7 +18,7 @@ public class App {
 		//
 		Options options = createCommandLineOptions();
 
-		CommandLineParser commandParser = new PosixParser();
+		CommandLineParser commandParser = new DefaultParser();
 		
 		Bem2RdfExporter exporter;
 		

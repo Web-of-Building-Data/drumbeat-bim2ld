@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 
 import fi.aalto.cs.drumbeat.common.config.document.ConfigurationDocument;
-import fi.aalto.cs.drumbeat.common.meta.MetaClassUtils;
+import fi.aalto.cs.drumbeat.common.meta.AnnotationUtils;
 import fi.aalto.cs.drumbeat.data.bem.parsers.util.BemParserUtil;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchema;
 import fi.aalto.cs.drumbeat.data.bem.schema.BemSchemaPool;
@@ -85,7 +85,7 @@ public class Test_Base {
 	}
 
 	private String getTestFilePath(int callingMethodCallShift, boolean isExpected, String extension) {
-		return getTestFilePath(isExpected, getClass().getSimpleName(), MetaClassUtils.getCallingMethodName(callingMethodCallShift + 1), extension);
+		return getTestFilePath(isExpected, getClass().getSimpleName(), AnnotationUtils.getCallingMethodName(callingMethodCallShift + 1), extension);
 	}
 	
 	protected String getExpectedTestFilePath(int callingMethodCallShift, String extension) {
@@ -103,7 +103,7 @@ public class Test_Base {
 	protected void startTest(int callingMethodCallShift) {
 		System.out.printf("%n[%s::%s()]%n",
 				getClass().getSimpleName(),
-				MetaClassUtils.getCallingMethodName(callingMethodCallShift + 1));		
+				AnnotationUtils.getCallingMethodName(callingMethodCallShift + 1));		
 	}
 	
 	protected byte[] writeAndCompareModel(

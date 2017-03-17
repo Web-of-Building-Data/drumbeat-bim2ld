@@ -1,6 +1,6 @@
 package fi.aalto.cs.drumbeat.bim2ld.config;
 
-import fi.aalto.cs.drumbeat.common.meta.MetaClassUtils;
+import fi.aalto.cs.drumbeat.common.meta.AnnotationUtils;
 
 public class Test_Base {
 
@@ -16,7 +16,7 @@ public class Test_Base {
 	protected void startTest(int callingMethodCallShift) {
 		System.out.printf("%n[%s::%s()]%n",
 				getClass().getSimpleName(),
-				MetaClassUtils.getCallingMethodName(callingMethodCallShift + 1));
+				AnnotationUtils.getCallingMethodName(callingMethodCallShift + 1));
 	}
 	
 
